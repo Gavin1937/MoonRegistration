@@ -1,0 +1,13 @@
+
+# files
+/**/*main*
+/**/*test*
+*.bat
+*.ps1
+*.sh
+
+# folders
+/.vscode/
+/**/*build*/
+/**/*output*/
+
