@@ -10,4 +10,5 @@
 /.vscode/
 /**/*build*/
 /**/*output*/
+/testing/
 
