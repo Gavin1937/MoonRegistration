@@ -169,8 +169,7 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
 EXPORT_SYMBOL void cut_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,
-    cv::Point& top_left,
-    cv::Point& bottom_right,
+    Rectangle& rect_out,
     int x,
     int y,
     int radius,
@@ -193,8 +192,7 @@ EXPORT_SYMBOL void cut_image_from_circle(
     if (xEnd > width) xEnd = width;
     
     image_out = cv::Mat(image_in, cv::Range(yStart, yEnd), cv::Range(xStart, xEnd));
-    top_left = cv::Point(xStart, yStart);
-    bottom_right = cv::Point(xEnd, yEnd);
+    rect_out = {xStart, yStart, xEnd, yEnd};
 }
 
 }

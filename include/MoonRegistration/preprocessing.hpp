@@ -2,7 +2,10 @@
 
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc.hpp>
+
 #include "../include/MoonRegistration/macros.h"
+#include "../include/MoonRegistration/util.hpp"
+
 
 namespace mr
 {
@@ -85,8 +88,7 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
 // Parameters:
 //   - image_in: input image
 //   - image_out: output image
-//   - top_left: cv::Point, top_left coordinate of output square in image_in
-//   - bottom_right: cv::Point, bottom_right coordinate of output square in image_in
+//   - rect_out: mr::Rectangle, top_left & bottom_right coordinate of output square in image_in
 //   - x: circle center x
 //   - y: circle center y
 //   - radius: circle radius
@@ -94,8 +96,7 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
 EXPORT_SYMBOL void cut_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,
-    cv::Point& top_left,
-    cv::Point& bottom_right,
+    Rectangle& rect_out,
     int x,
     int y,
     int radius,
