@@ -7,10 +7,14 @@ project(MoonRegistration LANGUAGES CXX)
 file(GLOB SRC
     "src/*.c"
     "src/*.cpp"
+    "src/MoonDetect/*.c"
+    "src/MoonDetect/*.cpp"
 )
 file(GLOB HEADER
     "include/*.h"
     "include/*.hpp"
+    "include/MoonDetect/*.h"
+    "include/MoonDetect/*.hpp"
 )
 
 

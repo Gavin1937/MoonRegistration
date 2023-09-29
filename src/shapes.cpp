@@ -1,10 +1,13 @@
-#include "../include/MoonRegistration/util.hpp"
+#include "../include/MoonRegistration/shapes.hpp"
 
 
 namespace mr
 {
 
-EXPORT_SYMBOL Square circle_to_square(const Circle& circle)
+extern "C"
+{
+
+EXPORT_SYMBOL Square circle_to_square_s(const Circle& circle)
 {
     int top_left_y = circle.y - circle.radius;
     if (top_left_y < 0) top_left_y = 0;
@@ -17,7 +20,7 @@ EXPORT_SYMBOL Square circle_to_square(const Circle& circle)
     return {top_left_x, top_left_y, square_width};
 }
 
-EXPORT_SYMBOL Square circle_to_square(int x, int y, int radius)
+EXPORT_SYMBOL Square circle_to_square_p(int x, int y, int radius)
 {
     int top_left_y = y - radius;
     if (top_left_y < 0) top_left_y = 0;
@@ -30,7 +33,7 @@ EXPORT_SYMBOL Square circle_to_square(int x, int y, int radius)
     return {top_left_x, top_left_y, square_width};
 }
 
-EXPORT_SYMBOL Rectangle circle_to_rectangle(const Circle& circle)
+EXPORT_SYMBOL Rectangle circle_to_rectangle_s(const Circle& circle)
 {
     int top_left_y = circle.y - circle.radius;
     if (top_left_y < 0) top_left_y = 0;
@@ -45,7 +48,7 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle(const Circle& circle)
     return {top_left_x, top_left_y, bottom_right_x, bottom_right_y};
 }
 
-EXPORT_SYMBOL Rectangle circle_to_rectangle(int x, int y, int radius)
+EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius)
 {
     int top_left_y = y - radius;
     if (top_left_y < 0) top_left_y = 0;
@@ -60,6 +63,25 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle(int x, int y, int radius)
     return {top_left_x, top_left_y, bottom_right_x, bottom_right_y};
 }
 
+}
+
+EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle)
+{
+    return cv::Vec3f(
+        static_cast<float>(circle.x),
+        static_cast<float>(circle.y),
+        static_cast<float>(circle.radius)
+    );
+}
+
+EXPORT_SYMBOL Circle vec3_to_circle(const cv::Vec3f& vec3)
+{
+    return {
+        static_cast<int>(vec3[0]),
+        static_cast<int>(vec3[1]),
+        static_cast<int>(vec3[2])
+    };
+}
 
 }
 
