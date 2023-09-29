@@ -3,6 +3,9 @@
 namespace mr
 {
 
+extern "C"
+{
+
 EXPORT_SYMBOL void resize_with_aspect_ratio(
     const cv::Mat& image_in,
     cv::Mat& image_out,
@@ -193,6 +196,8 @@ EXPORT_SYMBOL void cut_image_from_circle(
     
     image_out = cv::Mat(image_in, cv::Range(yStart, yEnd), cv::Range(xStart, xEnd));
     rect_out = {xStart, yStart, xEnd, yEnd};
+}
+
 }
 
 }
