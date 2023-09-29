@@ -3,11 +3,14 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include "../include/MoonRegistration/macros.h"
-#include "../include/MoonRegistration/util.hpp"
+#include "macros.h"
+#include "shapes.hpp"
 
 
 namespace mr
+{
+
+extern "C"
 {
 
 // original algorithm
@@ -102,5 +105,7 @@ EXPORT_SYMBOL void cut_image_from_circle(
     int radius,
     int padding         = 15
 );
+
+}
 
 }

@@ -1,11 +1,16 @@
 #pragma once
 
+#include <opencv2/core/mat.hpp>
+
 #include <iostream>
 
-#include "../include/MoonRegistration/macros.h"
+#include "macros.h"
 
 
 namespace mr
+{
+
+extern "C"
 {
 
 EXPORT_SYMBOL typedef struct Circle {
@@ -28,13 +33,20 @@ EXPORT_SYMBOL typedef struct Rectangle {
 } Rectangle;
 
 
-EXPORT_SYMBOL Square circle_to_square(const Circle& circle);
+EXPORT_SYMBOL Square circle_to_square_s(const Circle& circle);
 
-EXPORT_SYMBOL Square circle_to_square(int x, int y, int radius);
+EXPORT_SYMBOL Square circle_to_square_p(int x, int y, int radius);
 
-EXPORT_SYMBOL Rectangle circle_to_rectangle(const Circle& circle);
+EXPORT_SYMBOL Rectangle circle_to_rectangle_s(const Circle& circle);
 
-EXPORT_SYMBOL Rectangle circle_to_rectangle(int x, int y, int radius);
+EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius);
+
+
+}
+
+EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle);
+
+EXPORT_SYMBOL Circle vec3_to_circle(const cv::Vec3f& vec3);
 
 }
 
