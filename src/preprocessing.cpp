@@ -58,6 +58,7 @@ EXPORT_SYMBOL void resize_with_aspect_ratio(
     }
     
     cv::resize(image_in, image_out, dimension, (0.0), (0.0), inter);
+    ratio_out = r;
 }
 
 EXPORT_SYMBOL void apply_brightness_contrast(
