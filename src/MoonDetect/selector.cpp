@@ -1,5 +1,6 @@
 #include "../../include/MoonRegistration/MoonDetect/selector.hpp"
 #include "../../include/MoonRegistration/preprocessing.hpp"
+#include "../../include/MoonRegistration/utils.hpp"
 
 #include <utility>
 #include <queue>
@@ -27,24 +28,24 @@ EXPORT_SYMBOL Circle select_circle_by_brightness_perc(
     int y = -1;
     int radius = -1;
     float max_mean = -1.0;
+    cv::Vec3i veci;
     
     if (!detected_circles.empty())
     {
         for (auto vec : detected_circles)
         {
+            veci = mr::round_vec3f(vec);
             // calc circle brightness percentage (pixel mean)
             float mean = calc_circle_brightness_perc(
                 image_in,
-                static_cast<int>(vec[0]),
-                static_cast<int>(vec[1]),
-                static_cast<int>(vec[2])
+                veci[0], veci[1], veci[2]
             );
             // find the maximum mean thats below 0.98
             if (mean < 0.98 && mean > max_mean)
             {
-                x = static_cast<int>(vec[0]);
-                y = static_cast<int>(vec[1]);
-                radius = static_cast<int>(vec[2]);
+                x = veci[0];
+                y = veci[1];
+                radius = veci[2];
                 max_mean = mean;
             }
         }
@@ -64,19 +65,23 @@ EXPORT_SYMBOL std::vector<cv::Vec3f> select_n_circles_by_brightness_perc(
     else if (detected_circles.size() <= n)
         return detected_circles;
     
-    // find n largest element in list
+    // find n largest element in the list
     // https://stackoverflow.com/a/22654973
     
-    std::priority_queue<std::pair<float,cv::Vec3f>, std::vector<std::pair<float,cv::Vec3f>>, Comparator> minheap;
+    std::priority_queue<
+        std::pair<float,cv::Vec3f>,
+        std::vector<std::pair<float,cv::Vec3f>>,
+        Comparator
+    > minheap;
+    cv::Vec3i veci;
     
     for (auto vec : detected_circles)
     {
+        veci = mr::round_vec3f(vec);
         // calc circle brightness percentage (pixel mean)
         float mean = calc_circle_brightness_perc(
             image_in,
-            static_cast<int>(vec[0]),
-            static_cast<int>(vec[1]),
-            static_cast<int>(vec[2])
+            veci[0], veci[1], veci[2]
         );
         // find the maximum mean thats below 0.98
         if (mean < 0.98 && minheap.size() < n)
@@ -109,17 +114,19 @@ EXPORT_SYMBOL Circle select_circle_by_largest_radius(
     int x = -1;
     int y = -1;
     int radius = -1;
+    cv::Vec3i veci;
     
     if (!detected_circles.empty())
     {
         // checks for circles then finds biggest circle with HoughCircle parameters
         for (auto vec : detected_circles)
         {
-            if (vec[2] > radius)
+            veci = mr::round_vec3f(vec);
+            if (veci[2] > radius)
             {
-                x = static_cast<int>(vec[0]);
-                y = static_cast<int>(vec[1]);
-                radius = static_cast<int>(vec[2]);
+                x = veci[0];
+                y = veci[1];
+                radius = veci[2];
             }
         }
     }
@@ -136,19 +143,19 @@ EXPORT_SYMBOL Circle select_circle_by_shape(
     int y = -1;
     int radius = -1;
     int max_contour = -1;
+    cv::Vec3i veci;
     
     // checks for circles then finds the circle contains a shape with largest number of sides
     if (!detected_circles.empty())
     {
         for (auto vec : detected_circles)
         {
+            veci = mr::round_vec3f(vec);
             cv::Mat circle;
             Rectangle rect_out;
             cut_image_from_circle(
                 image_in, circle, rect_out,
-                static_cast<int>(vec[0]),
-                static_cast<int>(vec[1]),
-                static_cast<int>(vec[2])
+                veci[0], veci[1], veci[2]
             );
             
             std::vector<std::vector<cv::Point>> contours;
@@ -166,9 +173,9 @@ EXPORT_SYMBOL Circle select_circle_by_shape(
             if (max_approx_len > max_contour)
             {
                 max_contour = max_approx_len;
-                x = static_cast<int>(vec[0]);
-                y = static_cast<int>(vec[1]);
-                radius = static_cast<int>(vec[2]);
+                x = veci[0];
+                y = veci[1];
+                radius = veci[2];
             }
         }
     }

@@ -18,4 +18,6 @@ EXPORT_SYMBOL typedef struct ImageShape
 
 EXPORT_SYMBOL ImageShape calc_image_shape(const cv::Mat& image_in);
 
+EXPORT_SYMBOL cv::Vec3i round_vec3f(const cv::Vec3f& vec3);
+
 }
