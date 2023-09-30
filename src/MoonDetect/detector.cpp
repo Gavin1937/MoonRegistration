@@ -58,7 +58,7 @@ EXPORT_SYMBOL void default_preprocess_steps(
     cv::Mat buff;
     
     // creating gray scale version of image needed for HoughCircles
-    cv::cvtColor(image_out, buff, cv::COLOR_RGB2GRAY);
+    cv::cvtColor(image_out, buff, cv::COLOR_BGR2GRAY);
     
     // set img to maximum contrast
     // only leave black & white pixels
@@ -92,7 +92,7 @@ EXPORT_SYMBOL void default_param_init(
     max_iteration = 3;
     circle_threshold = 100;
     
-    dp = std::pow(2, 5);
+    dp = std::pow(2, 4);
     minDist = 50;
     if (minDist > (image_shape.shorter_side/2))
         minDist = (image_shape.shorter_side/2);
@@ -100,7 +100,7 @@ EXPORT_SYMBOL void default_param_init(
     minRadius = static_cast<int>(image_shape.longer_side * minRadiusRate);
     maxRadiusRate = 0.6;
     maxRadius = static_cast<int>(image_shape.longer_side * maxRadiusRate);
-    param1 = 20 * 4;
+    param1 = 20 * 2;
     param2 = 3 * param1;
 }
 
@@ -187,9 +187,9 @@ EXPORT_SYMBOL mr::Circle default_coordinate_remap(
             final_circle.x = std::get<1>(it).x - std::get<2>(it).top_left_x;
             final_circle.y = std::get<1>(it).y - std::get<2>(it).top_left_y;
             final_circle.radius = std::get<1>(it).radius;
+            final_circle.x += last_rect.top_left_x;
         }
-        final_circle.x += std::get<1>(it).x;
-        final_circle.y += std::get<1>(it).y;
+        final_circle.y += last_rect.top_left_y;
         last_rect.top_left_x += std::get<2>(it).top_left_x;
         last_rect.top_left_y += std::get<2>(it).top_left_y;
         last_rect.bottom_right_x += std::get<2>(it).bottom_right_x;
@@ -206,7 +206,7 @@ EXPORT_SYMBOL mr::Circle default_coordinate_remap(
 EXPORT_SYMBOL MoonDetector::MoonDetector(const std::string& image_filepath)
     : resize_ratio(0)
 {
-    this->original_image = cv::imread(image_filepath);
+    this->original_image = cv::imread(image_filepath, cv::IMREAD_COLOR);
     
     // default functions
     this->preprocess_steps = default_preprocess_steps;
@@ -218,7 +218,7 @@ EXPORT_SYMBOL MoonDetector::MoonDetector(const std::string& image_filepath)
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const std::vector<unsigned char>& image_binary)
 {
-    this->original_image = cv::imdecode(cv::Mat(image_binary), cv::IMREAD_UNCHANGED);
+    this->original_image = cv::imdecode(cv::Mat(image_binary), cv::IMREAD_COLOR);
     
     // default functions
     this->preprocess_steps = default_preprocess_steps;
@@ -298,8 +298,11 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         
         // cannot select circle, (select circle function failed)
         // maybe we didn't find any circle
+        // in iteration 0, which means input image doesn't contain any circle, return {-1, -1, -1}
+        if (iteration == 0 && (circle_found.x == -1 && circle_found.y == -1 && circle_found.radius == -1))
+            return circle_found;
         // use the center of image as the new circle
-        if (circle_found.x < 0 || circle_found.y < 0 || circle_found.radius < 0)
+        else if (circle_found.x < 0 || circle_found.y < 0 || circle_found.radius < 0)
             circle_found = {image_shape.width/2, image_shape.height/2, (image_shape.width/2)+3};
         
         // cut out part of img from circle
@@ -326,6 +329,5 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
     
     return final_circle;
 }
-
 
 }
