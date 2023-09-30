@@ -82,6 +82,12 @@ public:
     
     EXPORT_SYMBOL MoonDetector(const std::vector<unsigned char>& image_binary);
     
+    // trying to find a circle from input image
+    // thats most likely contains the moon.
+    // 
+    // Returns:
+    //   - if success, return mr::Circle of the circle found
+    //   - if fail (input doesn't contain circle), return mr::Circle of {-1, -1, -1}
     EXPORT_SYMBOL mr::Circle detect_moon();
     
     // function pointers to detect_moon steps
