@@ -23,4 +23,13 @@ EXPORT_SYMBOL ImageShape calc_image_shape(const cv::Mat& image_in)
     return shape;
 }
 
+EXPORT_SYMBOL cv::Vec3i round_vec3f(const cv::Vec3f& vec3)
+{
+    return cv::Vec3i(
+        static_cast<int>(round(vec3[0])),
+        static_cast<int>(round(vec3[1])),
+        static_cast<int>(round(vec3[2]))
+    );
+}
+
 }
