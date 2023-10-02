@@ -370,7 +370,7 @@ extern "C"
 EMSCRIPTEN_KEEPALIVE
 uint8_t* mrwasm_create_image_buffer(int img_width, int img_height)
 {
-    return (uint8_t*)malloc(width * height * 4 * sizeof(uint8_t));
+    return (uint8_t*)malloc(img_width * img_height * 4 * sizeof(uint8_t));
 }
 
 EMSCRIPTEN_KEEPALIVE
