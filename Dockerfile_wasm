@@ -1,0 +1,23 @@
+FROM emscripten/emsdk
+
+# setup enviroments
+ENV DEBIAN_FRONTEND=noninteractive \
+    TZ=America/Los_Angeles
+RUN apt update -y && \
+    apt install -y tzdata gcc g++ gdb cmake make python3 nano vim less git
+
+# setup working dir & copy source code
+WORKDIR /src/MoonRegistration
+COPY . .
+
+# build MoonRegistration lib into wasm
+RUN \
+    export EMSCRIPTEN="/emsdk/upstream/emscripten" && \
+    cd /src && git clone https://github.com/opencv/opencv && \
+    cd opencv && git checkout 4.8.0 && mkdir build_wasm && \
+    python3 ./platforms/js/build_js.py build_wasm --build_wasm && \
+    mkdir /src/MoonRegistration/build_wasm && cd /src/MoonRegistration/build_wasm && \
+    emcmake cmake -DMR_BUILD_WASM=ON -DOPENCV_DIR="/src/opencv" .. && \
+    emmake make
+
+ENTRYPOINT ["/bin/bash"]
