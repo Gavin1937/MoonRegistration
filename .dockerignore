@@ -1,0 +1,10 @@
+*.bat
+*.ps1
+*.sh
+
+.git
+.vscode
+**/build
+**/build_wasm
+**/output
+testing
