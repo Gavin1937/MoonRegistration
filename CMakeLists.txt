@@ -108,9 +108,10 @@ else()
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS
         " \
         -s EXPORTED_RUNTIME_METHODS=cwrap \
-        -s EXPORTED_FUNCTIONS=_mrwasm_create_image_buffer,_mrwasm_destroy_image_buffer,_mrwasm_detect_moon \
+        -s EXPORTED_FUNCTIONS=_mrwasm_create_image_buffer,_mrwasm_destroy_image_buffer,_mrwasm_detect_moon,_mrwasm_circle_to_square,_mrwasm_circle_to_rectangle \
         -s MODULARIZE=1 \
-        -s EXPORT_NAME=createMoonRegistrationModule \
+        -s EXPORT_ES6=1 \
+        -s USE_ES6_IMPORT_META=1 \
         -s ALLOW_MEMORY_GROWTH=1 \
         "
     )
