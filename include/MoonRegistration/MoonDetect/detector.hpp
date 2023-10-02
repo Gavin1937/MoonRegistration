@@ -82,6 +82,12 @@ public:
     
     EXPORT_SYMBOL MoonDetector(const std::vector<unsigned char>& image_binary);
     
+    // taking raw cv::Mat image as input
+    // this constructor will assume cv_image is a decoded pixel matrix ready to use
+    // it will set cv_image to original_image directly
+    // colors in cv_image MUST in BGR order
+    EXPORT_SYMBOL MoonDetector(const cv::Mat& cv_image);
+    
     // trying to find a circle from input image
     // thats most likely contains the moon.
     // 
