@@ -1,7 +1,7 @@
 
 # MoonRegistration
 
-A c++ library for moon location detection & moon image registration.
+A Cross Platform C++ library for Moon Location Detection & Moon Image Registration.
 
 
-
+# [Building the Library](./BUILDING.md)
