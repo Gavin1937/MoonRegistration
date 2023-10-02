@@ -353,7 +353,8 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
 extern "C"
 {
 // Known issue with this wasm wrapper:
-// This wrapper function will produce different moon detection result compare to pure C++.
+// This wrapper function may produce different moon detection result compare to pure C++.
+// This will happens for some file and will not for other files.
 // This is probably due to the way we pass image data from js to C++.
 // opencv.js (wasm) has no way to decode image from binary
 // (mode detail in here: https://github.com/opencv/opencv/issues/17535)
