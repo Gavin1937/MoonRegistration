@@ -35,5 +35,7 @@ cmake --build
 
 **Note that demo need to build with C++ >= 14 because they need the filesystem module**
 
+**You can use dataset in [./data](./data) folder**
+
 **You can play with demo applications inside [Docker Container](../BUILDING.md#build-using-docker-recommend)**
 
