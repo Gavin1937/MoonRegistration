@@ -17,7 +17,7 @@ RUN \
     cd opencv && git checkout 4.8.0 && mkdir build_wasm && \
     python3 ./platforms/js/build_js.py build_wasm --build_wasm && \
     mkdir /src/MoonRegistration/build_wasm && cd /src/MoonRegistration/build_wasm && \
-    emcmake cmake -DMR_BUILD_WASM=ON -DOPENCV_DIR="/src/opencv" .. && \
+    emcmake cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_WASM=ON -DOPENCV_DIR="/src/opencv" .. && \
     emmake make
 
 ENTRYPOINT ["/bin/bash"]
