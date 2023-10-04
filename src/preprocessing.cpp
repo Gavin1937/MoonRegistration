@@ -173,7 +173,7 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
 EXPORT_SYMBOL void cut_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,
-    Rectangle& rect_out,
+    mr::Rectangle& rect_out,
     int x,
     int y,
     int radius,

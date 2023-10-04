@@ -345,6 +345,28 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
 
 
 
+// C APIs
+extern "C"
+{
+
+EXPORT_SYMBOL mr::Circle detect_moon_from_filepath(const char* img_filepath)
+{
+    std::string filepath(img_filepath);
+    mr::MoonDetector detector(filepath);
+    return detector.detect_moon();
+}
+
+EXPORT_SYMBOL mr::Circle detect_moon_from_binary(const unsigned char* img_binary, const int img_size)
+{
+    std::vector<unsigned char> binary(img_binary, img_binary+img_size);
+    mr::MoonDetector detector(binary);
+    return detector.detect_moon();
+}
+
+}
+
+
+
 // Emscripten WASM API
 #ifdef MR_BUILD_WASM
 
