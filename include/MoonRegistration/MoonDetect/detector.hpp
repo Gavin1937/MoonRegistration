@@ -96,9 +96,11 @@ public:
     //   - if fail (input doesn't contain circle), return mr::Circle of {-1, -1, -1}
     EXPORT_SYMBOL mr::Circle detect_moon();
     
-    // function pointers to detect_moon steps
-    // modify them to further customize detect_moon steps
-    // all the function pointers default to default functions defined above
+    
+    // Following public members of mr::MoonDetector are function pointers
+    // They are functions handle different steps in mr::MoonDetector::detect_moon()
+    // You can modify them to further customize how mr::MoonDetector::detect_moon() works
+    // All the function pointers are default to default_... functions defined in "detector.hpp"
     
     void (*preprocess_steps)(const cv::Mat&, cv::Mat&, float&) = nullptr;
     void (*param_init)(const ImageShape&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&) = nullptr;
@@ -112,27 +114,5 @@ private:
     cv::Mat process_image;
     
 } MoonDetector;
-
-}
-
-
-// C APIs
-
-extern "C"
-{
-
-EXPORT_SYMBOL mr::Circle detect_moon_from_filepath(const char* img_filepath)
-{
-    std::string filepath(img_filepath);
-    mr::MoonDetector detector(filepath);
-    return detector.detect_moon();
-}
-
-EXPORT_SYMBOL mr::Circle detect_moon_from_binary(const unsigned char* img_binary, const int img_size)
-{
-    std::vector<unsigned char> binary(img_binary, img_binary+img_size);
-    mr::MoonDetector detector(binary);
-    return detector.detect_moon();
-}
 
 }

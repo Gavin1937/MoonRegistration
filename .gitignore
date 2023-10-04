@@ -5,6 +5,10 @@
 *.bat
 *.ps1
 *.sh
+*.jpg
+*.jpeg
+*.png
+*.bmp
 
 # folders
 /.vscode/
@@ -13,3 +17,6 @@
 /**/*data*/
 /testing/
 
+# white list
+!/demo/data
+!/demo/data/*

@@ -19,7 +19,7 @@ public:
 namespace mr
 {
 
-EXPORT_SYMBOL Circle select_circle_by_brightness_perc(
+EXPORT_SYMBOL mr::Circle select_circle_by_brightness_perc(
     const cv::Mat& image_in,
     const std::vector<cv::Vec3f>& detected_circles
 )
@@ -106,7 +106,7 @@ EXPORT_SYMBOL std::vector<cv::Vec3f> select_n_circles_by_brightness_perc(
     return result;
 }
 
-EXPORT_SYMBOL Circle select_circle_by_largest_radius(
+EXPORT_SYMBOL mr::Circle select_circle_by_largest_radius(
     const cv::Mat& image_in,
     const std::vector<cv::Vec3f>& detected_circles
 )
@@ -134,7 +134,7 @@ EXPORT_SYMBOL Circle select_circle_by_largest_radius(
     return {x,y,radius};
 }
 
-EXPORT_SYMBOL Circle select_circle_by_shape(
+EXPORT_SYMBOL mr::Circle select_circle_by_shape(
     const cv::Mat& image_in,
     const std::vector<cv::Vec3f>& detected_circles
 )
@@ -152,7 +152,7 @@ EXPORT_SYMBOL Circle select_circle_by_shape(
         {
             veci = mr::round_vec3f(vec);
             cv::Mat circle;
-            Rectangle rect_out;
+            mr::Rectangle rect_out;
             cut_image_from_circle(
                 image_in, circle, rect_out,
                 veci[0], veci[1], veci[2]
