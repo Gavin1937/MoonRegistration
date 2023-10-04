@@ -25,10 +25,9 @@ namespace fs = boost::filesystem;
 #include "MoonRegistration/mrapi.hpp"
 
 
-// mr::MoonDetector::moon_detect() steps
-// Following definitions are mean to show you their parameters
-// You can alter those parameters whatever you want.
-// Checkout "detector.cpp" for detailed implementation of default steps functions
+// Following functions are different steps in function mr::MoonDetector::moon_detect()
+// You can modify their behavior by rewriting them and setting them to mr::MoonDetector object.
+// Checkout "detector.cpp" for detailed implementation of these step functions
 // ==================================================
 
 void preprocess_steps(
@@ -137,7 +136,7 @@ int main(int argc, char** argv)
         
         
         // Following public members of mr::MoonDetector are function pointers
-        // They are functions handle different steps in mr::MoonDetector::detect_moon()
+        // They are functions to handle different steps in mr::MoonDetector::detect_moon()
         // You can modify them to further customize how mr::MoonDetector::detect_moon() works
         // All the function pointers are set to default_*** functions defined in "detector.hpp" by default
         detector.preprocess_steps = preprocess_steps;
