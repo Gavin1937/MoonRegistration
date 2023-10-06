@@ -2,7 +2,7 @@
 # Building MoonRegistration library from source code
 
 
-**If you only want to get library binary, consider [build using docker](#build-using-docker-recommend)**
+**If you only want to get library binary, consider [download pre-build binary](https://github.com/Gavin1937/MoonRegistration/releases/latest) or [build using docker](#build-using-docker-recommend)**
 
 ## Build System
 
