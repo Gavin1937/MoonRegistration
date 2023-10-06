@@ -9,6 +9,11 @@
 *.jpeg
 *.png
 *.bmp
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
 
 # folders
 /.vscode/
