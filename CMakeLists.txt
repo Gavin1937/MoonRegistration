@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.4-3.25)
 
 project(MoonRegistration LANGUAGES CXX)
 
+# set cmake binary output directory to build/bin or build/lib
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 
 # src files
 file(GLOB SRC

@@ -1,0 +1,51 @@
+name: Pack Release Package
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup ENV
+      run: |
+        echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        echo "VERSION_STR=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+    
+    - name: Build & Package
+      run: docker -t moonregistration -f Dockerfile_release .
+    
+    - name: Create Container
+      run: docker create --name moonregistration-container moonregistration
+    
+    - name: Copy Package Out
+      run: |
+        docker cp moonregistration-container:"/src/MoonRegistration/MoonRegistration-${{ env.VERSION_STR }}-linux-x86_64.zip" .
+        docker cp moonregistration-container:"/src/MoonRegistration/MoonRegistration-${{ env.VERSION_STR }}-wasm.zip" .
+    
+    - name: Release linux-x86_64
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: './MoonRegistration-${{ env.VERSION_STR }}-linux-x86_64.zip'
+        asset_name: 'MoonRegistration-${{ env.VERSION_STR }}-linux-x86_64.zip'
+        tag: '${{ env.RELEASE_VERSION }}'
+        overwrite: true
+    
+    - name: Release wasm
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: './MoonRegistration-${{ env.VERSION_STR }}-wasm.zip'
+        asset_name: 'MoonRegistration-${{ env.VERSION_STR }}-wasm.zip'
+        tag: '${{ env.RELEASE_VERSION }}'
+        overwrite: true
+

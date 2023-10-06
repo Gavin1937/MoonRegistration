@@ -51,6 +51,24 @@ built library binaries are inside folder `/src/MoonRegistration/build_wasm`
 
 all the build environments are set, so you can easily rebuild the library following [these steps](#build-into-webassembly-library) and modify [build arguments](#cmake-build-arguments)
 
+### Build release package
+
+build the docker image with:
+
+```sh
+docker build -t moonregistration -f .\Dockerfile_release .
+```
+
+once docker image is built, all MoonRegistration library is inside the container, launch the container by:
+
+```sh
+docker run -it --rm --name moonregistration moonregistration
+```
+
+built library release packages are in `/src/MoonRegistration/*.zip` archives
+
+all the build environments are set, so you can easily rebuild the library following [these steps](#build-into-webassembly-library) and modify [build arguments](#cmake-build-arguments)
+
 
 
 ## Build Into Library
