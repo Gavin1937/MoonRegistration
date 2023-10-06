@@ -21,7 +21,7 @@ jobs:
         echo "VERSION_STR=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
     
     - name: Build & Package
-      run: docker -t moonregistration -f Dockerfile_release .
+      run: docker build -t moonregistration -f Dockerfile_release .
     
     - name: Create Container
       run: docker create --name moonregistration-container moonregistration
