@@ -122,7 +122,9 @@ EXPORT_SYMBOL void default_iteration_param_update(
 {
     dp = dp * 2;
     minDist = 50;
+    minRadiusRate = minRadiusRate * 0.75;
     minRadius = static_cast<int>(image_shape.longer_side * minRadiusRate);
+    maxRadiusRate = maxRadiusRate * 0.75;
     maxRadius = static_cast<int>(image_shape.longer_side * maxRadiusRate);
     param1 = param1 * 2;
     param2 = param2 * 2;
