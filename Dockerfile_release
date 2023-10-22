@@ -1,21 +1,9 @@
-FROM emscripten/emsdk
+FROM gavin1937/emsdk-cv-wasm:4.8.0
 
 # setup enviroments
-ENV DEBIAN_FRONTEND=noninteractive \
-    TZ=America/Los_Angeles
 RUN \
     apt update -y && \
-    apt install -y tzdata gcc g++ gdb cmake make libopencv-dev python3 nano vim less git wget tar
-
-# setup dependencies
-RUN \
-    # download opencv source code
-    cd /src && wget https://github.com/opencv/opencv/archive/refs/tags/4.8.0.tar.gz && \
-    tar -xzvf 4.8.0.tar.gz && \
-    # compile opencv for wasm
-    export EMSCRIPTEN="/emsdk/upstream/emscripten" && \
-    cd /src/opencv-4.8.0 && mkdir build_wasm && \
-    python3 ./platforms/js/build_js.py build_wasm --build_wasm
+    apt install -y libopencv-dev nano vim less git
 
 # setup working dir & copy source code
 WORKDIR /src/MoonRegistration
@@ -31,7 +19,7 @@ RUN \
     cmake --build . && \
     # compile wasm version
     mkdir /src/MoonRegistration/build_wasm && cd /src/MoonRegistration/build_wasm && \
-    emcmake cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_WASM=ON -DOPENCV_DIR="/src/opencv-4.8.0" .. && \
+    emcmake cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_WASM=ON -DOPENCV_DIR="$OPENCV_SRC" .. && \
     emmake make && \
     # pack release
     cd /src/MoonRegistration && python3 PackReleaseZip.py
