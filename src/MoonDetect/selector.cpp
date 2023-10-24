@@ -95,13 +95,11 @@ EXPORT_SYMBOL std::vector<cv::Vec3f> select_n_circles_by_brightness_perc(
         }
     }
     
-    std::vector<cv::Vec3f> result;
-    result.reserve(minheap.size());
-    while (!minheap.empty())
+    std::vector<cv::Vec3f> result(n);
+    for (int i = 0; i < n; ++i)
     {
-        std::pair<float,cv::Vec3f> item = minheap.top();
+        result[i] = minheap.top().second;
         minheap.pop();
-        result.emplace_back(item.second);
     }
     return result;
 }
