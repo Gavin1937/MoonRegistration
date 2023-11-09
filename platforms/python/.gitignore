@@ -1,0 +1,7 @@
+
+# files
+*.pyd
+*test*
+
+# folders
+
