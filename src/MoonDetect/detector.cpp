@@ -145,19 +145,19 @@ EXPORT_SYMBOL mr::Circle default_iteration_circle_select(
     mr::Circle output;
     if (iteration == 0)
     {
-        output = mr::select_circle_by_largest_radius(
-            image_in, detected_circles
+        // find 5 circles w/ largest radius
+        // and then find the one with highest brightness perc
+        std::vector<cv::Vec3f> candidate_circles = mr::select_n_circles_by_largest_radius(
+            image_in, detected_circles, 5
+        );
+        output = mr::select_circle_by_brightness_perc(
+            image_in, candidate_circles
         );
     }
     
     else if (iteration > 0)
     {
-        // // find circle w/ highest brightness perc
-        // output = mr::select_circle_by_brightness_perc(
-        //     image_in, detected_circles
-        // );
-        
-        // find 3 circles w/ highest brightness perc
+        // find 5 circles w/ highest brightness perc
         // and then find the one with highest number of shape side
         std::vector<cv::Vec3f> candidate_circles = mr::select_n_circles_by_brightness_perc(
             image_in, detected_circles, 5
