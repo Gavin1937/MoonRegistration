@@ -61,14 +61,13 @@ endif()
 
 
 # report
-message("-- ==================================================")
-message("-- Build Options:")
-message("-- MR_BUILD_SHARED_LIBS: ${MR_BUILD_SHARED_LIBS}")
-message("-- MR_BUILD_WASM: ${MR_BUILD_WASM}")
+message(STATUS "================= MR Build Config ================")
+message(STATUS "MR_BUILD_SHARED_LIBS: ${MR_BUILD_SHARED_LIBS}")
+message(STATUS "MR_BUILD_WASM: ${MR_BUILD_WASM}")
 if (MR_BUILD_WASM)
-    message("-- OPENCV_DIR: ${OPENCV_DIR}")
+    message(STATUS "OPENCV_DIR: ${OPENCV_DIR}")
 endif()
-message("-- ==================================================")
+message(STATUS "==================================================")
 
 
 # build & link
