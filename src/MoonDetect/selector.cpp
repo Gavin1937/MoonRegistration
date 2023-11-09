@@ -7,10 +7,11 @@
 
 
 // forward declaration will fail
+template <typename COMP_TYPE, typename DATA_TYPE>
 class Comparator
 {
 public:
-    bool operator()(const std::pair<float,cv::Vec3f>& lhs, const std::pair<float,cv::Vec3f>& rhs)
+    bool operator()(const std::pair<COMP_TYPE,DATA_TYPE>& lhs, const std::pair<COMP_TYPE,DATA_TYPE>& rhs)
     {
         return (lhs.first > rhs.first);
     }
@@ -71,7 +72,7 @@ EXPORT_SYMBOL std::vector<cv::Vec3f> select_n_circles_by_brightness_perc(
     std::priority_queue<
         std::pair<float,cv::Vec3f>,
         std::vector<std::pair<float,cv::Vec3f>>,
-        Comparator
+        Comparator<float,cv::Vec3f>
     > minheap;
     cv::Vec3i veci;
     
@@ -130,6 +131,53 @@ EXPORT_SYMBOL mr::Circle select_circle_by_largest_radius(
     }
     
     return {x,y,radius};
+}
+
+EXPORT_SYMBOL std::vector<cv::Vec3f> select_n_circles_by_largest_radius(
+    const cv::Mat& image_in,
+    const std::vector<cv::Vec3f>& detected_circles,
+    int n
+)
+{
+    if (detected_circles.empty())
+        return std::vector<cv::Vec3f>();
+    else if (detected_circles.size() <= n)
+        return detected_circles;
+    
+    // find n largest element in the list
+    // https://stackoverflow.com/a/22654973
+    
+    std::priority_queue<
+        std::pair<int,cv::Vec3f>,
+        std::vector<std::pair<int,cv::Vec3f>>,
+        Comparator<int,cv::Vec3f>
+    > minheap;
+    cv::Vec3i veci;
+    int radius = -1;
+    
+    for (auto vec : detected_circles)
+    {
+        veci = mr::round_vec3f(vec);
+        radius = veci[2];
+        
+        if (minheap.size() < n)
+        {
+            minheap.push(std::pair<int,cv::Vec3f>(radius,vec));
+        }
+        else if (radius > minheap.top().first)
+        {
+            minheap.pop();
+            minheap.push(std::pair<int,cv::Vec3f>(radius,vec));
+        }
+    }
+    
+    std::vector<cv::Vec3f> result(n);
+    for (int i = 0; i < n; ++i)
+    {
+        result[i] = minheap.top().second;
+        minheap.pop();
+    }
+    return result;
 }
 
 EXPORT_SYMBOL mr::Circle select_circle_by_shape(
