@@ -8,11 +8,15 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
-# setup python & boost::python libraries
-find_package(PythonInterp)
+# setup dependencies
+
+set(Python_USE_STATIC_LIBS ON)
 # disable boost warning
 # New Boost version may have incorrect or missing dependencies and imported targets
 set(Boost_NO_WARN_NEW_VERSIONS ON)
+# set(Boost_USE_STATIC_LIBS ON)
+
+find_package(PythonInterp)
 
 if (PYTHONINTERP_FOUND)
     if (UNIX AND NOT APPLE) # linux
