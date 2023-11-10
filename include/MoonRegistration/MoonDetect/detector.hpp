@@ -78,6 +78,8 @@ EXPORT_SYMBOL mr::Circle default_coordinate_remap(
 EXPORT_SYMBOL typedef class MoonDetector
 {
 public:
+    EXPORT_SYMBOL MoonDetector();
+    
     EXPORT_SYMBOL MoonDetector(const std::string& image_filepath);
     
     EXPORT_SYMBOL MoonDetector(const std::vector<unsigned char>& image_binary);
@@ -87,6 +89,13 @@ public:
     // it will set cv_image to original_image directly
     // colors in cv_image MUST in BGR order
     EXPORT_SYMBOL MoonDetector(const cv::Mat& cv_image);
+    
+    
+    EXPORT_SYMBOL bool is_empty();
+    
+    EXPORT_SYMBOL void init_by_path(const std::string& image_filepath);
+    
+    EXPORT_SYMBOL void init_by_byte(const std::vector<unsigned char>& image_binary);
     
     // trying to find a circle from input image
     // thats most likely contains the moon.

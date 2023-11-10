@@ -205,6 +205,17 @@ EXPORT_SYMBOL mr::Circle default_coordinate_remap(
 }
 
 
+EXPORT_SYMBOL MoonDetector::MoonDetector()
+    : resize_ratio(0.0),
+    // default functions
+    preprocess_steps(default_preprocess_steps),
+    param_init(default_param_init),
+    iteration_param_update(default_iteration_param_update),
+    iteration_circle_select(default_iteration_circle_select),
+    coordinate_remap(default_coordinate_remap)
+{
+}
+
 EXPORT_SYMBOL MoonDetector::MoonDetector(const std::string& image_filepath)
     : resize_ratio(0.0),
     // default functions
@@ -214,7 +225,7 @@ EXPORT_SYMBOL MoonDetector::MoonDetector(const std::string& image_filepath)
     iteration_circle_select(default_iteration_circle_select),
     coordinate_remap(default_coordinate_remap)
 {
-    this->original_image = cv::imread(image_filepath, cv::IMREAD_COLOR);
+    this->init_by_path(image_filepath);
 }
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const std::vector<unsigned char>& image_binary)
@@ -226,7 +237,7 @@ EXPORT_SYMBOL MoonDetector::MoonDetector(const std::vector<unsigned char>& image
     iteration_circle_select(default_iteration_circle_select),
     coordinate_remap(default_coordinate_remap)
 {
-    this->original_image = cv::imdecode(cv::Mat(image_binary), cv::IMREAD_COLOR);
+    this->init_by_byte(image_binary);
 }
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const cv::Mat& cv_image)
@@ -241,8 +252,26 @@ EXPORT_SYMBOL MoonDetector::MoonDetector(const cv::Mat& cv_image)
 {
 }
 
+EXPORT_SYMBOL bool MoonDetector::is_empty()
+{
+    return this->original_image.empty();
+}
+
+EXPORT_SYMBOL void MoonDetector::init_by_path(const std::string& image_filepath)
+{
+    this->original_image = cv::imread(image_filepath, cv::IMREAD_COLOR);
+}
+
+EXPORT_SYMBOL void MoonDetector::init_by_byte(const std::vector<unsigned char>& image_binary)
+{
+    this->original_image = cv::imdecode(cv::Mat(image_binary), cv::IMREAD_COLOR);
+}
+
 EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
 {
+    if (this->is_empty())
+        std::runtime_error("Empty Input Image");
+    
     this->preprocess_steps(
         this->original_image,
         this->process_image,
