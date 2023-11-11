@@ -78,6 +78,11 @@ EXPORT_SYMBOL mr::Circle default_coordinate_remap(
 EXPORT_SYMBOL typedef class MoonDetector
 {
 public:
+    
+    // default constructor
+    // its here for better compatibility
+    // you MUST initialize original_image later with init_by_path() or init_by_byte()
+    // otherwise is_empty() will return false, and detect_moon will throw a runtime_error
     EXPORT_SYMBOL MoonDetector();
     
     EXPORT_SYMBOL MoonDetector(const std::string& image_filepath);
