@@ -2,8 +2,13 @@
 # files
 *.pyd
 *test*
+*.pyc
+*.egg
 
 # folders
+/*egg*/
+/.venv/
+/__pycache__/
 /build/
 /data/
 /dist/

@@ -1,0 +1,7 @@
+include *.py
+include *.md
+global-exclude *.pyc
+include requirements.txt
+include .gitignore
+include LICENSE
+include MANIFEST.in
