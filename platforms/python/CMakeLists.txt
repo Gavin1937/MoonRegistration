@@ -14,7 +14,7 @@ set(Python_USE_STATIC_LIBS ON)
 # disable boost warning
 # New Boost version may have incorrect or missing dependencies and imported targets
 set(Boost_NO_WARN_NEW_VERSIONS ON)
-# set(Boost_USE_STATIC_LIBS ON)
+# set(Boost_USE_STATIC_LIBS ON) # enable this line will lead to linker error with boost_python311...
 
 find_package(PythonInterp)
 
@@ -62,10 +62,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 
 # src files
+include_directories("include")
 file(GLOB SRC
     "src/*.cpp"
 )
-include_directories("include")
 
 # finally, use this function provide by PythonInterp & PythonLibs to compile a .pyd file
 PYTHON_ADD_MODULE(${CMAKE_PROJECT_NAME} ${SRC})
