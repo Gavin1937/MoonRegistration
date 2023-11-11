@@ -18,3 +18,9 @@ boost::shared_ptr<mr::MoonDetector> new_MoonDetector(const py::object& data)
     // input MatLike
     // else {}
 }
+
+void wrap_MoonDetect_init_by_byte(mr::MoonDetector& self, py::object& data)
+{
+    std::string val = py::extract<std::string>(data);
+    self.init_by_byte(std::vector<unsigned char>(val.begin(), val.end()));
+}
