@@ -29,7 +29,7 @@ if libs_dir.exists():
 
 try:
     from .__version__ import __version__
-    from .libs.MoonRegistration_pywrapper import MoonDetector
+    from .libs.MoonRegistration_pywrapper import *
 except ImportError as ierr:
     if 'DLL' in ierr.msg:
         raise ImportError('Missing Dependencies, please make sure you install all the dependencies correctly.')

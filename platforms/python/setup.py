@@ -32,6 +32,7 @@ DATA_FILES = None
 PACKAGE_DATA = {
     'MoonRegistration':[
         f'*.py',
+        f'./libs/*.py',
         f'./build/**/*.{OS_SHARED_LIBRARY_SUFFIX}',
         f'./build/**/*.{OS_PYEXT_SUFFIX}',
     ],
@@ -95,8 +96,10 @@ class Build_ext_first(install):
         install_dest_name = f'{get_python_lib()}{SEP}MoonRegistration{SEP}libs'
         Path(install_dest_name).mkdir(parents=True, exist_ok=True)
         # copy libraries to install directory
+        # also copy to ./MoonRegistration/libs in case of importing lib under current dir
         for libs in LIB_FILES:
             self.copy_file(str(libs), f'{install_dest_name}{SEP}')
+            self.copy_file(str(libs), f'.{SEP}MoonRegistration{SEP}libs{SEP}')
         
         return install.run(self)
 
