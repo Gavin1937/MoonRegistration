@@ -12,10 +12,10 @@ import platform
 if platform.system() == 'Windows':
     OS_SHARED_LIBRARY_SUFFIX = 'dll'
     OS_PYEXT_SUFFIX = 'pyd'
-elif platform.system == 'Linux':
+elif platform.system() == 'Linux':
     OS_SHARED_LIBRARY_SUFFIX = 'so'
     OS_PYEXT_SUFFIX = 'so'
-elif platform.system == 'Darwin': # MacOS
+elif platform.system() == 'Darwin': # MacOS
     OS_SHARED_LIBRARY_SUFFIX = 'dylib'
     OS_PYEXT_SUFFIX = 'so'
 ROOT = Path(__file__).parent
@@ -36,12 +36,13 @@ PACKAGE_DATA = {
         f'./build/**/*.{OS_PYEXT_SUFFIX}',
     ],
 }
-if argv[1] == 'install':
-    dest_name = f'{get_python_lib()}{SEP}MoonRegistration{SEP}libs'
+DEST_NAME = None
+if argv[1] == 'bdist_wheel':
+    DEST_NAME = f'{SEP}MoonRegistration{SEP}libs'
 else:
-    dest_name = f'{SEP}MoonRegistration{SEP}libs'
+    DEST_NAME = f'{get_python_lib()}{SEP}MoonRegistration{SEP}libs'
 DATA_FILES = [
-    (dest_name, [str(f) for f in LIB_FILES])
+    (DEST_NAME, [str(f) for f in LIB_FILES])
 ]
 
 
@@ -90,14 +91,12 @@ class Build_ext_first(install):
             [f.resolve() for f in (ROOT/'build').rglob(f'MoonRegistration_pywrapper.{OS_PYEXT_SUFFIX}') if f.is_file()]
         )
         
+        # install destination is different than DEST_NAME
+        install_dest_name = f'{get_python_lib()}{SEP}MoonRegistration{SEP}libs'
+        Path(install_dest_name).mkdir(parents=True, exist_ok=True)
         # copy libraries to install directory
-        if argv[1] == 'install':
-            dest_name = f'{get_python_lib()}{SEP}MoonRegistration{SEP}libs'
-        else:
-            dest_name = f'{SEP}MoonRegistration{SEP}libs'
-        Path(dest_name).mkdir(parents=True, exist_ok=True)
         for libs in LIB_FILES:
-            self.copy_file(str(libs), f'{dest_name}{SEP}')
+            self.copy_file(str(libs), f'{install_dest_name}{SEP}')
         
         return install.run(self)
 
