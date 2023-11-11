@@ -64,9 +64,7 @@ endif()
 message(STATUS "================= MR Build Config ================")
 message(STATUS "MR_BUILD_SHARED_LIBS: ${MR_BUILD_SHARED_LIBS}")
 message(STATUS "MR_BUILD_WASM: ${MR_BUILD_WASM}")
-if (MR_BUILD_WASM)
-    message(STATUS "OPENCV_DIR: ${OPENCV_DIR}")
-endif()
+message(STATUS "OPENCV_DIR: ${OPENCV_DIR}")
 message(STATUS "==================================================")
 
 
@@ -80,6 +78,8 @@ if(NOT MR_BUILD_WASM)
         ${HEADER}
     )
     set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+    # add -fPIC compile flag for MoonRegistration for linux system
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
     
     # linking
     target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})

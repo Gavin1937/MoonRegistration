@@ -48,6 +48,7 @@ message(STATUS "============= MR Python Build Config =============")
 message(STATUS "PYTHON_LIBRARIES = ${PYTHON_LIBRARIES}")
 message(STATUS "PYTHON_EXECUTABLE = ${PYTHON_EXECUTABLE}")
 message(STATUS "PYTHON_INCLUDE_DIRS = ${PYTHON_INCLUDE_DIRS}")
+message(STATUS "BOOST_ROOT = $ENV{BOOST_ROOT}")
 message(STATUS "Boost_LIBRARIES = ${Boost_LIBRARIES}")
 message(STATUS "==================================================")
 
@@ -74,3 +75,5 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ${PYTHON_LIBRARIES})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${CMAKE_PROJECT_NAME} MoonRegistration)
 
+
+install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION "${PROJECT_SOURCE_DIR}/dist")
