@@ -17,6 +17,7 @@ RUN cd /src/MoonRegistration && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug && cmake --build build && \
     cd platforms/python && \
     pip3 install wheel && python3 setup.py install && \
-    python3 setup.py bdist_wheel && python3 setup.py bdist_wheel
+    python3 setup.py bdist_wheel --py-limited-api cp38 && \
+    python3 setup.py bdist_wheel --py-limited-api cp38
 
 ENTRYPOINT ["/bin/bash"]
