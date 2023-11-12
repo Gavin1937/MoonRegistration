@@ -2,6 +2,7 @@
 # it will automatically search for the MoonRegistration_pywrapper file,
 # and then load the correct file instead,
 # this approach can avoid ModuleNotFoundError
+# https://stackoverflow.com/a/13466708
 def __bootstrap__():
     global __bootstrap__, __loader__, __file__
     from imp import load_dynamic
