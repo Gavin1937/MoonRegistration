@@ -7,9 +7,10 @@
 |--------------------------------------------------------|--------------|-------------------------------------------------------------------|
 | [MoonDetector_basic.cpp](./MoonDetector_basic.cpp)     | MoonDetector | A basic usage, easy and quick                                     |
 | [MoonDetector_advance.cpp](./MoonDetector_advance.cpp) | MoonDetector | An advanced usage, you can customize each steps in moon detection |
+| [MoonDetector_basic.py](./MoonDetector_basic.py)       | MoonDetector | A basic usage of MoonRegistration Python Wrapper api              |
 
 
-## Build demos
+## Build demos (for C++)
 
 To build all the demos:
 
