@@ -187,6 +187,12 @@ def main():
         author="Gavin1937",
         url='https://github.com/Gavin1937/MoonRegistration',
         python_requires='>=3.8.0',
+        classifiers=[
+            'Programming Language :: Python :: 3.8',
+            'Programming Language :: Python :: 3.9',
+            'Programming Language :: Python :: 3.10',
+            'Programming Language :: Python :: 3.11',
+        ],
         setup_requires=['wheel'],
         
         packages=['MoonRegistration'],
