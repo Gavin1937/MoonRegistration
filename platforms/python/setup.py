@@ -7,7 +7,7 @@ from shutil import copy as shcopy, SameFileError
 import re
 import os
 from os import sep as SEP
-from sys import argv
+import sys
 from pathlib import Path
 import platform
 
@@ -45,7 +45,7 @@ PACKAGE_FILES = []
 for pattern in PACKAGE_DATA['MoonRegistration'][:-2]:
     PACKAGE_FILES += [f for f in ROOT.glob(pattern)]
 DEST_NAME = None
-if argv[1] == 'bdist_wheel':
+if sys.argv[1] == 'bdist_wheel':
     DEST_NAME = f'{SEP}MoonRegistration{SEP}libs'
 else:
     DEST_NAME = f'{get_python_lib()}{SEP}MoonRegistration{SEP}libs'

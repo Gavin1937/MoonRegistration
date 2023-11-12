@@ -1,3 +1,11 @@
+
+# When installed under unix system, the package may be scattered into different
+# folders defined in sys.path. Following line will add to the package's __path__
+# all subdirectories of directories on sys.path named after the package.
+# It can help this __init__.py to find all the scattered modules.
+from pkgutil import extend_path
+__path__ = extend_path(__path__, __name__)
+
 import os
 from pathlib import Path
 import platform

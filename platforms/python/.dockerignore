@@ -1,0 +1,14 @@
+*.dll
+*.so
+*.dylib
+*.pyd
+*.pyc
+*.whl
+*test*
+
+**/build
+**/dist
+**/data
+**/.venv
+**/*egg*
+**/*pycache*
