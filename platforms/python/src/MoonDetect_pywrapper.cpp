@@ -3,6 +3,8 @@
 
 boost::shared_ptr<mr::MoonDetector> new_MoonDetector(const py::object& data)
 {
+    // https://stackoverflow.com/a/8142943
+    
     // input bytes
     if (PyBytes_Check(data.ptr()))
     {

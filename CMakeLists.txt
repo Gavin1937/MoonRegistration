@@ -28,6 +28,7 @@ file(GLOB HEADER
 # OpenCV
 option(MR_BUILD_WASM "Build MoonRegistration into WebAssembly" OFF)
 set(OpenCV_STATIC ON)
+set(OpenCV_SHARED OFF)
 if (MR_BUILD_WASM)
     # Needed for opencv2/opencv.hpp
     include_directories("${OPENCV_DIR}/include")
@@ -64,7 +65,8 @@ endif()
 message(STATUS "================= MR Build Config ================")
 message(STATUS "MR_BUILD_SHARED_LIBS: ${MR_BUILD_SHARED_LIBS}")
 message(STATUS "MR_BUILD_WASM: ${MR_BUILD_WASM}")
-message(STATUS "OPENCV_DIR: ${OPENCV_DIR}")
+message(STATUS "OpenCV_DIR: ${OpenCV_DIR}")
+message(STATUS "OpenCV_LIBS: ${OpenCV_LIBS}")
 message(STATUS "==================================================")
 
 
