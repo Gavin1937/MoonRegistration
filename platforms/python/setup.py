@@ -88,7 +88,7 @@ class cmake_build_ext(build_ext):
                 os.makedirs(self.build_temp)
             
             # Config
-            proc = subprocess.Popen(['cmake', ext.cmake_lists_dir] + cmake_args, cwd=self.build_temp, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            proc = subprocess.Popen(['cmake', ext.cmake_lists_dir] + cmake_args, cwd=self.build_temp, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             
             # searching for 3rd party dependencies library location from cmake output
             out, err = proc.communicate()
@@ -192,7 +192,7 @@ def main():
         packages=['MoonRegistration'],
         ext_modules=[CMakeExtension(
             name="MoonRegistration",
-            cmake_lists_dir=ROOT,
+            cmake_lists_dir=str(ROOT.resolve()),
         )],
         cmdclass={
             'build_ext':cmake_build_ext,
