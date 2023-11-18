@@ -98,7 +98,6 @@ class cmake_build_ext(build_ext):
             if len(err) > 0: print(err)
             global LIB_FILES
             opencv_pattern = r'.*OpenCV_DIR: (.*)'
-            boost_pattern = r'.*Boost_LIBRARY_DIRS: (.*)'
             opencv_match = re.search(opencv_pattern, out)
             if opencv_match:
                 opencv_dir = Path(opencv_match.group(1))
@@ -106,14 +105,6 @@ class cmake_build_ext(build_ext):
                     if cfg == 'Debug' and f.stem.endswith('d'):
                         LIB_FILES.append(f)
                     elif cfg == 'Release' and not f.stem.endswith('d'):
-                        LIB_FILES.append(f)
-            boost_match = re.search(boost_pattern, out)
-            if boost_match:
-                boost_dir = Path(boost_match.group(1))
-                for f in boost_dir.rglob(f'boost_python*.{OS_SHARED_LIBRARY_SUFFIX}'):
-                    if cfg == 'Debug' and 'gd' in f.stem:
-                        LIB_FILES.append(f)
-                    elif cfg == 'Release' and 'gd' not in f.stem:
                         LIB_FILES.append(f)
             # update DATA_FILES accordingly
             global DATA_FILES
