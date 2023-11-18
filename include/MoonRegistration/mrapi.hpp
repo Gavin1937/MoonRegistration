@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include "version.hpp"
 #include "preprocessing.hpp"
 #include "shapes.hpp"
 #include "utils.hpp"

@@ -20,6 +20,9 @@ std::string str_StreamOptOverload(const TYPE& obj)
 
 PYBIND11_MODULE(MoonRegistration_pywrapper, module)
 {
+    // version.hpp
+    module.def("version", mr::version);
+    
     // shapes.hpp
     py::class_<mr::Circle>(module, "Circle")
         .def_readwrite("x", &mr::Circle::x)

@@ -112,6 +112,7 @@ int main(int argc, char** argv)
         return 0;
     }
     
+    std::cout << "MoonRegistration Library Version: " << mr::version() << std::endl;
     
     fs::path folder(argv[1]);
     std::cout << "Folder Path: " << folder << std::endl;
