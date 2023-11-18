@@ -3,9 +3,10 @@
 
 std::unique_ptr<mr::MoonDetector> new_MoonDetector(const py::object& data)
 {
-    std::unique_ptr<mr::MoonDetector> self(new mr::MoonDetector());
-    
     // https://stackoverflow.com/a/8142943
+    // https://stackoverflow.com/a/62310838
+    
+    std::unique_ptr<mr::MoonDetector> self(new mr::MoonDetector());
     
     // input bytes
     if (py::isinstance<py::bytes>(data))
