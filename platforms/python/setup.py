@@ -24,8 +24,8 @@ elif platform.system() == 'Darwin': # MacOS
 ROOT = Path(__file__).parent
 
 VERSION = {}
-with open(ROOT/'MoonRegistration/__version__.py', 'r', encoding='utf-8') as file:
-    exec(file.read(), VERSION)
+with open(ROOT/'../../VERSION', 'r', encoding='utf-8') as file:
+    VERSION = {'__version__':file.read().strip()}
 
 HAS_BUILT = False
 LIB_FILES = (

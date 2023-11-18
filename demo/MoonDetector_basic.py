@@ -3,7 +3,7 @@ import MoonRegistration as mr
 from sys import argv
 from pathlib import Path
 
-print(f'Package Version: {mr.__version__}')
+print(f'MoonRegistration Library Version: {mr.__version__}')
 
 
 if len(argv) < 2:
