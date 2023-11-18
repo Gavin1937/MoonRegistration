@@ -3,6 +3,7 @@
 # folders defined in sys.path. Following line will add to the package's __path__
 # all subdirectories of directories on sys.path named after the package.
 # It can help this __init__.py to find all the scattered modules.
+# https://stackoverflow.com/a/9003220
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
 
@@ -24,11 +25,6 @@ def add_dll_directory(lib_folder:str):
 env_OpenCV_DIR = os.getenv('OpenCV_DIR')
 if env_OpenCV_DIR:
     for folder in Path(env_OpenCV_DIR).glob('**/'):
-        if 'lib' in folder.name or 'bin' in folder.name:
-            add_dll_directory(str(folder.resolve()))
-env_BOOST_ROOT = os.getenv('BOOST_ROOT')
-if env_BOOST_ROOT:
-    for folder in Path(env_BOOST_ROOT).glob('**/'):
         if 'lib' in folder.name or 'bin' in folder.name:
             add_dll_directory(str(folder.resolve()))
 
