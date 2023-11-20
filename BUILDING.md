@@ -6,7 +6,7 @@
 
 ## Build System
 
-This project uses CMake as its build system. You need to [install CMake](https://cgold.readthedocs.io/en/latest/first-step/installation.html) in your system first
+This project uses CMake (version >= 3.11) as its build system. You need to [install CMake](https://cgold.readthedocs.io/en/latest/first-step/installation.html) in your system first
 
 
 ## Build Using Docker (recommend)
