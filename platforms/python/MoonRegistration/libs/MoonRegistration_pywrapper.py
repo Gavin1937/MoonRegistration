@@ -7,7 +7,7 @@ def __bootstrap__():
     global __bootstrap__, __loader__, __file__
     from imp import load_dynamic
     from site import getsitepackages
-    from os.path import join, exists
+    from os.path import join, exists, dirname
     from platform import system
     if system() == 'Windows':
         OS_PYEXT_SUFFIX = 'pyd'
@@ -15,11 +15,24 @@ def __bootstrap__():
         OS_PYEXT_SUFFIX = 'so'
     elif system() == 'Darwin': # MacOS
         OS_PYEXT_SUFFIX = 'so'
+    target_name = 'MoonRegistration_pywrapper.'+OS_PYEXT_SUFFIX
+    current_folder = dirname(__file__)
+    found = False
     file = None
-    for folder in getsitepackages():
-        file = join(folder,'MoonRegistration/libs/MoonRegistration_pywrapper.'+OS_PYEXT_SUFFIX)
+    # search target in current folder
+    if not found:
+        file = join(current_folder,target_name)
         if exists(file):
-            break
+            found = True
+    # search target in site-packages
+    if not found:
+        for folder in getsitepackages():
+            file = join(folder,'MoonRegistration','libs',target_name)
+            if exists(file):
+                found = True
+                break
+    if not found:
+        raise ModuleNotFoundError('Cannot find library: %s' % target_name)
     __file__ = file
     __loader__ = None; del __bootstrap__, __loader__
     load_dynamic(__name__,__file__)
