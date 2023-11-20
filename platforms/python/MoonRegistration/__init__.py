@@ -1,6 +1,6 @@
 
 # When installed under unix system, the package may be scattered into different
-# folders defined in sys.path. Following line will add to the package's __path__
+# folders defined in sys.path. Following 2 lines will add to the package's __path__
 # all subdirectories of directories on sys.path named after the package.
 # It can help this __init__.py to find all the scattered modules.
 # https://stackoverflow.com/a/9003220
