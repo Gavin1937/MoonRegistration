@@ -12,9 +12,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # python
 set(Python_USE_STATIC_LIBS ON)
-find_package(Python COMPONENTS Interpreter Development)
+find_package(Python COMPONENTS Interpreter Development.Module NumPy)
 
 # pybind
+# add_compile_options(-DPYBIND11_DETAILED_ERROR_MESSAGES) # enable debug message
 include(FetchContent)
 FetchContent_Declare(
     pybind11
@@ -28,11 +29,28 @@ if(NOT pybind11_POPULATED)
 endif()
 include_directories(${pybind11_INCLUDE_DIRS})
 
+# numpy
+set(NUMPY_INCLUDE_DIR "" CACHE FILEPATH "Path to numpy header if cmake can't find them.")
+if (NOT ${NUMPY_INCLUDE_DIR} STREQUAL "")
+    message( " *** NUMPY_INCLUDE_DIR : ${NUMPY_INCLUDE_DIR}" )
+    if(NOT EXISTS ${NUMPY_INCLUDE_DIR}/numpy/ndarrayobject.h)
+        message(SEND_ERROR "Can't find numpy/ndarrayobject.h in ${NUMPY_INCLUDE_DIR}")
+    endif()
+    include_directories(${NUMPY_INCLUDE_DIR})
+endif()
+
+# opencv
+set(OpenCV_STATIC ON)
+set(OpenCV_SHARED OFF)
+find_package(OpenCV REQUIRED)
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+
 
 message(STATUS "============= MR Python Build Config =============")
 message(STATUS "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
 message(STATUS "PYTHON_EXECUTABLE: ${PYTHON_EXECUTABLE}")
 message(STATUS "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
+message(STATUS "NUMPY_INCLUDE_DIR: ${NUMPY_INCLUDE_DIR}")
 message(STATUS "==================================================")
 
 
@@ -52,7 +70,9 @@ file(GLOB SRC
 # we need to use following function instead of pybind11_add_module
 # in order to get a .pyd file with specific output name
 PYTHON_ADD_LIBRARY(${CMAKE_PROJECT_NAME} ${SRC})
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Python::NumPy)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE pybind11::headers)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE MoonRegistration)
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     INTERPROCEDURAL_OPTIMIZATION ON

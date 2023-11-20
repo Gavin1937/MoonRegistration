@@ -20,8 +20,6 @@ std::unique_ptr<mr::MoonDetector> new_MoonDetector(const py::object& data)
         std::string val = py::cast<std::string>(data);
         self->init_by_path(val);
     }
-    // input MatLike
-    // else {}
     
     return self;
 }

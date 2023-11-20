@@ -7,6 +7,23 @@
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
 
+__all__ = [
+    # shapes.hpp
+    'Circle', 'Square', 'Rectangle',
+    'circle_to_square_s',
+    'circle_to_square_p',
+    'circle_to_rectangle_s',
+    'circle_to_rectangle_p',
+    # preprocessing.hpp
+    'resize_with_aspect_ratio',
+    'apply_brightness_contrast',
+    'calc_img_brightness_perc',
+    'calc_circle_brightness_perc',
+    'cut_image_from_circle',
+    # MoonDetect/detector.hpp
+    'MoonDetector',
+]
+
 import os
 from pathlib import Path
 import platform

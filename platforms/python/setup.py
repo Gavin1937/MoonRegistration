@@ -27,6 +27,10 @@ VERSION = {}
 with open(ROOT/'../../VERSION', 'r', encoding='utf-8') as file:
     VERSION = {'__version__':file.read().strip()}
 
+requirements = []
+with open('requirements.txt', 'r', encoding='utf-8') as file:
+    requirements = [line.strip() for line in file.readlines() if len(line.strip()) > 0]
+
 HAS_BUILT = False
 LIB_FILES = (
     [f.resolve() for f in (ROOT/'build').rglob(f'*.{OS_SHARED_LIBRARY_SUFFIX}') if f.is_file()] +
@@ -68,6 +72,9 @@ class cmake_build_ext(build_ext):
             return
         
         import subprocess
+        
+        # install requirements.txt first, since we need numpy to build the library
+        subprocess.check_call(['pip', 'install', '--no-input', '-r', 'requirements.txt'], cwd='.')
         
         # Ensure that CMake is present and working
         try:
@@ -178,6 +185,7 @@ def main():
         author="Gavin1937",
         url='https://github.com/Gavin1937/MoonRegistration',
         python_requires='>=3.8.0',
+        install_requires=requirements,
         classifiers=[
             'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9',
