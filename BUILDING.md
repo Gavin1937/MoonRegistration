@@ -80,6 +80,7 @@ all the build environments are set, so you can easily rebuild the library follow
   * [Install in MacOS](https://www.geeksforgeeks.org/how-to-install-opencv-for-c-on-macos/)
     * `brew install opencv@4.8.0`
   * [Install in linux](https://phoenixnap.com/kb/installing-opencv-on-ubuntu)
+  * Once you installed OpenCV, remember to set an environment variable `OpenCV_DIR=/path/to/opencv_root_dir`. This environment variable will help other software to find OpenCV
 
 ### Build Steps
 

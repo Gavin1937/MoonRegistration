@@ -1,17 +1,13 @@
-#define PYBIND11_DETAILED_ERROR_MESSAGES
-
-#include "MoonRegistration/mrapi.hpp"
-
 #include "../include/ndarray_converter.h"
-
-#include "../include/MoonDetect_pywrapper.hpp"
-#include "../include/preprocessing_pywrapper.hpp"
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
 
 #include <string>
 
-#include <pybind11/pybind11.h>
+#include "MoonRegistration/mrapi.hpp"
 
-namespace py = pybind11;
+#include "../include/MoonDetect_pywrapper.hpp"
+#include "../include/preprocessing_pywrapper.hpp"
 
 
 template<typename TYPE>

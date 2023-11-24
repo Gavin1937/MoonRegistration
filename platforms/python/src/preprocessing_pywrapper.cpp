@@ -23,7 +23,7 @@ py::tuple wrap_resize_with_aspect_ratio(
         inter
     );
     
-    return py::make_tuple(py::float_(ratio_out).release(), image_out);
+    return py::make_tuple(py::float_(ratio_out), image_out);
 }
 
 cv::Mat wrap_apply_brightness_contrast(
