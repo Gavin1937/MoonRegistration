@@ -30,7 +30,7 @@ docker run -it --rm --name moonregistration_python moonregistration_python
 To build this library manually and install it to your python environment, you need to:
 
 1. Install all the dependencies and be able to [build the MoonRegistration C++ library](../../BUILDING.md#build-into-library)
-   * You need to have a C++ compiler, [CMake >= 3.11](https://cmake.org/), OpenCV, and [Python >= 3.8](https://www.python.org/)
+   * You need to have a C++ compiler, [CMake >= 3.11](https://cmake.org/), OpenCV, and [Python >= 3.8](https://www.python.org/) (with numpy, it will be install by setup.py)
    * You can find install tutorial in [BUILDING.md](../../BUILDING.md)
 2. Under `platforms/python` folder, use following command to build and install this python library
 
@@ -64,5 +64,6 @@ You can checkout [MoonDetector_basic.py](../../demo/MoonDetector_basic.py) in [d
 
 # Special Thanks
 
-1. [pybind11_opencv_numpy by edmBernard](https://github.com/edmBernard/pybind11_opencv_numpy) for easy conversion between cv::Mat and cv2.MatLike (np.ndarray)
+* [pybind11 for easy C++ & Python binding](https://github.com/pybind/pybind11)
+* [pybind11_opencv_numpy by edmBernard](https://github.com/edmBernard/pybind11_opencv_numpy) for easy conversion between cv::Mat and cv2.MatLike (np.ndarray)
 

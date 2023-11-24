@@ -1,14 +1,14 @@
 #pragma once
 
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
 #include <string>
 #include <vector>
 #include <memory>
 
 #include "MoonRegistration/mrapi.hpp"
 
-#include <pybind11/pybind11.h>
-
-namespace py = pybind11;
 
 std::unique_ptr<mr::MoonDetector> new_MoonDetector(const py::object& data);
 

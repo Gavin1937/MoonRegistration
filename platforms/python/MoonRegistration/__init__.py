@@ -24,6 +24,11 @@ __all__ = [
     'MoonDetector',
 ]
 
+__doc__ = '''
+Python wrapper for MoonRegistration Library.
+MoonRegistration Is A Cross Platform C++ library for Moon Location Detection & Moon Image Registration.
+'''
+
 import os
 from pathlib import Path
 import platform
