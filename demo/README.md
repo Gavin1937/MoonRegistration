@@ -3,11 +3,12 @@
 
 ## Demo Explanation
 
-| Name                                                   | Module       | Description                                                       |
-|--------------------------------------------------------|--------------|-------------------------------------------------------------------|
-| [MoonDetector_basic.cpp](./MoonDetector_basic.cpp)     | MoonDetector | A basic usage, easy and quick                                     |
-| [MoonDetector_advance.cpp](./MoonDetector_advance.cpp) | MoonDetector | An advanced usage, you can customize each steps in moon detection |
-| [MoonDetector_basic.py](./MoonDetector_basic.py)       | MoonDetector | A basic usage of MoonRegistration Python Wrapper api              |
+| Name                                                   | Module       | Description                                                                                              |
+|--------------------------------------------------------|--------------|----------------------------------------------------------------------------------------------------------|
+| [MoonDetector_basic.cpp](./MoonDetector_basic.cpp)     | MoonDetector | A basic usage, easy and quick                                                                            |
+| [MoonDetector_advance.cpp](./MoonDetector_advance.cpp) | MoonDetector | An advanced usage, you can customize each steps in moon detection                                        |
+| [MoonDetector_basic.py](./MoonDetector_basic.py)       | MoonDetector | A basic usage of MoonRegistration Python Wrapper api                                                     |
+| [MoonDetector_advance.py](./MoonDetector_advance.py)   | MoonDetector | An advanced usage of MoonRegistration Python Wrapper api, you can customize each steps in moon detection |
 
 
 ## Build demos (for C++)
