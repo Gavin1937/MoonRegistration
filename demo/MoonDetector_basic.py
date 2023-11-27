@@ -7,12 +7,12 @@ print(f'MoonRegistration Library Version: {mr.__version__}')
 
 
 if len(argv) < 2:
-    print("Usage: ./MoonDetector_basic /path/to/image/folder")
+    print('Usage: ./MoonDetector_basic /path/to/image/folder')
     exit(0)
 
 
 folder = Path(argv[1])
-print(f"Folder Path: {folder}")
+print(f'Folder Path: {folder}')
 for dirEntry in folder.rglob('*'):
     # read image directly from filepath
     detector = mr.MoonDetector(str(dirEntry))
@@ -22,15 +22,21 @@ for dirEntry in folder.rglob('*'):
     #     buffer = file_in.read()
     # detector = mr.MoonDetector(buffer)
     
+    # # read image from cv2.MatLike (numpy.ndarray) object
+    # import cv2
+    # # fill-in pixel data to cv_image...
+    # cv_image = cv2.imread(str(dirEntry))
+    # detector = mr.MoonDetector(cv_image)
+    
     
     # calculate moon position
     final_circle = detector.detect_moon()
     
     
     # printing out result
-    print("\n\n\n", end='')
-    print(f"file.name = '{dirEntry.name}'")
-    print(f"Circle: {final_circle}")
-    print(f"Square: {mr.circle_to_square_s(final_circle)}")
-    print(f"Rectangle: {mr.circle_to_rectangle_s(final_circle)}")
+    print('\n\n\n', end='')
+    print(f'file.name = \'{dirEntry.name}\'')
+    print(f'Circle: {final_circle}')
+    print(f'Square: {mr.circle_to_square_s(final_circle)}')
+    print(f'Rectangle: {mr.circle_to_rectangle_s(final_circle)}')
 

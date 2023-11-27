@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <functional>
 
 #include "../macros.h"
 #include "../shapes.hpp"
@@ -116,11 +117,11 @@ public:
     // You can modify them to further customize how mr::MoonDetector::detect_moon() works
     // All the function pointers are default to default_... functions defined in "detector.hpp"
     
-    void (*preprocess_steps)(const cv::Mat&, cv::Mat&, float&) = nullptr;
-    void (*param_init)(const ImageShape&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&) = nullptr;
-    void (*iteration_param_update)(const int, const float, const ImageShape&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&) = nullptr;
-    mr::Circle (*iteration_circle_select)(const int, const cv::Mat&, const std::vector<cv::Vec3f>&) = nullptr;
-    mr::Circle (*coordinate_remap)(const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>&, const float) = nullptr;
+    std::function<void(const cv::Mat&, cv::Mat&, float&)> preprocess_steps = nullptr;
+    std::function<void(const ImageShape&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> param_init = nullptr;
+    std::function<void(const int, const float, const ImageShape&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> iteration_param_update = nullptr;
+    std::function<mr::Circle(const int, const cv::Mat&, const std::vector<cv::Vec3f>&)> iteration_circle_select = nullptr;
+    std::function<mr::Circle(const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>&, const float)> coordinate_remap = nullptr;
     
 private:
     float resize_ratio;
