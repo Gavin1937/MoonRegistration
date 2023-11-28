@@ -18,11 +18,10 @@ namespace mr
 EXPORT_SYMBOL void find_circles_in_img(
     const cv::Mat& image_in,
     std::vector<cv::Vec3f>& detected_circles,
+    const int circle_threshold,
     const double dp,
     const double minDist,
-    const double minRadiusRate,
     const int minRadius,
-    const double maxRadiusRate,
     const int maxRadius,
     const double param1,
     const double param2
