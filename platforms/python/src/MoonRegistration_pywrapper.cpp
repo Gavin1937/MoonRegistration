@@ -39,11 +39,18 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
             circle_to_square_p
             circle_to_rectangle_s
             circle_to_rectangle_p
+            ImageShape
+            calc_image_shape
             resize_with_aspect_ratio
             apply_brightness_contrast
             calc_img_brightness_perc
             calc_circle_brightness_perc
             cut_image_from_circle
+            default_preprocess_steps
+            default_param_init
+            default_iteration_param_update
+            default_iteration_circle_select
+            default_coordinate_remap
             MoonDetector
     )pbdoc";
     
