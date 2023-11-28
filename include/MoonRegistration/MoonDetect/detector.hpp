@@ -15,6 +15,19 @@
 namespace mr
 {
 
+// A wrapper function around cv::HoughCircles
+// 
+// Parameters:
+//   - image_in: gray scaled input image
+//   - detected_circles: output detected circles vector
+//   - circle_threshold: threshold on number of circles to search
+//     if detected_circles > circle_threshold, function will throw runtime_error
+//   - dp: OpenCV parameter, inverse ratio of the accumulator resolution to the image resolution
+//   - minDist: OpenCV parameter, minimum distance between the centers of the detected circles
+//   - minRadius: OpenCV parameter, minimum circle radius
+//   - maxRadius: OpenCV parameter, maximum circle radius
+//   - param1: OpenCV parameter, first method-specific parameter
+//   - param2: OpenCV parameter, second method-specific parameter
 EXPORT_SYMBOL void find_circles_in_img(
     const cv::Mat& image_in,
     std::vector<cv::Vec3f>& detected_circles,
