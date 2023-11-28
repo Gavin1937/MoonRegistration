@@ -1,6 +1,8 @@
-#include "../include/ndarray_converter.h"
 #include <pybind11/pybind11.h>
 namespace py = pybind11;
+
+#include "../include/ndarray_converter.h"
+#include "../include/cvvec3f_vector_ndarray.hpp"
 
 #include <string>
 
@@ -21,39 +23,6 @@ std::string str_StreamOptOverload(const TYPE& obj)
 
 PYBIND11_MODULE(MoonRegistration_pywrapper, module)
 {
-    module.doc() = R"pbdoc(
-        Python wrapper for MoonRegistration Library.
-        MoonRegistration Is A Cross Platform C++ library for Moon Location Detection & Moon Image Registration.
-        --------------------
-        
-        .. currentmodule:: MoonRegistration
-        
-        .. autosummary::
-           :toctree: _generate
-        
-            version
-            Circle
-            Square
-            Rectangle
-            circle_to_square_s
-            circle_to_square_p
-            circle_to_rectangle_s
-            circle_to_rectangle_p
-            ImageShape
-            calc_image_shape
-            resize_with_aspect_ratio
-            apply_brightness_contrast
-            calc_img_brightness_perc
-            calc_circle_brightness_perc
-            cut_image_from_circle
-            default_preprocess_steps
-            default_param_init
-            default_iteration_param_update
-            default_iteration_circle_select
-            default_coordinate_remap
-            MoonDetector
-    )pbdoc";
-    
     NDArrayConverter::init_numpy();
     
     
@@ -63,7 +32,11 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     
     // shapes.hpp
     py::class_<mr::Circle>(module, "Circle")
-        .def(py::init<int,int,int>())
+        .def(py::init<int,int,int>(),
+            py::arg("x"),
+            py::arg("y"),
+            py::arg("radius")
+        )
         .def_readwrite("x", &mr::Circle::x)
         .def_readwrite("y", &mr::Circle::y)
         .def_readwrite("radius", &mr::Circle::radius)
@@ -72,7 +45,11 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     ;
     
     py::class_<mr::Square>(module, "Square")
-        .def(py::init<int,int,int>())
+        .def(py::init<int,int,int>(),
+            py::arg("x"),
+            py::arg("y"),
+            py::arg("width")
+        )
         .def_readwrite("x", &mr::Square::x)
         .def_readwrite("y", &mr::Square::y)
         .def_readwrite("width", &mr::Square::width)
@@ -81,7 +58,12 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     ;
     
     py::class_<mr::Rectangle>(module, "Rectangle")
-        .def(py::init<int,int,int,int>())
+        .def(py::init<int,int,int,int>(),
+            py::arg("top_left_x"),
+            py::arg("top_left_y"),
+            py::arg("bottom_right_x"),
+            py::arg("bottom_right_y")
+        )
         .def_readwrite("top_left_x", &mr::Rectangle::top_left_x)
         .def_readwrite("top_left_y", &mr::Rectangle::top_left_y)
         .def_readwrite("bottom_right_x", &mr::Rectangle::bottom_right_x)
@@ -90,20 +72,40 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
         .def("__repr__", str_StreamOptOverload<mr::Rectangle>)
     ;
     
-    module.def("circle_to_square_s", mr::circle_to_square_s);
-    module.def("circle_to_square_p", mr::circle_to_square_p);
-    module.def("circle_to_rectangle_s", mr::circle_to_rectangle_s);
-    module.def("circle_to_rectangle_p", mr::circle_to_rectangle_p);
+    module.def("circle_to_square_s", mr::circle_to_square_s,
+        py::arg("circle")
+    );
+    module.def("circle_to_square_p", mr::circle_to_square_p,
+        py::arg("x"),
+        py::arg("y"),
+        py::arg("radius")
+    );
+    module.def("circle_to_rectangle_s", mr::circle_to_rectangle_s,
+        py::arg("circle")
+    );
+    module.def("circle_to_rectangle_p", mr::circle_to_rectangle_p,
+        py::arg("x"),
+        py::arg("y"),
+        py::arg("radius")
+    );
     
     
     // utils.hpp
     py::class_<mr::ImageShape>(module, "ImageShape")
+        .def(py::init<int,int,int,int>(),
+            py::arg("height"),
+            py::arg("width"),
+            py::arg("longer_side"),
+            py::arg("shorter_side")
+        )
         .def_readwrite("height", &mr::ImageShape::height)
         .def_readwrite("width", &mr::ImageShape::width)
         .def_readwrite("longer_side", &mr::ImageShape::longer_side)
         .def_readwrite("shorter_side", &mr::ImageShape::shorter_side)
     ;
-    module.def("calc_image_shape", mr::calc_image_shape);
+    module.def("calc_image_shape", mr::calc_image_shape,
+        py::arg("image_in")
+    );
     
     
     // preprocessing.hpp
@@ -202,10 +204,66 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     );
     
     
+    // MoonDetect/selector.hpp
+    
+    module.def("select_circle_by_brightness_perc", mr::select_circle_by_brightness_perc,
+        py::arg("image_in"),
+        py::arg("detected_circles")
+    );
+    module.def("select_n_circles_by_brightness_perc", mr::select_n_circles_by_brightness_perc,
+        py::arg("image_in"),
+        py::arg("detected_circles"),
+        py::arg("n")
+    );
+    module.def("select_circle_by_largest_radius", mr::select_circle_by_largest_radius,
+        py::arg("image_in"),
+        py::arg("detected_circles")
+    );
+    module.def("select_n_circles_by_largest_radius", mr::select_n_circles_by_largest_radius,
+        py::arg("image_in"),
+        py::arg("detected_circles"),
+        py::arg("n")
+    );
+    module.def("select_circle_by_shape", mr::select_circle_by_shape,
+        py::arg("image_in"),
+        py::arg("detected_circles")
+    );
+    
+    
     // MoonDetect/detector.hpp
     
+    module.def("find_circles_in_img", wrap_find_circles_in_img,
+    py::arg("image_in"),
+    py::arg("circle_threshold"),
+    py::arg("dp"),
+    py::arg("minDist"),
+    py::arg("minRadius"),
+    py::arg("maxRadius"),
+    py::arg("param1"),
+    py::arg("param2"),
+    R"pbdoc(
+    A wrapper function around cv::HoughCircles
+    
+    Parameters:
+      - image_in: gray scaled input image
+      - circle_threshold: threshold on number of circles to search
+        if detected_circles > circle_threshold, function will throw runtime_error
+      - dp: OpenCV parameter, inverse ratio of the accumulator resolution to the image resolution
+      - minDist: OpenCV parameter, minimum distance between the centers of the detected circles
+      - minRadius: OpenCV parameter, minimum circle radius
+      - maxRadius: OpenCV parameter, maximum circle radius
+      - param1: OpenCV parameter, first method-specific parameter
+      - param2: OpenCV parameter, second method-specific parameter
+    
+    Returns:
+      - detected_circles: numpy.ndarray representing output detected circles
+    )pbdoc"
+    );
+    
     // default stage functions
-    module.def("default_preprocess_steps", wrap_default_preprocess_steps, R"pbdoc(
+    module.def("default_preprocess_steps", wrap_default_preprocess_steps,
+    py::arg("image_in"),
+    R"pbdoc(
     Default function for preprocess_steps stage
     
     Parameters:
@@ -214,7 +272,19 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     Returns:
       - tuple[image_out:cv2.MatLike|numpy.ndarray, resize_ratio_out:float]
     )pbdoc");
-    module.def("default_param_init", wrap_default_param_init, R"pbdoc(
+    module.def("default_param_init", wrap_default_param_init,
+    py::arg("image_shape"),
+    py::arg("max_iteration"),
+    py::arg("circle_threshold"),
+    py::arg("dp"),
+    py::arg("minDist"),
+    py::arg("minRadiusRate"),
+    py::arg("minRadius"),
+    py::arg("maxRadiusRate"),
+    py::arg("maxRadius"),
+    py::arg("param1"),
+    py::arg("param2"),
+    R"pbdoc(
     Default function for param_init stage
     
     Parameters:
@@ -237,7 +307,21 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
         param1:float, param2:float
       ]
     )pbdoc");
-    module.def("default_iteration_param_update", wrap_default_iteration_param_update, R"pbdoc(
+    module.def("default_iteration_param_update", wrap_default_iteration_param_update,
+    py::arg("iteration"),
+    py::arg("image_brightness_perc"),
+    py::arg("image_shape"),
+    py::arg("max_iteration"),
+    py::arg("circle_threshold"),
+    py::arg("dp"),
+    py::arg("minDist"),
+    py::arg("minRadiusRate"),
+    py::arg("minRadius"),
+    py::arg("maxRadiusRate"),
+    py::arg("maxRadius"),
+    py::arg("param1"),
+    py::arg("param2"),
+    R"pbdoc(
     Default function for iteration_param_update stage
     
     Parameters:
@@ -262,7 +346,11 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
         param1:float, param2:float
       ]
     )pbdoc");
-    module.def("default_iteration_circle_select", wrap_default_iteration_circle_select, R"pbdoc(
+    module.def("default_iteration_circle_select", wrap_default_iteration_circle_select,
+    py::arg("iteration"),
+    py::arg("image_in"),
+    py::arg("detected_circles"),
+    R"pbdoc(
     Default function for iteration_circle_select stage
     
     Parameters:
@@ -273,7 +361,10 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     Returns:
       - mr.Circle
     )pbdoc");
-    module.def("default_coordinate_remap", wrap_default_coordinate_remap, R"pbdoc(
+    module.def("default_coordinate_remap", wrap_default_coordinate_remap,
+    py::arg("result_list"),
+    py::arg("resize_ratio"),
+    R"pbdoc(
     Default function for coordinate_remap stage
     
     Parameters:
@@ -288,7 +379,9 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     py::class_<mr::MoonDetector>(module, "MoonDetector")
         .def(py::init<>())
         // handle bytes & str param
-        .def(py::init(&new_MoonDetector), R"pbdoc(
+        .def(py::init(&new_MoonDetector),
+        py::arg("data"),
+        R"pbdoc(
     Handling str image_filepath or bytes image_binary.
     
     Parameters:
@@ -301,8 +394,8 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
             colors in cv_image MUST in BGR order
         )pbdoc")
         .def("is_empty", &mr::MoonDetector::is_empty)
-        .def("init_by_path", &mr::MoonDetector::init_by_path)
-        .def("init_by_byte", wrap_MoonDetect_init_by_byte)
+        .def("init_by_path", &mr::MoonDetector::init_by_path, py::arg("image_filepath"))
+        .def("init_by_byte", wrap_MoonDetect_init_by_byte, py::arg("image_binary"))
         .def("detect_moon", &mr::MoonDetector::detect_moon, R"pbdoc(
     trying to find a circle from input image
     thats most likely contains the moon.
@@ -312,31 +405,41 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
       - if fail (input doesn't contain circle), return mr::Circle of {-1, -1, -1}
         )pbdoc")
         // set stage function pointers
-        .def("set_preprocess_steps", set_MoonDetect_preprocess_steps, R"pbdoc(
+        .def("set_preprocess_steps", set_MoonDetect_preprocess_steps,
+        py::arg("func"),
+        R"pbdoc(
     Set mr::MoonDetector::preprocess_steps
     
     Parameters:
       - func: callable function (cv2.MatLike|numpy.ndarray) -> tuple
         )pbdoc")
-        .def("set_param_init", set_MoonDetect_param_init, R"pbdoc(
+        .def("set_param_init", set_MoonDetect_param_init,
+        py::arg("func"),
+        R"pbdoc(
     Set mr::MoonDetector::param_init
     
     Parameters:
       - func: callable function (mr.ImageShape, int, int, float, float, float, int, float, int, float, float) -> tuple
         )pbdoc")
-        .def("set_iteration_param_update", set_MoonDetect_iteration_param_update, R"pbdoc(
+        .def("set_iteration_param_update", set_MoonDetect_iteration_param_update,
+        py::arg("func"),
+        R"pbdoc(
     Set mr::MoonDetector::iteration_param_update
     
     Parameters:
       - func: callable function (int, float, mr.ImageShape, int, int, float, float, float, int, float, int, float, float) -> tuple
         )pbdoc")
-        .def("set_iteration_circle_select", set_MoonDetect_iteration_circle_select, R"pbdoc(
+        .def("set_iteration_circle_select", set_MoonDetect_iteration_circle_select,
+        py::arg("func"),
+        R"pbdoc(
     Set mr::MoonDetector::iteration_circle_select
     
     Parameters:
       - func: callable function (int, cv2.MatLike|numpy.ndarray, numpy.ndarray) -> mr.Circle
         )pbdoc")
-        .def("set_coordinate_remap", set_MoonDetect_coordinate_remap, R"pbdoc(
+        .def("set_coordinate_remap", set_MoonDetect_coordinate_remap,
+        py::arg("func"),
+        R"pbdoc(
     Set mr::MoonDetector::coordinate_remap
     
     Parameters:

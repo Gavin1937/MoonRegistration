@@ -25,7 +25,14 @@ __all__ = [
     'calc_img_brightness_perc',
     'calc_circle_brightness_perc',
     'cut_image_from_circle',
+    # MoonDetect/selector.hpp
+    'select_circle_by_brightness_perc',
+    'select_n_circles_by_brightness_perc',
+    'select_circle_by_largest_radius',
+    'select_n_circles_by_largest_radius',
+    'select_circle_by_shape',
     # MoonDetect/detector.hpp
+    'find_circles_in_img',
     'default_preprocess_steps',
     'default_param_init',
     'default_iteration_param_update',
