@@ -8,12 +8,17 @@ from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
 
 __all__ = [
+    # version.hpp
+    'version',
     # shapes.hpp
     'Circle', 'Square', 'Rectangle',
     'circle_to_square_s',
     'circle_to_square_p',
     'circle_to_rectangle_s',
     'circle_to_rectangle_p',
+    # utils.hpp
+    'ImageShape',
+    'calc_image_shape',
     # preprocessing.hpp
     'resize_with_aspect_ratio',
     'apply_brightness_contrast',
@@ -21,6 +26,11 @@ __all__ = [
     'calc_circle_brightness_perc',
     'cut_image_from_circle',
     # MoonDetect/detector.hpp
+    'default_preprocess_steps',
+    'default_param_init',
+    'default_iteration_param_update',
+    'default_iteration_circle_select',
+    'default_coordinate_remap',
     'MoonDetector',
 ]
 

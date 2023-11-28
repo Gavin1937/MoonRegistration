@@ -66,7 +66,7 @@ public:
         dst_array.resize(py::array::ShapeContainer({1,static_cast<int>(src.size()),3}));
         
         handle result = handle(dst_array);
-        result.inc_ref(); // increase reference count so dst_array is visible by python
+        result.inc_ref(); // increase reference count so dst_array is visible to python
         return result;
     }
 };
