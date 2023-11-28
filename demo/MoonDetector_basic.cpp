@@ -1,4 +1,5 @@
 #include <opencv2/core/mat.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -56,6 +57,7 @@ int main(int argc, char** argv)
         // // read image from cv::Mat object
         // cv::Mat cv_image;
         // // fill-in pixel data to cv_image...
+        // cv_image = cv::imread(dirEntry.path().string());
         // mr::MoonDetector detector(cv_image);
         
         
