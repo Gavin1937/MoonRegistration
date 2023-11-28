@@ -111,9 +111,14 @@ public:
     
     EXPORT_SYMBOL bool is_empty();
     
+    // (re)init mr::MoonDetector by image_filepath
     EXPORT_SYMBOL void init_by_path(const std::string& image_filepath);
     
+    // (re)init mr::MoonDetector by image_binary
     EXPORT_SYMBOL void init_by_byte(const std::vector<unsigned char>& image_binary);
+    
+    // (re)init mr::MoonDetector by image_in
+    EXPORT_SYMBOL void init_by_mat(const cv::Mat& image_in);
     
     // trying to find a circle from input image
     // thats most likely contains the moon.
@@ -125,7 +130,7 @@ public:
     
     
     // Following public members of mr::MoonDetector are function pointers
-    // They are functions handle different steps in mr::MoonDetector::detect_moon()
+    // They are functions handling different steps in mr::MoonDetector::detect_moon()
     // You can modify them to further customize how mr::MoonDetector::detect_moon() works
     // All the function pointers are default to default_... functions defined in "detector.hpp"
     

@@ -394,8 +394,30 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
             colors in cv_image MUST in BGR order
         )pbdoc")
         .def("is_empty", &mr::MoonDetector::is_empty)
-        .def("init_by_path", &mr::MoonDetector::init_by_path, py::arg("image_filepath"))
-        .def("init_by_byte", wrap_MoonDetect_init_by_byte, py::arg("image_binary"))
+        .def("init_by_path", &mr::MoonDetector::init_by_path, py::arg("image_filepath"),
+        R"pbdoc(
+    (re)init mr.MoonDetector by image_filepath
+    
+    Parameters:
+      - image_filepath: str filepath
+        )pbdoc"
+        )
+        .def("init_by_byte", wrap_MoonDetect_init_by_byte, py::arg("image_binary"),
+        R"pbdoc(
+    (re)init mr.MoonDetector by image_binary
+    
+    Parameters:
+      - image_binary: bytes raw image
+        )pbdoc"
+        )
+        .def("init_by_mat", &mr::MoonDetector::init_by_mat, py::arg("image_in"),
+        R"pbdoc(
+    (re)init mr.MoonDetector by image_in
+    
+    Parameters:
+      - image_in: cv2.MatLike|numpy.ndarray image
+        )pbdoc"
+        )
         .def("detect_moon", &mr::MoonDetector::detect_moon, R"pbdoc(
     trying to find a circle from input image
     thats most likely contains the moon.
