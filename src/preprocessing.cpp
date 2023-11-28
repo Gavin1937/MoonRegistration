@@ -195,7 +195,9 @@ EXPORT_SYMBOL void cut_image_from_circle(
     int xEnd = x + radius + padding;
     if (xEnd > width) xEnd = width;
     
-    image_out = cv::Mat(image_in, cv::Range(yStart, yEnd), cv::Range(xStart, xEnd));
+    // use cv::Mat::operator() to extract a sub-matrix as reference
+    // and then copy the data into image_out
+    image_in(cv::Range(yStart, yEnd), cv::Range(xStart, xEnd)).copyTo(image_out);
     rect_out = {xStart, yStart, xEnd, yEnd};
 }
 
