@@ -1,5 +1,5 @@
-#include "../include/ndarray_converter.h"
 #include "../include/preprocessing_pywrapper.hpp"
+#include "../include/ndarray_converter.h"
 
 #include "MoonRegistration/preprocessing.hpp"
 

@@ -1,6 +1,31 @@
 #include "../include/MoonDetect_pywrapper.hpp"
+
 #include <pybind11/stl.h>
 
+#include "../include/ndarray_converter.h"
+#include "../include/cvvec3f_vector_ndarray.hpp"
+
+
+std::vector<cv::Vec3f> wrap_find_circles_in_img(
+    const cv::Mat& image_in,
+    const int circle_threshold,
+    const double dp,
+    const double minDist,
+    const int minRadius,
+    const int maxRadius,
+    const double param1,
+    const double param2
+)
+{
+    std::vector<cv::Vec3f> output;
+    mr::find_circles_in_img(
+        image_in, output, circle_threshold,
+        dp, minDist,
+        minRadius, maxRadius,
+        param1, param2
+    );
+    return output;
+}
 
 // default stage functions
 
