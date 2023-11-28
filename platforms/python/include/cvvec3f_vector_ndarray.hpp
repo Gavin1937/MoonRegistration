@@ -22,16 +22,21 @@ public:
         py::array_t<float> src_array = py::cast<py::array_t<float>>(src);
         py::buffer_info buff = src_array.request();
         
-        // we are expecting 3d array of shape (1, x, 3)
+        // we are expecting input 3d array of shape (1, x, 3)
         // where x is the size of output vector
         if (buff.ndim != 3)
             return false;
+        if (buff.shape[0] != 1 || buff.shape[2] != 3)
+            return false;
         
-        int flat_array_size = static_cast<int>(buff.size);
+        py::ssize_t flat_array_size = buff.size;
+        py::ssize_t output_size = buff.shape[1];
+        if (flat_array_size/3 != output_size)
+            return false;
         float* flat_array = static_cast<float*>(buff.ptr);
         
         // copy src to output value
-        value = std::vector<cv::Vec3f>(flat_array_size/3);
+        value = std::vector<cv::Vec3f>(output_size);
         for (int counter = 0, i = 0; i < flat_array_size; i+=3, counter++)
         {
             value[counter] = cv::Vec3f(
