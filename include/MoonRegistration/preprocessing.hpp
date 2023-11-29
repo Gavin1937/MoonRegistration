@@ -86,11 +86,31 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
     int radius
 );
 
-// Cut a square image using input circle
+// Cut a square image using input circle and output a cv::Mat reference to input
 // 
 // Parameters:
 //   - image_in: input image
-//   - image_out: output image
+//   - image_out: output image, reference of input image
+//   - rect_out: mr::Rectangle, top_left & bottom_right coordinate of output square in image_in
+//   - x: circle center x
+//   - y: circle center y
+//   - radius: circle radius
+//   - padding: padding pixels to the radius (default 15)
+EXPORT_SYMBOL void cut_ref_image_from_circle(
+    const cv::Mat& image_in,
+    cv::Mat& image_out,
+    mr::Rectangle& rect_out,
+    int x,
+    int y,
+    int radius,
+    int padding         = 15
+);
+
+// Cut a square image using input circle and output a cv::Mat copy of input
+// 
+// Parameters:
+//   - image_in: input image
+//   - image_out: output image, copy of input image
 //   - rect_out: mr::Rectangle, top_left & bottom_right coordinate of output square in image_in
 //   - x: circle center x
 //   - y: circle center y

@@ -199,7 +199,7 @@ EXPORT_SYMBOL mr::Circle select_circle_by_shape(
             veci = mr::round_vec3f(vec);
             cv::Mat circle;
             mr::Rectangle rect_out;
-            cut_image_from_circle(
+            cut_ref_image_from_circle(
                 image_in, circle, rect_out,
                 veci[0], veci[1], veci[2]
             );
