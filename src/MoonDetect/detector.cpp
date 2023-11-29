@@ -355,7 +355,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         // cut out part of img from circle
         cv::Mat buff;
         mr::Rectangle rect_out;
-        mr::cut_image_from_circle(
+        mr::cut_ref_image_from_circle(
             this->process_image,
             buff,
             rect_out,

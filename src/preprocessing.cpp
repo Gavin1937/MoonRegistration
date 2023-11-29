@@ -170,7 +170,7 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
     );
 }
 
-EXPORT_SYMBOL void cut_image_from_circle(
+EXPORT_SYMBOL void cut_ref_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,
     mr::Rectangle& rect_out,
@@ -196,9 +196,24 @@ EXPORT_SYMBOL void cut_image_from_circle(
     if (xEnd > width) xEnd = width;
     
     // use cv::Mat::operator() to extract a sub-matrix as reference
-    // and then copy the data into image_out
-    image_in(cv::Range(yStart, yEnd), cv::Range(xStart, xEnd)).copyTo(image_out);
+    // and then copy the reference to image_out
+    image_out = image_in(cv::Range(yStart, yEnd), cv::Range(xStart, xEnd));
     rect_out = {xStart, yStart, xEnd, yEnd};
+}
+
+EXPORT_SYMBOL void cut_image_from_circle(
+    const cv::Mat& image_in,
+    cv::Mat& image_out,
+    mr::Rectangle& rect_out,
+    int x,
+    int y,
+    int radius,
+    int padding
+)
+{
+    cut_ref_image_from_circle(image_in, image_out, rect_out, x, y, radius, padding);
+    // copy content of image_out to a new cv::Mat
+    image_out = image_out.clone();
 }
 
 }

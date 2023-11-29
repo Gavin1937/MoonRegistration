@@ -190,11 +190,11 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
         py::arg("radius"),
         py::arg("padding")         = 15,
         R"pbdoc(
-    Cut a square image using input circle
+    Cut a square image using input circle and output a cv2.MatLike|numpy.ndarray copy of input
     
     Parameters:
       - image_in: input image
-      - image_out: output image
+      - image_out: output image, copy of input image
       - rect_out: mr::Rectangle, top_left & bottom_right coordinate of output square in image_in
       - x: circle center x
       - y: circle center y
