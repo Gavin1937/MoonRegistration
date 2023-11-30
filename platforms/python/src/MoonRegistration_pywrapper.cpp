@@ -183,6 +183,8 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
       - float between 0 to 1
         )pbdoc"
     );
+    // cut_ref_image_from_circle won't be supported because we cannot properly convert
+    // cv::Mat referring another cv::Mat to numpy.ndarray
     module.def("cut_image_from_circle", &wrap_cut_image_from_circle,
         py::arg("image_in"),
         py::arg("x"),
