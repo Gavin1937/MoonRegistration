@@ -32,6 +32,8 @@ To build this library from source and install it to your python environment, you
 1. Install all the dependencies and make sure you can [build the MoonRegistration C++ library](../../BUILDING.md#build-into-library)
    * You need to have a C++ compiler, [CMake >= 3.11](https://cmake.org/), OpenCV, and [Python >= 3.8](https://www.python.org/) (with numpy, it will be install by setup.py)
    * You can find install tutorial in [BUILDING.md](../../BUILDING.md)
+   * **For the ease of dependency searching, this package will looking for environment variables**
+     * As suggested in [BUILDING.md Dependencies section](../../BUILDING.md#build-into-library), you should set an environment variable for OpenCV root directory, so python can correctly find OpenCV libraries.
 2. Under `platforms/python` folder, use following command to build and install this python library
 
 ```sh
