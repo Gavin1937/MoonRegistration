@@ -74,7 +74,7 @@ class cmake_build_ext(build_ext):
         import subprocess
         
         # install requirements.txt first, since we need numpy to build the library
-        subprocess.check_call(['pip', 'install', '--no-input', '-r', 'requirements.txt'], cwd='.')
+        subprocess.check_call(['pip', 'install', '--no-input', 'numpy>=1.23.5'], cwd='.')
         
         # Ensure that CMake is present and working
         try:
