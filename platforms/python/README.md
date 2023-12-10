@@ -55,6 +55,14 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config=Release
 ```
 
+### Python Dependencies
+
+| Name                  | Version     | Description                                                     |
+|-----------------------|-------------|-----------------------------------------------------------------|
+| numpy                 | >= 1.23.5   | install before compile, C++ dependency for data type conversion |
+| opencv-python         | >= 4.8.0.76 | python opencv package, you can use it with this library         |
+| opencv-contrib-python | >= 4.8.0.76 | python opencv package, you can use it with this library         |
+
 # Usage
 
 Once you installed this library into your python environment, you can import it with:
