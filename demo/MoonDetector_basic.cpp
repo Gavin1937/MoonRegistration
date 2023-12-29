@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <exception>
 
 
 #ifndef __has_include
@@ -35,42 +36,50 @@ int main(int argc, char** argv)
         return 0;
     }
     
-    std::cout << "MoonRegistration Library Version: " << mr::version() << std::endl;
+    std::cout << "MoonRegistration Library Version: " << mr::version() << "\n";
     
     fs::path folder(argv[1]);
-    std::cout << "Folder Path: " << folder << std::endl;
+    std::cout << "Folder Path: " << folder << "\n";
     for (auto dirEntry : fs::recursive_directory_iterator(folder))
     {
-        // read image directly from filepath
-        mr::MoonDetector detector(dirEntry.path().string());
-        
-        // // read image from bytes
-        // std::ifstream file_in(dirEntry.path().string(), std::ios::binary);
-        // file_in.seekg(0, std::ios::end);
-        // size_t file_size = file_in.tellg();
-        // std::vector<unsigned char> buffer(file_size);
-        // file_in.seekg(0);
-        // file_in.read((char*)(buffer.data()), file_size);
-        // file_in.close();
-        // mr::MoonDetector detector(buffer);
-        
-        // // read image from cv::Mat object
-        // cv::Mat cv_image;
-        // // fill-in pixel data to cv_image...
-        // cv_image = cv::imread(dirEntry.path().string());
-        // mr::MoonDetector detector(cv_image);
-        
-        
-        // calculate moon position
-        mr::Circle final_circle = detector.detect_moon();
-        
-        
-        // printing out result
-        std::cout << "\n\n\n";
-        std::cout << "file.name = \'" << dirEntry.path().filename().string() << "\'" << std::endl;
-        std::cout << "Circle: " << final_circle << std::endl;
-        std::cout << "Square: " << mr::circle_to_square_s(final_circle) << std::endl;
-        std::cout << "Rectangle: " << mr::circle_to_rectangle_s(final_circle) << std::endl;
+        try
+        {
+            // read image directly from filepath
+            mr::MoonDetector detector(dirEntry.path().string());
+            
+            // // read image from bytes
+            // std::ifstream file_in(dirEntry.path().string(), std::ios::binary);
+            // file_in.seekg(0, std::ios::end);
+            // size_t file_size = file_in.tellg();
+            // std::vector<unsigned char> buffer(file_size);
+            // file_in.seekg(0);
+            // file_in.read((char*)(buffer.data()), file_size);
+            // file_in.close();
+            // mr::MoonDetector detector(buffer);
+            
+            // // read image from cv::Mat object
+            // cv::Mat cv_image;
+            // // fill-in pixel data to cv_image...
+            // cv_image = cv::imread(dirEntry.path().string());
+            // mr::MoonDetector detector(cv_image);
+            
+            
+            // calculate moon position
+            mr::Circle final_circle = detector.detect_moon();
+            
+            
+            // printing out result
+            std::cout << "\n\n\n";
+            std::cout << "file.name = \'" << dirEntry.path().filename().string() << "\'" << "\n";
+            std::cout << "Circle: " << final_circle << "\n";
+            std::cout << "Square: " << mr::circle_to_square_s(final_circle) << "\n";
+            std::cout << "Rectangle: " << mr::circle_to_rectangle_s(final_circle) << "\n";
+        }
+        catch (const std::exception& error)
+        {
+            std::cerr << "Exception: " << error.what() << "\n";
+            return -1;
+        }
     }
     
     return 0;

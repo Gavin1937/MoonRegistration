@@ -16,6 +16,8 @@ __all__ = [
     'circle_to_square_p',
     'circle_to_rectangle_s',
     'circle_to_rectangle_p',
+    'is_valid_circle_s',
+    'is_valid_circle_p',
     # utils.hpp
     'ImageShape',
     'calc_image_shape',

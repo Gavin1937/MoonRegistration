@@ -88,6 +88,14 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
         py::arg("y"),
         py::arg("radius")
     );
+    module.def("is_valid_circle_s", mr::is_valid_circle_s,
+        py::arg("circle")
+    );
+    module.def("is_valid_circle_p", mr::is_valid_circle_p,
+        py::arg("x"),
+        py::arg("y"),
+        py::arg("radius")
+    );
     
     
     // utils.hpp

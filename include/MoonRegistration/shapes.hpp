@@ -38,6 +38,10 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle_s(const Circle& circle);
 
 EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius);
 
+EXPORT_SYMBOL bool is_valid_circle_s(const Circle& circle);
+
+EXPORT_SYMBOL bool is_valid_circle_p(int x, int y, int radius);
+
 
 EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle);
 

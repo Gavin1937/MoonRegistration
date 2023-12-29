@@ -60,6 +60,16 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius)
     return {top_left_x, top_left_y, bottom_right_x, bottom_right_y};
 }
 
+EXPORT_SYMBOL bool is_valid_circle_s(const Circle& circle)
+{
+    return (circle.x >= 0 && circle.y >= 0 && circle.radius >= 0);
+}
+
+EXPORT_SYMBOL bool is_valid_circle_p(int x, int y, int radius)
+{
+    return (x >= 0 && y >= 0 && radius >= 0);
+}
+
 EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle)
 {
     return cv::Vec3f(
