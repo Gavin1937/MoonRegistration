@@ -1,6 +1,7 @@
 #include "../../include/MoonRegistration/MoonDetect/detector.hpp"
 #include "../../include/MoonRegistration/MoonDetect/selector.hpp"
 #include "../../include/MoonRegistration/preprocessing.hpp"
+#include "../../include/MoonRegistration/utils.hpp"
 
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/core/mat.hpp>
@@ -242,7 +243,6 @@ EXPORT_SYMBOL MoonDetector::MoonDetector(const std::vector<unsigned char>& image
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const cv::Mat& cv_image)
     : resize_ratio(0.0),
-    original_image(cv_image),
     // default functions
     preprocess_steps(default_preprocess_steps),
     param_init(default_param_init),
@@ -250,6 +250,35 @@ EXPORT_SYMBOL MoonDetector::MoonDetector(const cv::Mat& cv_image)
     iteration_circle_select(default_iteration_circle_select),
     coordinate_remap(default_coordinate_remap)
 {
+    this->init_by_mat(cv_image);
+}
+
+EXPORT_SYMBOL bool MoonDetector::is_empty()
+{
+    return this->original_image.empty();
+}
+
+EXPORT_SYMBOL void MoonDetector::init_by_path(const std::string& image_filepath)
+{
+    if (!file_exists(image_filepath))
+        throw std::runtime_error("Empty Input Image");
+    this->original_image = cv::imread(image_filepath, cv::IMREAD_COLOR);
+    if (this->original_image.empty())
+        throw std::runtime_error("Empty Input Image");
+}
+
+EXPORT_SYMBOL void MoonDetector::init_by_byte(const std::vector<unsigned char>& image_binary)
+{
+    this->original_image = cv::imdecode(cv::Mat(image_binary), cv::IMREAD_COLOR);
+    if (this->original_image.empty())
+        throw std::runtime_error("Empty Input Image");
+}
+
+EXPORT_SYMBOL void MoonDetector::init_by_mat(const cv::Mat& image_in)
+{
+    this->original_image = image_in.clone();
+    if (this->original_image.empty())
+        throw std::runtime_error("Empty Input Image");
 }
 
 EXPORT_SYMBOL bool MoonDetector::is_empty()
@@ -275,7 +304,7 @@ EXPORT_SYMBOL void MoonDetector::init_by_mat(const cv::Mat& image_in)
 EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
 {
     if (this->is_empty())
-        std::runtime_error("Empty Input Image");
+        throw std::runtime_error("Empty Input Image");
     
     this->preprocess_steps(
         this->original_image,
@@ -346,10 +375,10 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         // cannot select circle, (select circle function failed)
         // maybe we didn't find any circle
         // in iteration 0, which means input image doesn't contain any circle, return {-1, -1, -1}
-        if (iteration == 0 && (circle_found.x == -1 && circle_found.y == -1 && circle_found.radius == -1))
+        if (iteration == 0 && !mr::is_valid_circle_s(circle_found))
             return circle_found;
         // use the center of image as the new circle
-        else if (circle_found.x < 0 || circle_found.y < 0 || circle_found.radius < 0)
+        else if (!mr::is_valid_circle_s(circle_found))
             circle_found = {image_shape.width/2, image_shape.height/2, (image_shape.width/2)+3};
         
         // cut out part of img from circle
@@ -375,38 +404,6 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
     );
     
     return final_circle;
-}
-
-}
-
-
-
-// C APIs
-extern "C"
-{
-
-EXPORT_SYMBOL int* detect_moon_from_filepath(const char* img_filepath)
-{
-    std::string filepath(img_filepath);
-    mr::MoonDetector detector(filepath);
-    mr::Circle circle = detector.detect_moon();
-    int* retval = (int*)malloc(3*sizeof(int));
-    retval[0] = circle.x;
-    retval[1] = circle.y;
-    retval[2] = circle.radius;
-    return retval;
-}
-
-EXPORT_SYMBOL int* detect_moon_from_binary(const unsigned char* img_binary, const int img_size)
-{
-    std::vector<unsigned char> binary(img_binary, img_binary+img_size);
-    mr::MoonDetector detector(binary);
-    mr::Circle circle = detector.detect_moon();
-    int* retval = (int*)malloc(3*sizeof(int));
-    retval[0] = circle.x;
-    retval[1] = circle.y;
-    retval[2] = circle.radius;
-    return retval;
 }
 
 }
