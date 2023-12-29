@@ -156,7 +156,7 @@ int main(int argc, char** argv)
         
         // printing out result
         std::cout << "\n\n\n";
-        std::cout <<"file.name = \'" << dirEntry.path().filename().string() << "\'" << std::endl;
+        std::cout << "file.name = \'" << dirEntry.path().filename().string() << "\'" << std::endl;
         std::cout << "Circle: " << final_circle << std::endl;
         std::cout << "Square: " << mr::circle_to_square_s(final_circle) << std::endl;
         std::cout << "Rectangle: " << mr::circle_to_rectangle_s(final_circle) << std::endl;

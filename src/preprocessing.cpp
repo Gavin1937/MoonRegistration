@@ -3,9 +3,6 @@
 namespace mr
 {
 
-extern "C"
-{
-
 EXPORT_SYMBOL void resize_with_aspect_ratio(
     const cv::Mat& image_in,
     cv::Mat& image_out,
@@ -214,8 +211,6 @@ EXPORT_SYMBOL void cut_image_from_circle(
     cut_ref_image_from_circle(image_in, image_out, rect_out, x, y, radius, padding);
     // copy content of image_out to a new cv::Mat
     image_out = image_out.clone();
-}
-
 }
 
 }

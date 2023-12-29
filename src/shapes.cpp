@@ -4,9 +4,6 @@
 namespace mr
 {
 
-extern "C"
-{
-
 EXPORT_SYMBOL Square circle_to_square_s(const Circle& circle)
 {
     int top_left_y = circle.y - circle.radius;
@@ -61,8 +58,6 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius)
     int bottom_right_y = top_left_y + square_width;
     
     return {top_left_x, top_left_y, bottom_right_x, bottom_right_y};
-}
-
 }
 
 EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle)

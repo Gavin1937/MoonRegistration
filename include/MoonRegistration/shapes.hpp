@@ -10,9 +10,6 @@
 namespace mr
 {
 
-extern "C"
-{
-
 EXPORT_SYMBOL typedef struct Circle {
     int x;
     int y;
@@ -41,8 +38,6 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle_s(const Circle& circle);
 
 EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius);
 
-
-}
 
 EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle);
 

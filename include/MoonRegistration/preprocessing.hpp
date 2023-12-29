@@ -10,9 +10,6 @@
 namespace mr
 {
 
-extern "C"
-{
-
 // original algorithm
 // https://stackoverflow.com/a/58126805
 // 
@@ -125,7 +122,5 @@ EXPORT_SYMBOL void cut_image_from_circle(
     int radius,
     int padding         = 15
 );
-
-}
 
 }
