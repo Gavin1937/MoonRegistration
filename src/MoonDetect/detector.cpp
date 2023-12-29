@@ -242,7 +242,6 @@ EXPORT_SYMBOL MoonDetector::MoonDetector(const std::vector<unsigned char>& image
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const cv::Mat& cv_image)
     : resize_ratio(0.0),
-    original_image(cv_image),
     // default functions
     preprocess_steps(default_preprocess_steps),
     param_init(default_param_init),
@@ -250,6 +249,7 @@ EXPORT_SYMBOL MoonDetector::MoonDetector(const cv::Mat& cv_image)
     iteration_circle_select(default_iteration_circle_select),
     coordinate_remap(default_coordinate_remap)
 {
+    this->init_by_mat(cv_image);
 }
 
 EXPORT_SYMBOL bool MoonDetector::is_empty()
