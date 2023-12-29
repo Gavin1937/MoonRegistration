@@ -17,7 +17,7 @@ extern "C" {
 
 EXPORT_SYMBOL extern inline const char* mr_version()
 {
-    return "v0.1.5";
+    return "v0.1.6";
 }
 
 // Run mr::MoonDetector::detect_moon() from image filepath

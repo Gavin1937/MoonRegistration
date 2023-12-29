@@ -2,6 +2,21 @@
 # CHANGELOG
 
 <details open>
+<summary><strong style="font-size:140%">v0.1.6</strong></summary>
+
+* Improve overall error handling in this library
+* Extract C API out and make it a single unit
+  * We now only support an abstracted version of C API because:
+> Since C++ version of this library is heavily rely on
+> C++ features like namespace & class, plus we relies on
+> OpenCV's C++ API. So providing a full API of the library
+> for C is time consuming. Thus, we only provide an
+> abstracted version of this library.
+
+</details>
+
+
+<details>
 <summary><strong style="font-size:140%">v0.1.5</strong></summary>
 
 * Add python wrapper for the entire library
