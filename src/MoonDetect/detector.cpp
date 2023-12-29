@@ -281,26 +281,6 @@ EXPORT_SYMBOL void MoonDetector::init_by_mat(const cv::Mat& image_in)
         throw std::runtime_error("Empty Input Image");
 }
 
-EXPORT_SYMBOL bool MoonDetector::is_empty()
-{
-    return this->original_image.empty();
-}
-
-EXPORT_SYMBOL void MoonDetector::init_by_path(const std::string& image_filepath)
-{
-    this->original_image = cv::imread(image_filepath, cv::IMREAD_COLOR);
-}
-
-EXPORT_SYMBOL void MoonDetector::init_by_byte(const std::vector<unsigned char>& image_binary)
-{
-    this->original_image = cv::imdecode(cv::Mat(image_binary), cv::IMREAD_COLOR);
-}
-
-EXPORT_SYMBOL void MoonDetector::init_by_mat(const cv::Mat& image_in)
-{
-    this->original_image = image_in.clone();
-}
-
 EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
 {
     if (this->is_empty())
