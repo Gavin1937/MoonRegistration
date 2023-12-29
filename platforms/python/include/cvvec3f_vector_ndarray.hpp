@@ -18,6 +18,7 @@ public:
     
     PYBIND11_TYPE_CASTER(std::vector<cv::Vec3f>, _("numpy.ndarray"));
     
+    // numpy.ndarray --> std::vector<cv::Vec3f>
     bool load(handle src, bool /* convert */) {
         py::array_t<float> src_array = py::cast<py::array_t<float>>(src);
         py::buffer_info buff = src_array.request();
@@ -49,6 +50,7 @@ public:
         return true;
     }
     
+    // std::vector<cv::Vec3f> --> numpy.ndarray
     static handle cast(const std::vector<cv::Vec3f> &src, return_value_policy, handle defval) {
         py::array_t<float> dst_array(src.size()*3);
         py::buffer_info dst_buff_info = dst_array.request();

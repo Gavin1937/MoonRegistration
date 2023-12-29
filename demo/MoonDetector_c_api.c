@@ -6,13 +6,21 @@
 // MoonRegistration library api
 #include "MoonRegistration/c_mrapi.h"
 
+#define PATH_MAX 256
+
 const char* basename(const char* filepath);
 
 int main(int argc, char** argv)
 {
+    if (argc < 2)
+    {
+        printf("Usage: ./MoonDetector_c_api /path/to/image.jpg\n");
+        return 0;
+    }
+    
     printf("MoonRegistration Library Version: %s\n", mr_version());
     
-    const char* filepath = "/path/to/image.jpg";
+    const char* filepath = argv[1];
     int* final_circle = NULL;
     char* error_message = NULL;
     
@@ -28,10 +36,11 @@ int main(int argc, char** argv)
     //     fseek(file_in, 0L, SEEK_END);
     //     size_t file_size = ftell(file_in);
     //     unsigned char* buffer = malloc(sizeof(unsigned char) * file_size);
-    //     fseek(file_in, 0L, SEEK_END);
+    //     fseek(file_in, 0L, SEEK_SET);
     //     fread(buffer, sizeof(unsigned char), file_size, file_in);
     //     fclose(file_in);
     //     final_circle = detect_moon_from_binary(buffer, (const int)file_size, &error_message /*set this to NULL if you don't need it*/);
+    //     free(buffer);
     // }
     // else
     // {
@@ -66,9 +75,9 @@ int main(int argc, char** argv)
 
 const char* basename(const char* filepath)
 {
-    size_t pathlen = strlen(filepath);
-    size_t cur = pathlen;
-    for (size_t i = pathlen; i >= 0; --i)
+    int pathlen = (int)strlen(filepath);
+    int cur = 0;
+    for (int i = pathlen; i >= 0; --i)
     {
         if (filepath[i] == PATHSEP)
         {
@@ -76,5 +85,6 @@ const char* basename(const char* filepath)
             break;
         }
     }
+    if (cur <= 0) return filepath;
     return (filepath+cur+1);
 }
