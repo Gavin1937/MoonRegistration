@@ -6,7 +6,7 @@
 // MoonRegistration library api
 #include "MoonRegistration/c_mrapi.h"
 
-#define PATH_MAX 256
+
 
 const char* basename(const char* filepath);
 
