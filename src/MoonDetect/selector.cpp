@@ -2,20 +2,6 @@
 #include "../../include/MoonRegistration/preprocessing.hpp"
 #include "../../include/MoonRegistration/utils.hpp"
 
-#include <utility>
-#include <queue>
-
-
-// forward declaration will fail
-template <typename COMP_TYPE, typename DATA_TYPE>
-class Comparator
-{
-public:
-    bool operator()(const std::pair<COMP_TYPE,DATA_TYPE>& lhs, const std::pair<COMP_TYPE,DATA_TYPE>& rhs)
-    {
-        return (lhs.first > rhs.first);
-    }
-};
 
 namespace mr
 {
@@ -66,42 +52,24 @@ EXPORT_SYMBOL std::vector<cv::Vec3f> select_n_circles_by_brightness_perc(
     else if (detected_circles.size() <= n)
         return detected_circles;
     
-    // find n largest element in the list
-    // https://stackoverflow.com/a/22654973
-    
-    std::priority_queue<
-        std::pair<float,cv::Vec3f>,
-        std::vector<std::pair<float,cv::Vec3f>>,
-        Comparator<float,cv::Vec3f>
-    > minheap;
     cv::Vec3i veci;
-    
-    for (auto vec : detected_circles)
-    {
-        veci = mr::round_vec3f(vec);
-        // calc circle brightness percentage (pixel mean)
-        float mean = calc_circle_brightness_perc(
-            image_in,
-            veci[0], veci[1], veci[2]
-        );
-        // find the maximum mean thats below 0.98
-        if (mean < 0.98 && minheap.size() < n)
-        {
-            minheap.push(std::pair<float,cv::Vec3f>(mean,vec));
-        }
-        else if (mean < 0.98 && mean > minheap.top().first)
-        {
-            minheap.pop();
-            minheap.push(std::pair<float,cv::Vec3f>(mean,vec));
-        }
-    }
-    
     std::vector<cv::Vec3f> result(n);
-    for (int i = 0; i < n; ++i)
-    {
-        result[i] = minheap.top().second;
-        minheap.pop();
-    }
+    find_n_circles<float>(
+        n,
+        detected_circles,
+        result,
+        [&image_in, &veci](const cv::Vec3f& vec) {
+            veci = mr::round_vec3f(vec);
+            // calc circle brightness percentage (pixel mean)
+            return calc_circle_brightness_perc(
+                image_in,
+                veci[0], veci[1], veci[2]
+            );
+        },
+        // filter circles with maximum mean(value) thats below 0.98
+        [](const float& value) { return value < 0.98; }
+    );
+    
     return result;
 }
 
@@ -144,39 +112,16 @@ EXPORT_SYMBOL std::vector<cv::Vec3f> select_n_circles_by_largest_radius(
     else if (detected_circles.size() <= n)
         return detected_circles;
     
-    // find n largest element in the list
-    // https://stackoverflow.com/a/22654973
-    
-    std::priority_queue<
-        std::pair<int,cv::Vec3f>,
-        std::vector<std::pair<int,cv::Vec3f>>,
-        Comparator<int,cv::Vec3f>
-    > minheap;
-    cv::Vec3i veci;
-    int radius = -1;
-    
-    for (auto vec : detected_circles)
-    {
-        veci = mr::round_vec3f(vec);
-        radius = veci[2];
-        
-        if (minheap.size() < n)
-        {
-            minheap.push(std::pair<int,cv::Vec3f>(radius,vec));
-        }
-        else if (radius > minheap.top().first)
-        {
-            minheap.pop();
-            minheap.push(std::pair<int,cv::Vec3f>(radius,vec));
-        }
-    }
-    
     std::vector<cv::Vec3f> result(n);
-    for (int i = 0; i < n; ++i)
-    {
-        result[i] = minheap.top().second;
-        minheap.pop();
-    }
+    find_n_circles<int>(
+        n,
+        detected_circles,
+        result,
+        [](const cv::Vec3f& vec) {
+            return mr::round_vec3f(vec)[2];
+        }
+    );
+    
     return result;
 }
 
