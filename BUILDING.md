@@ -76,7 +76,7 @@ all the build environments are set, so you can easily rebuild the library follow
 ### Dependencies
 
 * OpenCV 4.8.0
-  * [Install in Windows](https://sourceforge.net/projects/opencvlibrary/files/4.8.0/)
+  * [Install in Windows](https://opencv.org/releases/)
   * [Install in MacOS](https://www.geeksforgeeks.org/how-to-install-opencv-for-c-on-macos/)
     * `brew install opencv@4.8.0`
   * [Install in linux](https://phoenixnap.com/kb/installing-opencv-on-ubuntu)
