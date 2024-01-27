@@ -8,8 +8,6 @@
 
 
 
-const char* basename(const char* filepath);
-
 int main(int argc, char** argv)
 {
     if (argc < 2)
@@ -53,7 +51,7 @@ int main(int argc, char** argv)
     if (final_circle != NULL)
     {
         printf("\n\n\n");
-        printf("file.name = \'%s\'\n", basename(filepath));
+        printf("file: \'%s\'\n", filepath);
         printf( "Circle: (x=%d, y=%d, radius=%d)\n", final_circle[0], final_circle[1], final_circle[2]);
     }
     else
@@ -65,26 +63,4 @@ int main(int argc, char** argv)
     free(final_circle);
     
     return 0;
-}
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__CYGWIN__)
-#define PATHSEP '\\'
-#else
-#define PATHSEP '/'
-#endif
-
-const char* basename(const char* filepath)
-{
-    int pathlen = (int)strlen(filepath);
-    int cur = 0;
-    for (int i = pathlen; i >= 0; --i)
-    {
-        if (filepath[i] == PATHSEP)
-        {
-            cur = i;
-            break;
-        }
-    }
-    if (cur <= 0) return filepath;
-    return (filepath+cur+1);
 }

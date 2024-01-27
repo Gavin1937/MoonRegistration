@@ -63,40 +63,46 @@ if len(argv) < 2:
 folder = Path(argv[1])
 print(f'Folder Path: {folder}')
 for dirEntry in folder.rglob('*'):
-    # read image directly from filepath
-    detector = mr.MoonDetector(str(dirEntry))
-    
-    # # read image from bytes
-    # with open(dirEntry, 'rb') as file_in:
-    #     buffer = file_in.read()
-    # detector = mr.MoonDetector(buffer)
-    
-    # # read image from cv2.MatLike (numpy.ndarray) object
-    # import cv2
-    # # fill-in pixel data to cv_image...
-    # cv_image = cv2.imread(str(dirEntry))
-    # detector = mr.MoonDetector(cv_image)
-    
-    
-    # Following functions of mr.MoonDetector will set function pointers in the class.
-    # Those pointers are functions to handle different steps in mr.MoonDetector.detect_moon()
-    # You can modify them to further customize how mr.MoonDetector.detect_moon() works
-    # All the function pointers are set to default_*** functions defined in "detector.hpp" by default
-    detector.set_preprocess_steps(preprocess_steps)
-    detector.set_param_init(param_init)
-    detector.set_iteration_param_update(iteration_param_update)
-    detector.set_iteration_circle_select(iteration_circle_select)
-    detector.set_coordinate_remap(coordinate_remap)
-    
-    
-    # calculate moon position
-    final_circle = detector.detect_moon()
-    
-    
-    # printing out result
-    print('\n\n\n', end='')
-    print(f'file.name = \'{dirEntry.name}\'')
-    print(f'Circle: {final_circle}')
-    print(f'Square: {mr.circle_to_square_s(final_circle)}')
-    print(f'Rectangle: {mr.circle_to_rectangle_s(final_circle)}')
+    if not dirEntry.is_file():
+        continue
+    try:
+        # read image directly from filepath
+        detector = mr.MoonDetector(str(dirEntry))
+        
+        # # read image from bytes
+        # with open(dirEntry, 'rb') as file_in:
+        #     buffer = file_in.read()
+        # detector = mr.MoonDetector(buffer)
+        
+        # # read image from cv2.MatLike (numpy.ndarray) object
+        # import cv2
+        # # fill-in pixel data to cv_image...
+        # cv_image = cv2.imread(str(dirEntry))
+        # detector = mr.MoonDetector(cv_image)
+        
+        
+        # Following functions of mr.MoonDetector will set function pointers in the class.
+        # Those pointers are functions to handle different steps in mr.MoonDetector.detect_moon()
+        # You can modify them to further customize how mr.MoonDetector.detect_moon() works
+        # All the function pointers are set to default_*** functions defined in "detector.hpp" by default
+        detector.set_preprocess_steps(preprocess_steps)
+        detector.set_param_init(param_init)
+        detector.set_iteration_param_update(iteration_param_update)
+        detector.set_iteration_circle_select(iteration_circle_select)
+        detector.set_coordinate_remap(coordinate_remap)
+        
+        
+        # calculate moon position
+        final_circle = detector.detect_moon()
+        
+        
+        # printing out result
+        print('\n\n\n', end='')
+        print(f'file: \'{dirEntry}\'')
+        print(f'Circle: {final_circle}')
+        print(f'Square: {mr.circle_to_square_s(final_circle)}')
+        print(f'Rectangle: {mr.circle_to_rectangle_s(final_circle)}')
+        
+    except Exception as err:
+        print(f'Exception: {err}')
 

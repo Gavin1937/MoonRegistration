@@ -120,6 +120,8 @@ int main(int argc, char** argv)
     std::cout << "Folder Path: " << folder << "\n";
     for (auto dirEntry : fs::recursive_directory_iterator(folder))
     {
+        if (!fs::is_regular_file(dirEntry))
+            continue;
         try
         {
             // read image directly from filepath
@@ -159,7 +161,7 @@ int main(int argc, char** argv)
             
             // printing out result
             std::cout << "\n\n\n";
-            std::cout << "file.name = \'" << dirEntry.path().filename().string() << "\'" << "\n";
+            std::cout << "file: \'" << dirEntry.path().string() << "\'" << "\n";
             std::cout << "Circle: " << final_circle << "\n";
             std::cout << "Square: " << mr::circle_to_square_s(final_circle) << "\n";
             std::cout << "Rectangle: " << mr::circle_to_rectangle_s(final_circle) << "\n";
