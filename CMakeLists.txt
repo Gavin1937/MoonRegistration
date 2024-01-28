@@ -66,6 +66,7 @@ message(STATUS "================= MR Build Config ================")
 message(STATUS "MR_BUILD_SHARED_LIBS: ${MR_BUILD_SHARED_LIBS}")
 message(STATUS "MR_BUILD_WASM: ${MR_BUILD_WASM}")
 message(STATUS "OpenCV_DIR: ${OpenCV_DIR}")
+message(STATUS "OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "OpenCV_LIBS: ${OpenCV_LIBS}")
 message(STATUS "==================================================")
 
