@@ -1,4 +1,4 @@
-FROM gavin1937/emsdk-cv-wasm:4.8.0
+FROM gavin1937/emsdk-cv-wasm:4.9.0
 
 # setup enviroments
 RUN \
@@ -18,8 +18,9 @@ RUN \
     cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_SHARED_LIBS=ON .. && \
     cmake --build . && \
     # compile wasm version
-    mkdir /src/MoonRegistration/build_wasm && cd /src/MoonRegistration/build_wasm && \
-    emcmake cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_WASM=ON -DOPENCV_DIR="$OPENCV_SRC" .. && \
+    mkdir /src/MoonRegistration/platforms/js/build_wasm && \
+    cd /src/MoonRegistration/platforms/js/build_wasm && \
+    emcmake cmake -DCMAKE_BUILD_TYPE=Release -DOPENCV_SRC="$OPENCV_SRC" .. && \
     emmake make && \
     # pack release
     cd /src/MoonRegistration && python3 PackReleaseZip.py

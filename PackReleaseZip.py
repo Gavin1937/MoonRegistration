@@ -36,7 +36,7 @@ if __name__ == "__main__":
         VERSION = file.read().strip();
     ARCHITECTURES = [
         ("linux-x86_64", "build_linux"),
-        ("wasm", "build_wasm"),
+        ("wasm", "platforms/js/build_wasm"),
     ]
     for ARC,BUILD_PATH in ARCHITECTURES:
         BUILD_PATH = ROOT/BUILD_PATH

@@ -1,4 +1,4 @@
-FROM gavin1937/emsdk-cv-wasm:4.8.0
+FROM gavin1937/emsdk-cv-wasm:4.9.0
 
 # setup enviroments
 RUN \
@@ -11,8 +11,9 @@ COPY . .
 
 # build MoonRegistration lib into wasm
 RUN \
-    mkdir /src/MoonRegistration/build_wasm && cd /src/MoonRegistration/build_wasm && \
-    emcmake cmake -DMR_BUILD_WASM=ON -DOPENCV_DIR="$OPENCV_SRC" .. && \
+    mkdir /src/MoonRegistration/platforms/js/build_wasm && \
+    cd /src/MoonRegistration/platforms/js/build_wasm && \
+    emcmake cmake -DOPENCV_SRC="$OPENCV_SRC" .. && \
     emmake make
 
 ENTRYPOINT ["/bin/bash"]
