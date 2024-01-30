@@ -164,6 +164,8 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration()
     this->good_keypoint_matches.shrink_to_fit();
     
     // compute homography matrix
+    if (tmp_user_keypoints_pt2f.size() < 4 || tmp_model_keypoints_pt2f.size() < 4)
+        throw std::runtime_error("No enough keypoints for finding homography matrix");
     this->homography_matrix = cv::findHomography(tmp_user_keypoints_pt2f, tmp_model_keypoints_pt2f, cv::RANSAC, 5.0);
     if (this->homography_matrix.empty())
         throw std::runtime_error("Cannot find Homography Matrix");
