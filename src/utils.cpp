@@ -1,5 +1,7 @@
 #include "../include/MoonRegistration/utils.hpp"
 
+#include <opencv2/imgproc.hpp>
+
 #include <fstream>
 
 
@@ -38,6 +40,12 @@ EXPORT_SYMBOL bool file_exists(const std::string& filepath)
 {
     std::ifstream input(filepath);
     return input.good();
+}
+
+
+EXPORT_SYMBOL void sync_img_size(const cv::Mat &primary, cv::Mat &secondary)
+{
+    cv::resize(secondary, secondary, primary.size());
 }
 
 }

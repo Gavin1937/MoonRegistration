@@ -14,12 +14,16 @@ file(GLOB SRC
     "src/*.cpp"
     "src/MoonDetect/*.c"
     "src/MoonDetect/*.cpp"
+    "src/MoonRegistrar/*.c"
+    "src/MoonRegistrar/*.cpp"
 )
 file(GLOB HEADER
     "include/*.h"
     "include/*.hpp"
     "include/MoonDetect/*.h"
     "include/MoonDetect/*.hpp"
+    "include/MoonRegistrar/*.h"
+    "include/MoonRegistrar/*.hpp"
 )
 
 

@@ -9,3 +9,4 @@
 #include "MoonDetect/selector.hpp"
 #include "MoonDetect/detector.hpp"
 
+#include "MoonRegistrar/registrar.hpp"

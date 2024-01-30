@@ -94,4 +94,11 @@ template<typename COMP_TYPE> EXPORT_SYMBOL void find_n_circles(
 
 EXPORT_SYMBOL bool file_exists(const std::string& filepath);
 
+// Sync the width & height of secondary image to primary image
+// 
+// Parameters:
+//   - primary: image for sync reference
+//   - secondary: image to sync with primary
+EXPORT_SYMBOL void sync_img_size(const cv::Mat& primary, cv::Mat& secondary);
+
 }
