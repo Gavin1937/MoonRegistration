@@ -48,4 +48,75 @@ EXPORT_SYMBOL void sync_img_size(const cv::Mat &primary, cv::Mat &secondary)
     cv::resize(secondary, secondary, primary.size());
 }
 
+
+EXPORT_SYMBOL ImageChannels::ImageChannels(const cv::Mat& alpha)
+{
+    this->channels.reserve(1);
+    this->channels.push_back(alpha.clone());
+}
+EXPORT_SYMBOL ImageChannels::ImageChannels(const cv::Mat& blue, const cv::Mat& green, const cv::Mat& red)
+{
+    this->channels.reserve(3);
+    this->channels.push_back(blue.clone());
+    this->channels.push_back(green.clone());
+    this->channels.push_back(red.clone());
+}
+EXPORT_SYMBOL ImageChannels::ImageChannels(const cv::Mat& blue, const cv::Mat& green, const cv::Mat& red, const cv::Mat& alpha)
+{
+    this->channels.reserve(4);
+    this->channels.push_back(blue.clone());
+    this->channels.push_back(green.clone());
+    this->channels.push_back(red.clone());
+    this->channels.push_back(alpha.clone());
+}
+
+EXPORT_SYMBOL const cv::Mat& ImageChannels::blue() const
+{
+    if (this->channel_num() == 3 || this->channel_num() == 4)
+        return this->channels[0];
+    else
+        throw std::runtime_error("Channel Number Not Matching");
+}
+EXPORT_SYMBOL const cv::Mat& ImageChannels::green() const
+{
+    if (this->channel_num() == 3 || this->channel_num() == 4)
+        return this->channels[1];
+    else
+        throw std::runtime_error("Channel Number Not Matching");
+}
+EXPORT_SYMBOL const cv::Mat& ImageChannels::red() const
+{
+    if (this->channel_num() == 3 || this->channel_num() == 4)
+        return this->channels[2];
+    else
+        throw std::runtime_error("Channel Number Not Matching");
+}
+EXPORT_SYMBOL const cv::Mat& ImageChannels::alpha() const
+{
+    if (this->channel_num() == 1)
+        return this->channels[0];
+    else if (this->channel_num() == 4)
+        return this->channels[3];
+    else
+        throw std::runtime_error("Channel Number Not Matching");
+}
+
+EXPORT_SYMBOL const size_t ImageChannels::channel_num() const
+{
+    return this->channels.size();
+}
+
+
+EXPORT_SYMBOL void split_img_channel(const cv::Mat& image_in, mr::ImageChannels& channels)
+{
+    int channel_num = image_in.channels();
+    channels.channels.reserve(channel_num);
+    cv::split(image_in, channels.channels);
+}
+
+EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat& image_out)
+{
+    cv::merge(channels.channels, image_out);
+}
+
 }

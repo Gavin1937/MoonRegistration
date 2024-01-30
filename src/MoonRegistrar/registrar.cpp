@@ -7,7 +7,21 @@
 #include <opencv2/calib3d.hpp>
 
 #include <exception>
+#include <iostream>
 
+template<typename T>
+std::ostream& operator<<(std::ostream& out, const std::vector<T>& vec)
+{
+    for (auto v : vec)
+        out << v << "\n";
+    return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const cv::KeyPoint& kp)
+{
+    out << kp.pt;
+    return out;
+}
 
 namespace mr
 {
@@ -108,7 +122,7 @@ EXPORT_SYMBOL void MoonRegistrar::update_f2d_detector(const cv::Ptr<cv::Feature2
     this->f2d_detector = f2d_detector;
 }
 
-EXPORT_SYMBOL void MoonRegistrar::registrate_moon()
+EXPORT_SYMBOL void MoonRegistrar::compute_registration()
 {
     cv::Mat gray_user_image, gray_model_image;
     cv::cvtColor(this->user_image, gray_user_image, cv::COLOR_BGR2GRAY);
@@ -129,18 +143,20 @@ EXPORT_SYMBOL void MoonRegistrar::registrate_moon()
     bf_matcher.knnMatch(tmp_user_descriptors, tmp_model_descriptors, matches, 2);
     
     this->good_keypoint_matches.reserve(matches.size());
-    std::vector<cv::Point2f> tmp_user_keypoints_pt2f(matches.size());
-    std::vector<cv::Point2f> tmp_model_keypoints_pt2f(matches.size());
+    std::vector<cv::Point2f> tmp_user_keypoints_pt2f;
+    tmp_user_keypoints_pt2f.reserve(matches.size());
+    std::vector<cv::Point2f> tmp_model_keypoints_pt2f;
+    tmp_model_keypoints_pt2f.reserve(matches.size());
     
     // filter good matches
     for (auto mn : matches)
     {
         if (mn[0].distance < 0.7 * mn[1].distance)
         {
-            this->good_keypoint_matches.emplace_back(std::vector<cv::DMatch>({mn[0]}));
+            this->good_keypoint_matches.push_back(std::vector<cv::DMatch>({mn[0]}));
             
-            tmp_user_keypoints_pt2f.emplace_back(this->user_keypoints[mn[0].queryIdx].pt);
-            tmp_model_keypoints_pt2f.emplace_back(this->model_keypoints[mn[0].trainIdx].pt);
+            tmp_user_keypoints_pt2f.push_back(this->user_keypoints[mn[0].queryIdx].pt);
+            tmp_model_keypoints_pt2f.push_back(this->model_keypoints[mn[0].trainIdx].pt);
         }
     }
     tmp_user_keypoints_pt2f.shrink_to_fit();
@@ -165,6 +181,123 @@ EXPORT_SYMBOL void MoonRegistrar::draw_matched_keypoints(cv::Mat& image_out)
         std::vector<std::vector<char>>(),
         cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS
     );
+}
+
+EXPORT_SYMBOL void MoonRegistrar::registrate_image(const cv::Mat& image_in, cv::Mat& image_out)
+{
+    cv::warpPerspective(image_in, image_out, this->homography_matrix, image_in.size());
+}
+
+EXPORT_SYMBOL void MoonRegistrar::registrate_image_inverse_homography(const cv::Mat& image_in, cv::Mat& image_out)
+{
+    cv::warpPerspective(image_in, image_out, this->homography_matrix.inv(), image_in.size());
+}
+
+EXPORT_SYMBOL void MoonRegistrar::registrate_user_image(cv::Mat& image_out)
+{
+    this->registrate_image(this->user_image, image_out);
+}
+
+EXPORT_SYMBOL void MoonRegistrar::draw_red_transformed_user_image(cv::Mat& image_out, const cv::Mat& transformed_image_in)
+{
+    cv::Mat transformed_image;
+    if (transformed_image_in.empty())
+        this->registrate_user_image(transformed_image);
+    else
+        transformed_image = transformed_image_in;
+    
+    if (transformed_image.size() != this->user_image.size() || transformed_image.size() != this->model_image.size())
+        throw std::runtime_error("Transformed Image size not match with original image size");
+    
+    cv::cvtColor(transformed_image, transformed_image, cv::COLOR_BGR2GRAY);
+    
+    cv::merge(
+        std::vector<cv::Mat>({
+            cv::Mat::zeros(this->user_image.size(), CV_8UC1),  // B
+            cv::Mat::zeros(this->user_image.size(), CV_8UC1),  // G
+            transformed_image                                  // R
+        }),
+        image_out
+    );
+}
+
+EXPORT_SYMBOL void MoonRegistrar::draw_green_model_image(cv::Mat& image_out)
+{
+    cv::Mat gray_model_image;
+    cv::cvtColor(this->model_image, gray_model_image, cv::COLOR_BGR2GRAY);
+    
+    cv::merge(
+        std::vector<cv::Mat>({
+            cv::Mat::zeros(this->user_image.size(), CV_8UC1),  // B
+            gray_model_image,                                  // G
+            cv::Mat::zeros(this->user_image.size(), CV_8UC1)   // R
+        }),
+        image_out
+    );
+}
+
+EXPORT_SYMBOL void MoonRegistrar::draw_stacked_red_green_image(cv::Mat& image_out, const cv::Mat& transformed_image_in)
+{
+    cv::Mat green;
+    cv::cvtColor(this->model_image, green, cv::COLOR_BGR2GRAY);
+    
+    cv::Mat red;
+    if (transformed_image_in.empty())
+        this->registrate_user_image(red);
+    else
+        red = transformed_image_in;
+    if (red.size() != this->user_image.size() || red.size() != this->model_image.size())
+        throw std::runtime_error("Transformed Image size not match with original image size");
+    cv::cvtColor(red, red, cv::COLOR_BGR2GRAY);
+    
+    cv::merge(
+        std::vector<cv::Mat>({
+            cv::Mat::zeros(this->user_image.size(), CV_8UC1),  // B
+            green,                                             // G
+            red                                                // R
+        }),
+        image_out
+    );
+}
+
+EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(const cv::Mat& layer_image_in, cv::Mat& image_out, const float layer_image_transparency)
+{
+    // pre-process layer image
+    cv::Mat processed_layer_image = layer_image_in.clone();
+    mr::sync_img_size(this->user_image, processed_layer_image);
+    this->registrate_image_inverse_homography(processed_layer_image, processed_layer_image);
+    
+    // create alpha channel for layer image
+    cv::Mat gray_processed_layer_image, alpha;
+    cv::cvtColor(processed_layer_image, gray_processed_layer_image, cv::COLOR_BGR2GRAY);
+    cv::threshold(gray_processed_layer_image, alpha, 0, 255, cv::THRESH_BINARY);
+    
+    // merge into a transparent layer image
+    cv::Mat transparent_layer_image;
+    mr::ImageChannels processed_layer_image_channels;
+    mr::split_img_channel(processed_layer_image, processed_layer_image_channels);
+    processed_layer_image_channels.channels.push_back(alpha);
+    mr::merge_img_channel(processed_layer_image_channels, transparent_layer_image);
+    
+    // merge 
+    cv::Mat all_alpha_layer_image;
+    mr::merge_img_channel(mr::ImageChannels(alpha, alpha, alpha), all_alpha_layer_image);
+    cv::Mat front_layer;
+    cv::cvtColor(transparent_layer_image, front_layer, cv::COLOR_BGRA2BGR);
+    
+    image_out = cv::Mat::zeros(this->user_image.size(), CV_8UC3);
+    cv::Vec3b zero_pixel(0, 0, 0);
+    for (int row = 0; row < image_out.rows; ++row)
+    {
+        for (int col = 0; col < image_out.cols; ++col)
+        {
+            cv::Point p(col, row);
+            if (all_alpha_layer_image.at<cv::Vec3b>(p) == zero_pixel)
+                image_out.at<cv::Vec3b>(p) = this->user_image.at<cv::Vec3b>(p);
+            else
+                image_out.at<cv::Vec3b>(p) = front_layer.at<cv::Vec3b>(p);
+        }
+    }
 }
 
 }

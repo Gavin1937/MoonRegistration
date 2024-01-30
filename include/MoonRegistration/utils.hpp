@@ -101,4 +101,26 @@ EXPORT_SYMBOL bool file_exists(const std::string& filepath);
 //   - secondary: image to sync with primary
 EXPORT_SYMBOL void sync_img_size(const cv::Mat& primary, cv::Mat& secondary);
 
+EXPORT_SYMBOL typedef struct ImageChannels
+{
+    std::vector<cv::Mat> channels;
+    
+    EXPORT_SYMBOL ImageChannels() {}
+    EXPORT_SYMBOL ImageChannels(const cv::Mat& alpha);
+    EXPORT_SYMBOL ImageChannels(const cv::Mat& blue, const cv::Mat& green, const cv::Mat& red);
+    EXPORT_SYMBOL ImageChannels(const cv::Mat& blue, const cv::Mat& green, const cv::Mat& red, const cv::Mat& alpha);
+    
+    EXPORT_SYMBOL const cv::Mat& blue() const;
+    EXPORT_SYMBOL const cv::Mat& green() const;
+    EXPORT_SYMBOL const cv::Mat& red() const;
+    EXPORT_SYMBOL const cv::Mat& alpha() const;
+    
+    EXPORT_SYMBOL const size_t channel_num() const;
+    
+} ImageChannels;
+
+EXPORT_SYMBOL void split_img_channel(const cv::Mat& image_in, mr::ImageChannels& channels);
+
+EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat& image_out);
+
 }

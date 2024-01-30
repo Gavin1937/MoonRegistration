@@ -60,9 +60,19 @@ public:
         return this->homography_matrix;
     }
     
+    EXPORT_SYMBOL const cv::Mat& get_user_image() const
+    {
+        return this->user_image;
+    }
+    
     EXPORT_SYMBOL const std::vector<cv::KeyPoint>& get_user_keypoints() const
     {
         return this->user_keypoints;
+    }
+    
+    EXPORT_SYMBOL const cv::Mat& get_model_image() const
+    {
+        return this->model_image;
     }
     
     EXPORT_SYMBOL const std::vector<cv::KeyPoint>& get_model_keypoints() const
@@ -76,9 +86,23 @@ public:
     }
     
     // moon registration
-    EXPORT_SYMBOL void registrate_moon();
+    EXPORT_SYMBOL void compute_registration();
     
     EXPORT_SYMBOL void draw_matched_keypoints(cv::Mat& image_out);
+    
+    EXPORT_SYMBOL void registrate_image(const cv::Mat& image_in, cv::Mat& image_out);
+    
+    EXPORT_SYMBOL void registrate_image_inverse_homography(const cv::Mat& image_in, cv::Mat& image_out);
+    
+    EXPORT_SYMBOL void registrate_user_image(cv::Mat& image_out);
+    
+    EXPORT_SYMBOL void draw_red_transformed_user_image(cv::Mat& image_out, const cv::Mat& transformed_image_in = cv::Mat());
+    
+    EXPORT_SYMBOL void draw_green_model_image(cv::Mat& image_out);
+    
+    EXPORT_SYMBOL void draw_stacked_red_green_image(cv::Mat& image_out, const cv::Mat& transformed_image_in = cv::Mat());
+    
+    EXPORT_SYMBOL void draw_layer_image(const cv::Mat& layer_image_in, cv::Mat& image_out, const float layer_image_transparency = 1.0);
     
 private:
     cv::Ptr<cv::Feature2D> f2d_detector;
