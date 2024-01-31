@@ -174,6 +174,13 @@ EXPORT_SYMBOL void MoonRegistrar::registrate_user_image(cv::Mat& image_out)
     this->registrate_image(this->user_image, image_out);
 }
 
+EXPORT_SYMBOL void MoonRegistrar::transform_layer_image(const cv::Mat& layer_image_in, cv::Mat& layer_image_out)
+{
+    layer_image_out = layer_image_in.clone();
+    mr::sync_img_size(this->user_image, layer_image_out);
+    this->registrate_image_inverse_homography(layer_image_out, layer_image_out);
+}
+
 
 EXPORT_SYMBOL void MoonRegistrar::draw_matched_keypoints(cv::Mat& image_out)
 {
@@ -254,9 +261,8 @@ EXPORT_SYMBOL void MoonRegistrar::draw_stacked_red_green_image(cv::Mat& image_ou
 EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(const cv::Mat& layer_image_in, cv::Mat& image_out, const float layer_image_transparency)
 {
     // pre-process layer image
-    cv::Mat processed_layer_image = layer_image_in.clone();
-    mr::sync_img_size(this->user_image, processed_layer_image);
-    this->registrate_image_inverse_homography(processed_layer_image, processed_layer_image);
+    cv::Mat processed_layer_image;
+    this->transform_layer_image(layer_image_in, processed_layer_image);
     
     // create alpha channel for layer image
     cv::Mat gray_processed_layer_image, alpha;

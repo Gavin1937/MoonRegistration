@@ -95,6 +95,8 @@ public:
     
     EXPORT_SYMBOL void registrate_user_image(cv::Mat& image_out);
     
+    EXPORT_SYMBOL void transform_layer_image(const cv::Mat& layer_image_in, cv::Mat& layer_image_out);
+    
     
     // draw result image
     EXPORT_SYMBOL void draw_matched_keypoints(cv::Mat& image_out);
