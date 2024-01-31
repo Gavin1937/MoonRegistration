@@ -32,18 +32,36 @@ EXPORT_SYMBOL typedef class MoonRegistrar
 public:
     EXPORT_SYMBOL MoonRegistrar();
     
-    EXPORT_SYMBOL MoonRegistrar(const std::string& user_image_path, const std::string& model_image_path, const mr::RegistrationAlgorithms& algorithm);
+    EXPORT_SYMBOL MoonRegistrar(
+        const std::string& user_image_path,
+        const std::string& model_image_path,
+        const mr::RegistrationAlgorithms& algorithm
+    );
     
-    EXPORT_SYMBOL MoonRegistrar(const std::vector<unsigned char>& user_image_binary, const std::vector<unsigned char>& model_image_binary, const mr::RegistrationAlgorithms& algorithm);
+    EXPORT_SYMBOL MoonRegistrar(
+        const std::vector<unsigned char>& user_image_binary,
+        const std::vector<unsigned char>& model_image_binary,
+        const mr::RegistrationAlgorithms& algorithm
+    );
     
-    EXPORT_SYMBOL MoonRegistrar(const cv::Mat& user_image, const cv::Mat& model_image, const mr::RegistrationAlgorithms& algorithm);
+    EXPORT_SYMBOL MoonRegistrar(
+        const cv::Mat& user_image,
+        const cv::Mat& model_image,
+        const mr::RegistrationAlgorithms& algorithm
+    );
     
     
     // (re)init user_image & model_image with filepath
-    EXPORT_SYMBOL void update_images(const std::string& user_image_path, const std::string& model_image_path);
+    EXPORT_SYMBOL void update_images(
+        const std::string& user_image_path,
+        const std::string& model_image_path
+    );
     
     // (re)init user_image & model_image with image binary
-    EXPORT_SYMBOL void update_images(const std::vector<unsigned char>& user_image_binary, const std::vector<unsigned char>& model_image_binary);
+    EXPORT_SYMBOL void update_images(
+        const std::vector<unsigned char>& user_image_binary,
+        const std::vector<unsigned char>& model_image_binary
+    );
     
     // (re)init user_image & model_image with cv::Mat
     EXPORT_SYMBOL void update_images(const cv::Mat& user_image, const cv::Mat& model_image);
@@ -107,12 +125,21 @@ public:
     
     EXPORT_SYMBOL void draw_stacked_red_green_image(cv::Mat& image_out, const cv::Mat& transformed_image_in = cv::Mat());
     
-    EXPORT_SYMBOL void draw_layer_image(const cv::Mat& layer_image_in, cv::Mat& image_out, const float layer_image_transparency = 1.0);
+    EXPORT_SYMBOL void draw_layer_image(
+        const cv::Mat& layer_image_in,
+        cv::Mat& image_out,
+        const float layer_image_transparency = 1.0,
+        const cv::Vec3b* filter_bgr = NULL
+    );
+    
+private: // helper functions
+    void __validate_registrar();
     
 private:
     cv::Ptr<cv::Feature2D> f2d_detector;
     cv::Mat homography_matrix;
     std::vector<std::vector<cv::DMatch>> good_keypoint_matches;
+    cv::Size image_size;
     // user
     cv::Mat user_image;
     std::vector<cv::KeyPoint> user_keypoints;

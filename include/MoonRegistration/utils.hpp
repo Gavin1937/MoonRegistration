@@ -26,8 +26,28 @@ EXPORT_SYMBOL ImageShape calc_image_shape(const cv::Mat& image_in);
 
 EXPORT_SYMBOL cv::Vec3i round_vec3f(const cv::Vec3f& vec3);
 
-// templates can only implement in header file
-// https://stackoverflow.com/a/456716
+template <class TYPE>
+EXPORT_SYMBOL TYPE clamp(TYPE value, TYPE lower, TYPE higher)
+{
+    if (value < lower) return value;
+    else if (higher < value) return higher;
+    return value;
+}
+
+template <class TYPE>
+EXPORT_SYMBOL TYPE clamp_lower(TYPE value, TYPE lower)
+{
+    if (value < lower) return value;
+    return value;
+}
+
+template <class TYPE>
+EXPORT_SYMBOL TYPE clamp_higher(TYPE value, TYPE higher)
+{
+    if (higher < value) return higher;
+    return value;
+}
+
 
 template <typename COMP_TYPE, typename DATA_TYPE>
 class Comparator
