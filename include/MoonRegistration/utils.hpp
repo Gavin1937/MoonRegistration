@@ -56,8 +56,7 @@ template<typename COMP_TYPE> EXPORT_SYMBOL void find_n_circles(
     [](const COMP_TYPE&) { return true; }
 )
 {
-    if (output.capacity() < n)
-        output.reserve(n);
+    output.reserve(n);
     
     // find n largest element in the list
     // https://stackoverflow.com/a/22654973

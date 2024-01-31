@@ -51,23 +51,23 @@ EXPORT_SYMBOL void sync_img_size(const cv::Mat &primary, cv::Mat &secondary)
 
 EXPORT_SYMBOL ImageChannels::ImageChannels(const cv::Mat& alpha)
 {
-    this->channels.reserve(1);
-    this->channels.push_back(alpha.clone());
+    this->channels.resize(1);
+    this->channels[0] = alpha.clone();
 }
 EXPORT_SYMBOL ImageChannels::ImageChannels(const cv::Mat& blue, const cv::Mat& green, const cv::Mat& red)
 {
-    this->channels.reserve(3);
-    this->channels.push_back(blue.clone());
-    this->channels.push_back(green.clone());
-    this->channels.push_back(red.clone());
+    this->channels.resize(3);
+    this->channels[0] = blue.clone();
+    this->channels[1] = green.clone();
+    this->channels[2] = red.clone();
 }
 EXPORT_SYMBOL ImageChannels::ImageChannels(const cv::Mat& blue, const cv::Mat& green, const cv::Mat& red, const cv::Mat& alpha)
 {
-    this->channels.reserve(4);
-    this->channels.push_back(blue.clone());
-    this->channels.push_back(green.clone());
-    this->channels.push_back(red.clone());
-    this->channels.push_back(alpha.clone());
+    this->channels.resize(4);
+    this->channels[0] = blue.clone();
+    this->channels[1] = green.clone();
+    this->channels[2] = red.clone();
+    this->channels[3] = alpha.clone();
 }
 
 EXPORT_SYMBOL const cv::Mat& ImageChannels::blue() const
@@ -110,7 +110,7 @@ EXPORT_SYMBOL const size_t ImageChannels::channel_num() const
 EXPORT_SYMBOL void split_img_channel(const cv::Mat& image_in, mr::ImageChannels& channels)
 {
     int channel_num = image_in.channels();
-    channels.channels.reserve(channel_num);
+    channels.channels.resize(channel_num);
     cv::split(image_in, channels.channels);
 }
 

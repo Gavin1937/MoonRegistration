@@ -85,16 +85,19 @@ public:
         return this->good_keypoint_matches;
     }
     
+    
     // moon registration
     EXPORT_SYMBOL void compute_registration();
-    
-    EXPORT_SYMBOL void draw_matched_keypoints(cv::Mat& image_out);
     
     EXPORT_SYMBOL void registrate_image(const cv::Mat& image_in, cv::Mat& image_out);
     
     EXPORT_SYMBOL void registrate_image_inverse_homography(const cv::Mat& image_in, cv::Mat& image_out);
     
     EXPORT_SYMBOL void registrate_user_image(cv::Mat& image_out);
+    
+    
+    // draw result image
+    EXPORT_SYMBOL void draw_matched_keypoints(cv::Mat& image_out);
     
     EXPORT_SYMBOL void draw_red_transformed_user_image(cv::Mat& image_out, const cv::Mat& transformed_image_in = cv::Mat());
     

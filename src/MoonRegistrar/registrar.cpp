@@ -62,6 +62,7 @@ EXPORT_SYMBOL MoonRegistrar::MoonRegistrar(const cv::Mat& user_image, const cv::
     this->update_f2d_detector(algorithm);
 }
 
+
 EXPORT_SYMBOL void MoonRegistrar::update_images(const std::string& user_image_path, const std::string& model_image_path)
 {
     this->user_image = cv::imread(user_image_path);
@@ -107,6 +108,7 @@ EXPORT_SYMBOL void MoonRegistrar::update_f2d_detector(const cv::Ptr<cv::Feature2
 {
     this->f2d_detector = f2d_detector;
 }
+
 
 EXPORT_SYMBOL void MoonRegistrar::compute_registration()
 {
@@ -157,20 +159,6 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration()
         throw std::runtime_error("Cannot find Homography Matrix");
 }
 
-EXPORT_SYMBOL void MoonRegistrar::draw_matched_keypoints(cv::Mat& image_out)
-{
-    cv::drawMatches(
-        this->user_image, this->user_keypoints,
-        this->model_image, this->model_keypoints,
-        this->good_keypoint_matches,
-        image_out,
-        cv::Scalar::all(-1),
-        cv::Scalar::all(-1),
-        std::vector<std::vector<char>>(),
-        cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS
-    );
-}
-
 EXPORT_SYMBOL void MoonRegistrar::registrate_image(const cv::Mat& image_in, cv::Mat& image_out)
 {
     cv::warpPerspective(image_in, image_out, this->homography_matrix, image_in.size());
@@ -184,6 +172,21 @@ EXPORT_SYMBOL void MoonRegistrar::registrate_image_inverse_homography(const cv::
 EXPORT_SYMBOL void MoonRegistrar::registrate_user_image(cv::Mat& image_out)
 {
     this->registrate_image(this->user_image, image_out);
+}
+
+
+EXPORT_SYMBOL void MoonRegistrar::draw_matched_keypoints(cv::Mat& image_out)
+{
+    cv::drawMatches(
+        this->user_image, this->user_keypoints,
+        this->model_image, this->model_keypoints,
+        this->good_keypoint_matches,
+        image_out,
+        cv::Scalar::all(-1),
+        cv::Scalar::all(-1),
+        std::vector<std::vector<char>>(),
+        cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS
+    );
 }
 
 EXPORT_SYMBOL void MoonRegistrar::draw_red_transformed_user_image(cv::Mat& image_out, const cv::Mat& transformed_image_in)
