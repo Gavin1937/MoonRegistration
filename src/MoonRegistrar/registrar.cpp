@@ -330,7 +330,7 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
             cv::Vec4b front_layer_bgra = transparent_layer_image.at<cv::Vec4b>(position);
             
             // use front_layer alpha as a binary float to enable/disable front_layer pixel
-            float on_layer = static_cast<float>(mr::clamp<uchar>(front_layer_bgra[3], 0, 1));
+            float on_layer = mr::clamp<float>(static_cast<float>(front_layer_bgra[3])/255.0, 0.0, 1.0);
             
             // when filter_bgr value matches front_layer_bgra value, don't draw layer
             if (filter_bgr && memcmp(filter_bgr->val, front_layer_bgra.val, 3) == 0)
