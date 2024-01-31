@@ -7,21 +7,7 @@
 #include <opencv2/calib3d.hpp>
 
 #include <exception>
-#include <iostream>
 
-template<typename T>
-std::ostream& operator<<(std::ostream& out, const std::vector<T>& vec)
-{
-    for (auto v : vec)
-        out << v << "\n";
-    return out;
-}
-
-std::ostream& operator<<(std::ostream& out, const cv::KeyPoint& kp)
-{
-    out << kp.pt;
-    return out;
-}
 
 namespace mr
 {
@@ -142,11 +128,13 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration()
     std::vector<std::vector<cv::DMatch>> matches;
     bf_matcher.knnMatch(tmp_user_descriptors, tmp_model_descriptors, matches, 2);
     
-    this->good_keypoint_matches.reserve(matches.size());
+    // only allocate 75% of matches buffer, assuming good_matches are 75% of matches
+    int keypoints_buffer_size = static_cast<int>(matches.size()*0.75);
+    this->good_keypoint_matches.reserve(keypoints_buffer_size);
     std::vector<cv::Point2f> tmp_user_keypoints_pt2f;
-    tmp_user_keypoints_pt2f.reserve(matches.size());
+    tmp_user_keypoints_pt2f.reserve(keypoints_buffer_size);
     std::vector<cv::Point2f> tmp_model_keypoints_pt2f;
-    tmp_model_keypoints_pt2f.reserve(matches.size());
+    tmp_model_keypoints_pt2f.reserve(keypoints_buffer_size);
     
     // filter good matches
     for (auto mn : matches)
@@ -159,8 +147,6 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration()
             tmp_model_keypoints_pt2f.push_back(this->model_keypoints[mn[0].trainIdx].pt);
         }
     }
-    tmp_user_keypoints_pt2f.shrink_to_fit();
-    tmp_model_keypoints_pt2f.shrink_to_fit();
     this->good_keypoint_matches.shrink_to_fit();
     
     // compute homography matrix
