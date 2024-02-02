@@ -22,6 +22,7 @@ EXPORT_SYMBOL typedef enum class RegistrationAlgorithms
     // opencv non-free algorithms
     // NONFREE_SURF   = 0x200,
     
+    EMPTY_ALGORITHM   = 0x001,
     INVALID_ALGORITHM = 0x000
 } RegistrationAlgorithms;
 

@@ -34,6 +34,8 @@ EXPORT_SYMBOL void create_f2d_detector(const mr::RegistrationAlgorithms algorith
     //     f2d_detector = cv::xfeatures2d::SURF::create();
     //     break;
     
+    case mr::RegistrationAlgorithms::EMPTY_ALGORITHM:
+        break;
     case mr::RegistrationAlgorithms::INVALID_ALGORITHM:
         throw std::runtime_error("Invalid Algorithm");
         break;
@@ -133,6 +135,9 @@ EXPORT_SYMBOL void MoonRegistrar::update_f2d_detector(const cv::Ptr<cv::Feature2
 
 EXPORT_SYMBOL void MoonRegistrar::compute_registration()
 {
+    if (this->f2d_detector.empty())
+        throw std::runtime_error("Empty Feature2D detector");
+    
     cv::Mat gray_user_image, gray_model_image;
     cv::cvtColor(this->user_image, gray_user_image, cv::COLOR_BGR2GRAY);
     cv::cvtColor(this->model_image, gray_model_image, cv::COLOR_BGR2GRAY);
