@@ -1,7 +1,5 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
-#include <opencv2/features2d.hpp>
-#include <opencv2/calib3d.hpp>
 
 #ifdef MR_HAVE_OPENCV_NONFREE
 #include <opencv2/xfeatures2d.hpp>
@@ -139,7 +137,12 @@ EXPORT_SYMBOL void MoonRegistrar::update_f2d_detector(const cv::Ptr<cv::Feature2
 }
 
 
-EXPORT_SYMBOL void MoonRegistrar::compute_registration()
+EXPORT_SYMBOL void MoonRegistrar::compute_registration(
+    const int knn_k,
+    const float good_match_ratio,
+    const int find_homography_method,
+    const double find_homography_ransac_reproj_threshold
+)
 {
     if (this->f2d_detector.empty())
         throw std::runtime_error("Empty Feature2D detector");
@@ -160,7 +163,7 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration()
     // matching keypoints
     cv::BFMatcher bf_matcher;
     std::vector<std::vector<cv::DMatch>> matches;
-    bf_matcher.knnMatch(tmp_user_descriptors, tmp_model_descriptors, matches, 2);
+    bf_matcher.knnMatch(tmp_user_descriptors, tmp_model_descriptors, matches, knn_k);
     
     // only allocate 75% of matches buffer, assuming good_matches are 75% of matches
     int keypoints_buffer_size = static_cast<int>(matches.size()*0.75);
@@ -173,7 +176,7 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration()
     // filter good matches
     for (auto mn : matches)
     {
-        if (mn[0].distance < 0.7 * mn[1].distance)
+        if (mn[0].distance < good_match_ratio * mn[1].distance)
         {
             this->good_keypoint_matches.push_back(std::vector<cv::DMatch>({mn[0]}));
             
@@ -186,7 +189,12 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration()
     // compute homography matrix
     if (tmp_user_keypoints_pt2f.size() < 4 || tmp_model_keypoints_pt2f.size() < 4)
         throw std::runtime_error("No enough keypoints for finding homography matrix");
-    this->homography_matrix = cv::findHomography(tmp_user_keypoints_pt2f, tmp_model_keypoints_pt2f, cv::RANSAC, 5.0);
+    this->homography_matrix = cv::findHomography(
+        tmp_user_keypoints_pt2f,
+        tmp_model_keypoints_pt2f,
+        find_homography_method,
+        find_homography_ransac_reproj_threshold
+    );
     if (this->homography_matrix.empty())
         throw std::runtime_error("Cannot find Homography Matrix");
 }

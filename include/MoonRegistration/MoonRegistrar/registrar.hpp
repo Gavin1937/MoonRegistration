@@ -1,6 +1,7 @@
 #pragma once
 
 #include <opencv2/core/mat.hpp>
+#include <opencv2/calib3d.hpp>
 #include <opencv2/features2d.hpp>
 
 #include <vector>
@@ -109,7 +110,12 @@ public:
     
     
     // moon registration
-    EXPORT_SYMBOL void compute_registration();
+    EXPORT_SYMBOL void compute_registration(
+        const int knn_k = 2,
+        const float good_match_ratio = 0.7,
+        const int find_homography_method = cv::RANSAC,
+        const double find_homography_ransac_reproj_threshold = 5.0
+    );
     
     EXPORT_SYMBOL void registrate_image(const cv::Mat& image_in, cv::Mat& image_out);
     
