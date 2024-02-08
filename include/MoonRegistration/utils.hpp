@@ -48,6 +48,13 @@ EXPORT_SYMBOL TYPE clamp_higher(TYPE value, TYPE higher)
     return value;
 }
 
+template <class TYPE>
+EXPORT_SYMBOL TYPE make_binary_num(TYPE value, TYPE threshold, TYPE maxval)
+{
+    if (value <= threshold) return static_cast<TYPE>(0);
+    else return maxval;
+}
+
 
 template <typename COMP_TYPE, typename DATA_TYPE>
 class Comparator
