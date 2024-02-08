@@ -66,6 +66,25 @@ all the build environments are set, so you can easily rebuild the library follow
     * This is mandatory for Windows user.
     * For other OS, your OS package manager may handle those thing for you, but it's good to set it up.
 
+> **About OpenCV non-free modules:**
+> 
+> This library uses some OpenCV non-free modules. Which means those modules contain algorithms that may be patented in some countries or have some other limitations on the use. (Table below is a list of non-free models & algorithms that we use)
+> 
+> If you want to use those non-free modules, you need to:
+> * Install an OpenCV compiled with extra modules in [OpenCV Contrib](https://github.com/opencv/opencv_contrib). 
+>   * That means you probably need to **compile OpenCV with Contrib module by yourself**
+>   * [Compile in Windows](https://docs.opencv.org/4.x/d3/d52/tutorial_windows_install.html)
+>   * [Compile in MacOS](https://docs.opencv.org/3.4/d0/db2/tutorial_macos_install.html)
+>   * [Compile in Linux](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
+>   * Download pre-built binary: libopencv-dev and libopencv-contrib-dev
+>     * Note that you may not be able to find the latest OpenCV Contrib pre-built binary
+> * Once you have OpenCV and OpenCV Contrib library installed, you can enable MoonRegistration's non-free algorithms by setting cmake flag `-DMR_ENABLE_OPENCV_NONFREE=ON`. More details in [CMake Build Arguments](#cmake-build-arguments).
+
+| non-free OpenCV modules used                                                         | non-free OpenCV algorithms used                                                |
+|--------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| [XFeatures2D](https://docs.opencv.org/4.9.0/d2/dca/group__xfeatures2d__nonfree.html) | [SURF](https://docs.opencv.org/3.4/d5/df7/classcv_1_1xfeatures2d_1_1SURF.html) |
+
+
 ### Build Steps
 
 ```sh
@@ -88,3 +107,4 @@ cmake --build .
   * Or, you can turn it off to build the library into a static library `-DMR_BUILD_SHARED_LIBS=OFF`
 * Use Custom build of opencv
   * You can tell cmake to use your opencv build with flag `-DOPENCV_DIR`. This flag should point to a folder that contains cmake files like **"OpenCVConfig.cmake"** or **"opencv-config.cmake"**
+* To enable MoonRegistration library to use OpenCV non-free models and algorithms, you can set cmake flag `-DMR_ENABLE_OPENCV_NONFREE=ON`. By default, this option is `OFF` by default.

@@ -7,9 +7,9 @@
 #include <tuple>
 #include <functional>
 
-#include "../macros.h"
-#include "../shapes.hpp"
-#include "../utils.hpp"
+#include "MoonRegistration/macros.h"
+#include "MoonRegistration/shapes.hpp"
+#include "MoonRegistration/utils.hpp"
 
 
 namespace mr

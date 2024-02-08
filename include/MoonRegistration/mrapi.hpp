@@ -1,12 +1,12 @@
 #pragma once
 
 
-#include "version.hpp"
-#include "preprocessing.hpp"
-#include "shapes.hpp"
-#include "utils.hpp"
+#include "MoonRegistration/version.hpp"
+#include "MoonRegistration/preprocessing.hpp"
+#include "MoonRegistration/shapes.hpp"
+#include "MoonRegistration/utils.hpp"
 
-#include "MoonDetect/selector.hpp"
-#include "MoonDetect/detector.hpp"
+#include "MoonRegistration/MoonDetect/selector.hpp"
+#include "MoonRegistration/MoonDetect/detector.hpp"
 
-#include "MoonRegistrar/registrar.hpp"
+#include "MoonRegistration/MoonRegistrar/registrar.hpp"

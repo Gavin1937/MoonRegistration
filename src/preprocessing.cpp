@@ -1,4 +1,4 @@
-#include "../include/MoonRegistration/preprocessing.hpp"
+#include "MoonRegistration/preprocessing.hpp"
 
 namespace mr
 {

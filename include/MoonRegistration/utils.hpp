@@ -1,7 +1,5 @@
 #pragma once
 
-#include "macros.h"
-
 #include <opencv2/core/mat.hpp>
 
 #include <string>
@@ -9,6 +7,8 @@
 #include <utility>
 #include <queue>
 #include <functional>
+
+#include "MoonRegistration/macros.h"
 
 
 namespace mr

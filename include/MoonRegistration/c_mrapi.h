@@ -1,7 +1,7 @@
 #ifndef C_MRAPI_H
 #define C_MRAPI_H
 
-#include "macros.h"
+#include "MoonRegistration/macros.h"
 
 // An abstraction of C++ MoonRegistration API for C
 // Since C++ version of this library is heavily rely on

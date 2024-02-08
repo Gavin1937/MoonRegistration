@@ -3,8 +3,8 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include "macros.h"
-#include "shapes.hpp"
+#include "MoonRegistration/macros.h"
+#include "MoonRegistration/shapes.hpp"
 
 
 namespace mr

@@ -1,10 +1,11 @@
-#include "../include/MoonRegistration/c_mrapi.h"
-#include "../include/MoonRegistration/MoonDetect/detector.hpp"
-#include "../include/MoonRegistration/shapes.hpp"
-
 #include <string>
 #include <vector>
 #include <exception>
+
+#include "MoonRegistration/c_mrapi.h"
+#include "MoonRegistration/MoonDetect/detector.hpp"
+#include "MoonRegistration/shapes.hpp"
+
 
 extern "C"
 {

@@ -1,8 +1,8 @@
-#include "../include/MoonRegistration/utils.hpp"
-
 #include <opencv2/imgproc.hpp>
 
 #include <fstream>
+
+#include "MoonRegistration/utils.hpp"
 
 
 namespace mr

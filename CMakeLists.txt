@@ -17,14 +17,7 @@ file(GLOB SRC
     "src/MoonRegistrar/*.c"
     "src/MoonRegistrar/*.cpp"
 )
-file(GLOB HEADER
-    "include/*.h"
-    "include/*.hpp"
-    "include/MoonDetect/*.h"
-    "include/MoonDetect/*.hpp"
-    "include/MoonRegistrar/*.h"
-    "include/MoonRegistrar/*.hpp"
-)
+include_directories("include")
 
 
 # setup external libraries
@@ -53,22 +46,35 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 # handle build options
 
 # MR_BUILD_SHARED_LIBS
-option(MR_BUILD_SHARED_LIBS "Build MoonRegistration into Shared Library" ON)
+option(MR_BUILD_SHARED_LIBS:BOOL "Build MoonRegistration into Shared Library" ON)
 if (MR_BUILD_SHARED_LIBS)
     set(MR_BUILD_TYPE SHARED)
 else()
     set(MR_BUILD_TYPE STATIC)
 endif()
 
+option(MR_ENABLE_OPENCV_NONFREE:BOOL "Build MoonRegistration Library with OpenCV nonfree modules enabled" OFF)
+
 
 # report
 message(STATUS "================= MR Build Config ================")
 message(STATUS "MR_BUILD_SHARED_LIBS: ${MR_BUILD_SHARED_LIBS}")
-message(STATUS "MR_BUILD_WASM: ${MR_BUILD_WASM}")
+message(STATUS "MR_ENABLE_OPENCV_NONFREE: ${MR_ENABLE_OPENCV_NONFREE}")
 message(STATUS "OpenCV_DIR: ${OpenCV_DIR}")
 message(STATUS "OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "OpenCV_LIBS: ${OpenCV_LIBS}")
 message(STATUS "==================================================")
+
+
+# generate mrconfig.h
+set(MR_CONFIG_FILE_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/include" CACHE PATH "Where to create the platform-dependant mrconfig.h")
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/MoonRegistration/mrconfig.h.in"
+    "${MR_CONFIG_FILE_INCLUDE_DIR}/MoonRegistration/mrconfig.h"
+    @ONLY
+)
+# add newly generated mrconfig.h to include directories
+include_directories("${MR_CONFIG_FILE_INCLUDE_DIR}")
 
 
 # build & link
@@ -79,6 +85,11 @@ add_library(${PROJECT_NAME} ${MR_BUILD_TYPE}
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 # add -fPIC compile flag for MoonRegistration for unix system
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+# expose mrconfig.h to external projects
+target_include_directories(
+    ${PROJECT_NAME}
+    PUBLIC "${MR_CONFIG_FILE_INCLUDE_DIR}"
+)
 
 # linking
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})

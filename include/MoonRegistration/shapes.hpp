@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "macros.h"
+#include "MoonRegistration/macros.h"
 
 
 namespace mr

@@ -1,12 +1,16 @@
-#include "../../include/MoonRegistration/MoonRegistrar/registrar.hpp"
-#include "../../include/MoonRegistration/utils.hpp"
-
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/features2d.hpp>
 #include <opencv2/calib3d.hpp>
 
+#ifdef MR_HAVE_OPENCV_NONFREE
+#include <opencv2/xfeatures2d.hpp>
+#endif
+
 #include <exception>
+
+#include "MoonRegistration/MoonRegistrar/registrar.hpp"
+#include "MoonRegistration/utils.hpp"
 
 
 namespace mr
@@ -29,10 +33,12 @@ EXPORT_SYMBOL void create_f2d_detector(const mr::RegistrationAlgorithms algorith
         f2d_detector = cv::BRISK::create();
         break;
     
+#ifdef MR_ENABLE_OPENCV_NONFREE
     // opencv non-free algorithms
-    // case mr::RegistrationAlgorithms::NONFREE_SURF:
-    //     f2d_detector = cv::xfeatures2d::SURF::create();
-    //     break;
+    case mr::RegistrationAlgorithms::SURF_NONFREE:
+        f2d_detector = cv::xfeatures2d::SURF::create();
+        break;
+#endif
     
     case mr::RegistrationAlgorithms::EMPTY_ALGORITHM:
         break;
@@ -335,7 +341,7 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
             cv::Vec4b front_layer_bgra = transparent_layer_image.at<cv::Vec4b>(position);
             
             // use front_layer alpha as a binary float to enable/disable front_layer pixel
-            float on_layer = mr::clamp<float>(static_cast<float>(front_layer_bgra[3])/255.0, 0.0, 1.0);
+            float on_layer = mr::clamp<float>(static_cast<float>(front_layer_bgra[3])/255.0f, 0.0, 1.0);
             
             // when filter_bgr value matches front_layer_bgra value, don't draw layer
             if (filter_bgr && memcmp(filter_bgr->val, front_layer_bgra.val, 3) == 0)

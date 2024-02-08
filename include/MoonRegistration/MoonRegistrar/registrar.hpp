@@ -6,7 +6,8 @@
 #include <vector>
 #include <string>
 
-#include "../macros.h"
+#include "MoonRegistration/macros.h"
+#include "MoonRegistration/mrconfig.h"
 
 
 namespace mr
@@ -14,16 +15,18 @@ namespace mr
 
 EXPORT_SYMBOL typedef enum class RegistrationAlgorithms
 {
-    SIFT   = 0x100,
-    ORB    = 0x101,
-    AKAZE  = 0x102,
-    BRISK  = 0x103,
+    SIFT                               = 0x100,
+    ORB                                = 0x101,
+    AKAZE                              = 0x102,
+    BRISK                              = 0x103,
     
+#ifdef MR_HAVE_OPENCV_NONFREE
     // opencv non-free algorithms
-    // NONFREE_SURF   = 0x200,
+    SURF_NONFREE                       = 0x200,
+#endif
     
-    EMPTY_ALGORITHM   = 0x001,
-    INVALID_ALGORITHM = 0x000
+    EMPTY_ALGORITHM                    = 0x001,
+    INVALID_ALGORITHM                  = 0x000
 } RegistrationAlgorithms;
 
 EXPORT_SYMBOL void create_f2d_detector(const mr::RegistrationAlgorithms algorithm, cv::Ptr<cv::Feature2D>& f2d_detector);

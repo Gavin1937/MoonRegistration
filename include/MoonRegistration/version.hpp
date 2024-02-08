@@ -1,6 +1,6 @@
 #pragma once
 
-#include "macros.h"
+#include "MoonRegistration/macros.h"
 
 namespace mr
 {

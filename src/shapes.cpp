@@ -1,4 +1,4 @@
-#include "../include/MoonRegistration/shapes.hpp"
+#include "MoonRegistration/shapes.hpp"
 
 
 namespace mr

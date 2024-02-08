@@ -1,13 +1,13 @@
-#include "../../include/MoonRegistration/MoonDetect/detector.hpp"
-#include "../../include/MoonRegistration/MoonDetect/selector.hpp"
-#include "../../include/MoonRegistration/preprocessing.hpp"
-#include "../../include/MoonRegistration/utils.hpp"
-
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/core/mat.hpp>
 
 #include <cmath>
 #include <exception>
+
+#include "MoonRegistration/MoonDetect/detector.hpp"
+#include "MoonRegistration/MoonDetect/selector.hpp"
+#include "MoonRegistration/preprocessing.hpp"
+#include "MoonRegistration/utils.hpp"
 
 
 namespace mr

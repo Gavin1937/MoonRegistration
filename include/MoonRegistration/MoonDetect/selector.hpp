@@ -4,8 +4,8 @@
 
 #include <vector>
 
-#include "../macros.h"
-#include "../shapes.hpp"
+#include "MoonRegistration/macros.h"
+#include "MoonRegistration/shapes.hpp"
 
 
 namespace mr

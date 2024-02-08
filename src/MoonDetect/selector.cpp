@@ -1,6 +1,6 @@
-#include "../../include/MoonRegistration/MoonDetect/selector.hpp"
-#include "../../include/MoonRegistration/preprocessing.hpp"
-#include "../../include/MoonRegistration/utils.hpp"
+#include "MoonRegistration/MoonDetect/selector.hpp"
+#include "MoonRegistration/preprocessing.hpp"
+#include "MoonRegistration/utils.hpp"
 
 
 namespace mr

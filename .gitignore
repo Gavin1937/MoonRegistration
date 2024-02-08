@@ -18,6 +18,7 @@
 # folders
 /.vscode/
 /**/*build*/
+/**/*install*/
 /**/*output*/
 /**/*data*/
 /testing/
