@@ -47,6 +47,9 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 # MR_BUILD_SHARED_LIBS
 option(MR_BUILD_SHARED_LIBS:BOOL "Build MoonRegistration into Shared Library" ON)
+if(NOT DEFINED MR_BUILD_SHARED_LIBS) # check for no default value
+    set(MR_BUILD_SHARED_LIBS ON)
+endif()
 if (MR_BUILD_SHARED_LIBS)
     set(MR_BUILD_TYPE SHARED)
 else()
@@ -93,3 +96,42 @@ target_include_directories(
 
 # linking
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+
+
+# install path setup from OpenCV
+# https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT.html
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    # native build
+    if(NOT CMAKE_TOOLCHAIN_FILE)
+        if(WIN32)
+            set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
+        else()
+            set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation Directory" FORCE)
+        endif()
+    
+    # any cross-compiling
+    else()
+        set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
+    endif()
+    
+endif()
+
+# install binary
+install(
+    TARGETS ${PROJECT_NAME}
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+)
+# install main include files
+install(
+    DIRECTORY "${CMAKE_SOURCE_DIR}/include/"
+    DESTINATION "include"
+    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
+# install mrconfig.h
+install(
+    DIRECTORY "${MR_CONFIG_FILE_INCLUDE_DIR}/"
+    DESTINATION "include"
+    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
