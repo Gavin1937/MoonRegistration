@@ -1,14 +1,14 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
-#ifdef MR_HAVE_OPENCV_NONFREE
-#include <opencv2/xfeatures2d.hpp>
-#endif
-
 #include <exception>
 
 #include "MoonRegistration/MoonRegistrar/registrar.hpp"
 #include "MoonRegistration/utils.hpp"
+
+#ifdef MR_HAVE_OPENCV_NONFREE
+#include <opencv2/xfeatures2d.hpp>
+#endif
 
 
 namespace mr
