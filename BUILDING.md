@@ -108,3 +108,18 @@ cmake --build .
 * Use Custom build of opencv
   * You can tell cmake to use your opencv build with flag `-DOPENCV_DIR`. This flag should point to a folder that contains cmake files like **"OpenCVConfig.cmake"** or **"opencv-config.cmake"**
 * To enable MoonRegistration library to use OpenCV non-free models and algorithms, you can set cmake flag `-DMR_ENABLE_OPENCV_NONFREE=ON`. By default, this option is `OFF` by default.
+
+## Install with CMake
+
+To install this library with cmake, simply use `cmake --install` command:
+
+```sh
+cmake --install /path/to/build/dir --prefix /path/to/install/dir
+```
+
+If you don't supply `--prefix` flag, cmake will try to install all the library & header files to:
+
+* If in Windows or is cross-compiling this library, install to:
+  * `"${CMAKE_BINARY_DIR}/install"`
+* Otherwise install to:
+  * `"/usr/local"`
