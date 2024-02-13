@@ -52,6 +52,17 @@ built library release packages are in `/src/MoonRegistration/*.zip` archives
 all the build environments are set, so you can easily rebuild the library following [these steps](#build-into-webassembly-library) and modify [build arguments](#cmake-build-arguments)
 
 
+## Develope with Dev Container
+
+You can use Docker container to develope this library.
+
+* If you use VSCode as your Editor, you can [follow this doc](https://code.visualstudio.com/docs/devcontainers/tips-and-tricks) to install docker and [VSCode Dev Container Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+  * After installation, you can use [VSCode Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) to search & execute command: `Dev Containers: Reopen in Container`
+  * This command will reopen this folder inside a Dev Container
+  * If git is breaking inside Dev Container, follow [this doc](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials) to fix it.
+* If you don't use VSCode as your Editor, you can launch a container from [./Dockerfile_dev](./Dockerfile_dev) and trying to connect to it.
+  * Remember to mount repository root into this container.
+
 
 ## Build Into Library
 
