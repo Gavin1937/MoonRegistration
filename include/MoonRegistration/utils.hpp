@@ -49,9 +49,9 @@ EXPORT_SYMBOL TYPE clamp_higher(TYPE value, TYPE higher)
 }
 
 template <class TYPE>
-EXPORT_SYMBOL TYPE make_binary_num(TYPE value, TYPE threshold, TYPE maxval)
+EXPORT_SYMBOL TYPE make_binary_num(TYPE value, TYPE threshold, TYPE minval, TYPE maxval)
 {
-    if (value <= threshold) return static_cast<TYPE>(0);
+    if (value <= threshold) return minval;
     else return maxval;
 }
 
