@@ -211,12 +211,6 @@ EXPORT_SYMBOL void stack_imgs(
         
         // if show_fore is 1.0, adding foreground pixel on top of background pixel,
         // otherwise nothing will be add on top of background pixel.
-        // 
-        // when applying foreground transparency, we use transparency factor (0~1 float) multiply
-        // with the pixel, decrease its value, and then add it on top of background pixel,
-        // so two pixels' color will blend together.
-        // in this case, we also need to adjust background pixel's transparency.
-        // it will use (1 - transparency_factor) as its transparency factor.
         for (int channel_idx = 0; channel_idx < max_channel; ++channel_idx)
         {
             // since we are accessing pixels via uchar* to the underlying cv::Mat,
@@ -231,6 +225,11 @@ EXPORT_SYMBOL void stack_imgs(
             if (channel_idx >= foreground_channel)
                 fore_px_ch_val = default_px[channel_idx];
             
+            // when applying foreground transparency, we use transparency factor (0~1 float) multiply
+            // with the pixel, decrease its value, and then add it on top of background pixel,
+            // so two pixels' color will blend together.
+            // in this case, we also need to adjust background pixel's transparency.
+            // it will use (1 - transparency_factor) as its transparency factor.
             pixel[channel_idx] = static_cast<uchar>(
                 (
                     back_px_ch_val * (1.0 - (transparency_factor * show_fore))
@@ -370,12 +369,6 @@ EXPORT_SYMBOL void stack_imgs_in_place(
         
         // if show_fore is 1.0, adding foreground pixel on top of background pixel,
         // otherwise nothing will be add on top of background pixel.
-        // 
-        // when applying foreground transparency, we use transparency factor (0~1 float) multiply
-        // with the pixel, decrease its value, and then add it on top of background pixel,
-        // so two pixels' color will blend together.
-        // in this case, we also need to adjust background pixel's transparency.
-        // it will use (1 - transparency_factor) as its transparency factor.
         for (int channel_idx = 0; channel_idx < background_channel; ++channel_idx)
         {
             // since we are accessing pixels via uchar* to the underlying cv::Mat,
@@ -390,6 +383,11 @@ EXPORT_SYMBOL void stack_imgs_in_place(
             if (channel_idx >= foreground_channel)
                 fore_px_ch_val = default_px[channel_idx];
             
+            // when applying foreground transparency, we use transparency factor (0~1 float) multiply
+            // with the pixel, decrease its value, and then add it on top of background pixel,
+            // so two pixels' color will blend together.
+            // in this case, we also need to adjust background pixel's transparency.
+            // it will use (1 - transparency_factor) as its transparency factor.
             back_px[channel_idx] = static_cast<uchar>(
                 (
                     back_px_ch_val * (1.0 - (transparency_factor * show_fore))
