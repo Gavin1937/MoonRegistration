@@ -345,7 +345,7 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
     
     mr::stack_imgs(
         this->user_image,
-        cv::Rect({0,0}, this->user_image.size()),
+        cv::Rect({0,0}, this->image_size),
         transparent_layer_image,
         image_out,
         layer_image_transparency,
