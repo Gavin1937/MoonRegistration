@@ -88,6 +88,22 @@ EXPORT_SYMBOL Circle vec3_to_circle(const cv::Vec3f& vec3)
     };
 }
 
+EXPORT_SYMBOL cv::Rect rectangle_to_roi(const Rectangle& rectangle)
+{
+    return cv::Rect(
+        rectangle.top_left_x, rectangle.top_left_y,
+        std::abs(rectangle.bottom_right_x - rectangle.top_left_x),
+        std::abs(rectangle.bottom_right_y - rectangle.top_left_y)
+    );
+}
+
+EXPORT_SYMBOL Rectangle roi_to_rectangle(const cv::Rect& roi)
+{
+    return {
+        roi.x, roi.y, roi.x+roi.width, roi.y+roi.height
+    };
+}
+
 }
 
 

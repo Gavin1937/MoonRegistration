@@ -139,7 +139,7 @@ public:
         const cv::Mat& layer_image_in,
         cv::Mat& image_out,
         const float layer_image_transparency = 1.0,
-        const cv::Vec3b* filter_bgr = NULL
+        const cv::Vec4b* filter_bgr = NULL
     );
     
 private: // helper functions

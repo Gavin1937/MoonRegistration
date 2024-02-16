@@ -314,7 +314,7 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
     const cv::Mat& layer_image_in,
     cv::Mat& image_out,
     const float layer_image_transparency,
-    const cv::Vec3b* filter_bgr
+    const cv::Vec4b* filter_bgr
 )
 {
     this->__validate_registrar();
@@ -323,6 +323,8 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
     cv::Mat processed_layer_image;
     this->transform_layer_image(layer_image_in, processed_layer_image);
     
+    
+    // create our own alpha channel for layer image if needed
     cv::Mat transparent_layer_image;
     if (processed_layer_image.channels() < 4)
     {
@@ -340,39 +342,12 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
     else // channels == 4
         transparent_layer_image = processed_layer_image;
     
-    // merge
-    float transparency_factor = mr::clamp<float>(layer_image_transparency, 0.0, 1.0);
-    image_out = cv::Mat::zeros(this->image_size, CV_8UC3);
-    image_out.forEach<cv::Vec3b>(
-        [this, &transparent_layer_image, filter_bgr, transparency_factor]
-        (cv::Vec3b& pixel, const int* position)
-        {
-            cv::Vec4b front_layer_bgra = transparent_layer_image.at<cv::Vec4b>(position);
-            
-            // use front_layer alpha as a binary float to enable/disable front_layer pixel
-            float on_layer = mr::make_binary_num<float>(static_cast<float>(front_layer_bgra[3])/255.0f, 0.0f, 0.0f, 1.0f);
-            
-            // when filter_bgr value matches front_layer_bgra value, don't draw layer
-            if (filter_bgr && memcmp(filter_bgr->val, front_layer_bgra.val, 3) == 0)
-                on_layer = 0.0;
-            
-            // if on_layer is 1, adding front_layer pixel on top of user_image pixel,
-            // otherwise nothing will be add on top of user_image pixel.
-            // 
-            // when applying layer transparency, we use transparency factor (0~1 float) multiply
-            // with the pixel, decrease its RGB value, and then add it on top of background pixel,
-            // so two pixels' color will blend together.
-            // in this case, we also need to adjust background pixel's transparency.
-            // it will use (1 - transparency_factor) as its transparency factor.
-            pixel = (
-                (
-                    this->user_image.at<cv::Vec3b>(position) * (1.0 - (transparency_factor * on_layer))
-                ) +
-                (
-                    cv::Vec3b(front_layer_bgra.val) * transparency_factor * on_layer
-                )
-            );
-        }
+    
+    mr::stack_imgs(
+        this->user_image, cv::Rect({0,0}, this->user_image.size()),
+        transparent_layer_image, layer_image_transparency,
+        filter_bgr,
+        image_out
     );
 }
 

@@ -47,6 +47,10 @@ EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle);
 
 EXPORT_SYMBOL Circle vec3_to_circle(const cv::Vec3f& vec3);
 
+EXPORT_SYMBOL cv::Rect rectangle_to_roi(const Rectangle& rectangle);
+
+EXPORT_SYMBOL Rectangle roi_to_rectangle(const cv::Rect& roi);
+
 }
 
 

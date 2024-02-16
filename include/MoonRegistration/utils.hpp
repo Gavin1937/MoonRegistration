@@ -27,32 +27,29 @@ EXPORT_SYMBOL ImageShape calc_image_shape(const cv::Mat& image_in);
 EXPORT_SYMBOL cv::Vec3i round_vec3f(const cv::Vec3f& vec3);
 
 template <class TYPE>
-EXPORT_SYMBOL TYPE clamp(TYPE value, TYPE lower, TYPE higher)
+EXPORT_SYMBOL inline TYPE clamp(TYPE value, TYPE lower, TYPE higher)
 {
-    if (value < lower) return value;
-    else if (higher < value) return higher;
-    return value;
+    return (
+        (value < lower) ? lower : ((value > higher) ? higher : value)
+    );
 }
 
 template <class TYPE>
-EXPORT_SYMBOL TYPE clamp_lower(TYPE value, TYPE lower)
+EXPORT_SYMBOL inline TYPE clamp_lower(TYPE value, TYPE lower)
 {
-    if (value < lower) return value;
-    return value;
+    return ((value < lower) ? lower : value);
 }
 
 template <class TYPE>
-EXPORT_SYMBOL TYPE clamp_higher(TYPE value, TYPE higher)
+EXPORT_SYMBOL inline TYPE clamp_higher(TYPE value, TYPE higher)
 {
-    if (higher < value) return higher;
-    return value;
+    return ((value > higher) ? higher : value);
 }
 
 template <class TYPE>
-EXPORT_SYMBOL TYPE make_binary_num(TYPE value, TYPE threshold, TYPE minval, TYPE maxval)
+EXPORT_SYMBOL inline TYPE make_binary_num(TYPE value, TYPE threshold, TYPE minval, TYPE maxval)
 {
-    if (value <= threshold) return minval;
-    else return maxval;
+    return ((value <= threshold) ? minval : maxval);
 }
 
 
@@ -148,5 +145,59 @@ EXPORT_SYMBOL typedef struct ImageChannels
 EXPORT_SYMBOL void split_img_channel(const cv::Mat& image_in, mr::ImageChannels& channels);
 
 EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat& image_out);
+
+// Stack two images together respecting transparency
+// 
+// Parameters:
+//   - background: background image
+//   - background_roi: Region of Interest (ROI) of background image
+//   - foreground: foreground image
+//   - foreground_transparency: a 0~1 float percentage changing foreground image's transparency
+//   - filter_px: pixel value to filter in the foreground image
+//   - image_out: output image buffer
+// 
+// Note:
+//   - this function is designed to work with different number of color channels
+//   - if foreground size is bigger then background size, this function will call mr::sync_img_size()
+//     to sync it with background
+//   - image_out will follow the maximum number of channels between two input images,
+//     thus if one input is grayscale image and another is not, then it will become
+//     the blue channel of image_out, as OpenCV uses BGRA pixel order.
+//   - when using filter_px, we only read number of elements corresponding to
+//     number of channels in foreground. if foreground image has 3 channels, we only read
+//     first 3 elements of filter_px. rest of elements will be ignored.
+EXPORT_SYMBOL void stack_imgs(
+    const cv::Mat& background, cv::Rect background_roi,
+    const cv::Mat& foreground, float foreground_transparency,
+    const cv::Vec4b* filter_px,
+    cv::Mat& image_out
+);
+
+// Stack two images together respecting transparency,
+// and write pixel value in-place to the background.
+// This function is really similar to mr::stack_imgs(),
+// we just write pixel value directly to background image to avoid copy.
+// 
+// Parameters:
+//   - background: background image
+//   - background_roi: Region of Interest (ROI) of background image
+//   - foreground: foreground image
+//   - foreground_transparency: a 0~1 float percentage changing foreground image's transparency
+//   - filter_px: pixel value to filter in the foreground image
+// 
+// Note:
+//   - this function is designed to work with different number of color channels
+//   - if foreground size is bigger then background size, this function will call mr::sync_img_size()
+//     to sync it with background
+//   - if foreground number of channel is greater then background, this function will sync
+//     its number of channel with background
+//   - when using filter_px, we only read number of elements corresponding to
+//     number of channels in foreground. if foreground image has 3 channels, we only read
+//     first 3 elements of filter_px. rest of elements will be ignored.
+EXPORT_SYMBOL void stack_imgs_in_place(
+    cv::Mat& background, cv::Rect background_roi,
+    const cv::Mat& foreground, float foreground_transparency,
+    const cv::Vec4b* filter_px
+);
 
 }
