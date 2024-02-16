@@ -179,7 +179,6 @@ EXPORT_SYMBOL void stack_imgs(
     }
     
     // setup image_out & fill-in pixel values
-    cv::Vec4b default_px(0, 0, 0, 255);
     float transparency_factor = mr::clamp<float>(foreground_transparency, 0.0, 1.0);
     image_out = cv::Mat::zeros(background_with_roi.size(), CV_MAKETYPE(CV_8U, max_channel));
     image_out.forEach<cv::Vec4b>(
@@ -188,7 +187,7 @@ EXPORT_SYMBOL void stack_imgs(
         &background_with_roi, background_channel,
         &foreground_copy, foreground_channel,
         max_channel, transparency_factor,
-        filter_px, default_px, &select_fore_px_val
+        filter_px, &select_fore_px_val
     ]
     (cv::Vec4b& unused_param, const int* position)
     {
@@ -197,6 +196,7 @@ EXPORT_SYMBOL void stack_imgs(
         uchar* pixel = image_out.ptr<uchar>(position);
         const uchar* fore_px = foreground_copy.ptr<uchar>(position);
         const uchar* back_px = background_with_roi.ptr<uchar>(position);
+        cv::Vec4b default_px(0, 0, 0, 255);
         
         
         // use a binary float to enable/disable foreground pixel
@@ -341,14 +341,13 @@ EXPORT_SYMBOL void stack_imgs_in_place(
     }
     
     // setup image_out & fill-in pixel values
-    cv::Vec4b default_px(0, 0, 0, 255);
     float transparency_factor = mr::clamp<float>(foreground_transparency, 0.0, 1.0);
     background_with_roi.forEach<cv::Vec4b>(
     [
         &background_with_roi, background_channel,
         &foreground_copy, foreground_channel,
         transparency_factor,
-        filter_px, default_px, &select_fore_px_val
+        filter_px, &select_fore_px_val
     ]
     (cv::Vec4b& unused_param, const int* position)
     {
@@ -356,6 +355,7 @@ EXPORT_SYMBOL void stack_imgs_in_place(
         // so we can handle images with unknown channel number easier
         const uchar* fore_px = foreground_copy.ptr<uchar>(position);
         uchar* back_px = background_with_roi.ptr<uchar>(position);
+        cv::Vec4b default_px(0, 0, 0, 255);
         
         
         // use a binary float to enable/disable foreground pixel
