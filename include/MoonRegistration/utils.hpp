@@ -152,9 +152,11 @@ EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat&
 //   - background: background image
 //   - background_roi: Region of Interest (ROI) of background image
 //   - foreground: foreground image
-//   - foreground_transparency: a 0~1 float percentage changing foreground image's transparency
-//   - filter_px: pixel value to filter in the foreground image
 //   - image_out: output image buffer
+//   - foreground_transparency: a 0~1 float percentage changing foreground image's transparency,
+//     default 1.0
+//   - filter_px: pointer to cv::Vec4b pixel with pixel value to filter in the foreground image,
+//     set it to NULL if you don't need it, default NULL
 // 
 // Note:
 //   - this function is designed to work with different number of color channels
@@ -167,10 +169,12 @@ EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat&
 //     number of channels in foreground. if foreground image has 3 channels, we only read
 //     first 3 elements of filter_px. rest of elements will be ignored.
 EXPORT_SYMBOL void stack_imgs(
-    const cv::Mat& background, cv::Rect background_roi,
-    const cv::Mat& foreground, float foreground_transparency,
-    const cv::Vec4b* filter_px,
-    cv::Mat& image_out
+    const cv::Mat& background,
+    cv::Rect background_roi,
+    const cv::Mat& foreground,
+    cv::Mat& image_out,
+    float foreground_transparency = 1.0f,
+    const cv::Vec4b* filter_px = NULL
 );
 
 // Stack two images together respecting transparency,
@@ -182,8 +186,10 @@ EXPORT_SYMBOL void stack_imgs(
 //   - background: background image
 //   - background_roi: Region of Interest (ROI) of background image
 //   - foreground: foreground image
-//   - foreground_transparency: a 0~1 float percentage changing foreground image's transparency
-//   - filter_px: pixel value to filter in the foreground image
+//   - foreground_transparency: a 0~1 float percentage changing foreground image's transparency,
+//     default 1.0
+//   - filter_px: pointer to cv::Vec4b pixel with pixel value to filter in the foreground image,
+//     set it to NULL if you don't need it, default NULL
 // 
 // Note:
 //   - this function is designed to work with different number of color channels
@@ -195,9 +201,11 @@ EXPORT_SYMBOL void stack_imgs(
 //     number of channels in foreground. if foreground image has 3 channels, we only read
 //     first 3 elements of filter_px. rest of elements will be ignored.
 EXPORT_SYMBOL void stack_imgs_in_place(
-    cv::Mat& background, cv::Rect background_roi,
-    const cv::Mat& foreground, float foreground_transparency,
-    const cv::Vec4b* filter_px
+    cv::Mat& background,
+    cv::Rect background_roi,
+    const cv::Mat& foreground,
+    float foreground_transparency = 1.0f,
+    const cv::Vec4b* filter_px = NULL
 );
 
 }

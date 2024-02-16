@@ -200,29 +200,29 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration(
         throw std::runtime_error("Cannot find Homography Matrix");
 }
 
-EXPORT_SYMBOL void MoonRegistrar::registrate_image(const cv::Mat& image_in, cv::Mat& image_out)
+EXPORT_SYMBOL void MoonRegistrar::transform_image(const cv::Mat& image_in, cv::Mat& image_out)
 {
     this->__validate_registrar();
     cv::warpPerspective(image_in, image_out, this->homography_matrix, image_in.size());
 }
 
-EXPORT_SYMBOL void MoonRegistrar::registrate_image_inverse_homography(const cv::Mat& image_in, cv::Mat& image_out)
+EXPORT_SYMBOL void MoonRegistrar::transform_image_inverse(const cv::Mat& image_in, cv::Mat& image_out)
 {
     this->__validate_registrar();
     cv::warpPerspective(image_in, image_out, this->homography_matrix.inv(), image_in.size());
 }
 
-EXPORT_SYMBOL void MoonRegistrar::registrate_user_image(cv::Mat& image_out)
+EXPORT_SYMBOL void MoonRegistrar::transform_user_image(cv::Mat& image_out)
 {
     this->__validate_registrar();
-    this->registrate_image(this->user_image, image_out);
+    this->transform_image(this->user_image, image_out);
 }
 
 EXPORT_SYMBOL void MoonRegistrar::transform_layer_image(const cv::Mat& layer_image_in, cv::Mat& layer_image_out)
 {
     layer_image_out = layer_image_in.clone();
     mr::sync_img_size(this->user_image, layer_image_out);
-    this->registrate_image_inverse_homography(layer_image_out, layer_image_out);
+    this->transform_image_inverse(layer_image_out, layer_image_out);
 }
 
 
@@ -248,7 +248,7 @@ EXPORT_SYMBOL void MoonRegistrar::draw_red_transformed_user_image(cv::Mat& image
     
     cv::Mat transformed_image;
     if (transformed_image_in.empty())
-        this->registrate_user_image(transformed_image);
+        this->transform_user_image(transformed_image);
     else
         transformed_image = transformed_image_in;
     
@@ -293,7 +293,7 @@ EXPORT_SYMBOL void MoonRegistrar::draw_stacked_red_green_image(cv::Mat& image_ou
     
     cv::Mat red;
     if (transformed_image_in.empty())
-        this->registrate_user_image(red);
+        this->transform_user_image(red);
     else
         red = transformed_image_in;
     if (red.size() != this->image_size)
@@ -314,7 +314,7 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
     const cv::Mat& layer_image_in,
     cv::Mat& image_out,
     const float layer_image_transparency,
-    const cv::Vec4b* filter_bgr
+    const cv::Vec4b* filter_px
 )
 {
     this->__validate_registrar();
@@ -344,10 +344,12 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
     
     
     mr::stack_imgs(
-        this->user_image, cv::Rect({0,0}, this->user_image.size()),
-        transparent_layer_image, layer_image_transparency,
-        filter_bgr,
-        image_out
+        this->user_image,
+        cv::Rect({0,0}, this->user_image.size()),
+        transparent_layer_image,
+        image_out,
+        layer_image_transparency,
+        filter_px
     );
 }
 

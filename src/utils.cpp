@@ -121,10 +121,12 @@ EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat&
 }
 
 EXPORT_SYMBOL void stack_imgs(
-    const cv::Mat& background, cv::Rect background_roi,
-    const cv::Mat& foreground, float foreground_transparency,
-    const cv::Vec4b* filter_px,
-    cv::Mat& image_out
+    const cv::Mat& background,
+    cv::Rect background_roi,
+    const cv::Mat& foreground,
+    cv::Mat& image_out,
+    float foreground_transparency,
+    const cv::Vec4b* filter_px
 )
 {
     // setup background & foreground, sync their size if needed.
@@ -242,8 +244,10 @@ EXPORT_SYMBOL void stack_imgs(
 }
 
 EXPORT_SYMBOL void stack_imgs_in_place(
-    cv::Mat& background, cv::Rect background_roi,
-    const cv::Mat& foreground, float foreground_transparency,
+    cv::Mat& background,
+    cv::Rect background_roi,
+    const cv::Mat& foreground,
+    float foreground_transparency,
     const cv::Vec4b* filter_px
 )
 {
