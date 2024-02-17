@@ -1,0 +1,10 @@
+# file
+*.jpg
+*.jpeg
+*.png
+
+# folder
+
+# whitelist
+!data/**/*
+!output/

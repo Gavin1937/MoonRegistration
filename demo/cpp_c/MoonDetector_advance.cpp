@@ -110,7 +110,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        std::cout << "Usage: ./MoonDetector_advance /path/to/image/folder\n";
+        std::cout << "Usage: ./MoonDetector_advance [IMAGE_FOLDER]\n";
         return 0;
     }
     

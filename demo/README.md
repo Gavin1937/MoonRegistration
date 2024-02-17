@@ -4,16 +4,20 @@
 ## Before we start
 
 * **You can use dataset in [./data](./data) folder**
+  * datasets are divided into folders for testing different modules
 * **You can play with demo applications inside [Docker Container](../BUILDING.md#build-using-docker-recommend)**
 * **All demo code are store in their folder same as language name**
 
 ## C++ & C
 
-| Name                                                         | Module       | Description                                                       |
-|--------------------------------------------------------------|--------------|-------------------------------------------------------------------|
-| [MoonDetector_basic.cpp](./cpp_c/MoonDetector_basic.cpp)     | MoonDetector | A basic usage, easy and quick                                     |
-| [MoonDetector_advance.cpp](./cpp_c/MoonDetector_advance.cpp) | MoonDetector | An advanced usage, you can customize each steps in moon detection |
-| [MoonDetector_c_api.c](./cpp_c/MoonDetector_c_api.c)         | MoonDetector | A basic usage of the C abstraction API                            |
+| Name                                                                               | Module        | Description                                                          |
+|------------------------------------------------------------------------------------|---------------|----------------------------------------------------------------------|
+| [MoonDetector_basic.cpp](./cpp_c/MoonDetector_basic.cpp)                           | MoonDetector  | A basic usage, easy and quick                                        |
+| [MoonDetector_advance.cpp](./cpp_c/MoonDetector_advance.cpp)                       | MoonDetector  | An advanced usage, you can further customize moon image detection    |
+| [MoonRegistrar_basic.cpp](./cpp_c/MoonRegistrar_basic.cpp)                         | MoonRegistrar | A basic usage, easy and quick                                        |
+| [MoonRegistrar_advance.cpp](./cpp_c/MoonRegistrar_advance.cpp)                     | MoonRegistrar | An advanced usage, you can further customize moon image registration |
+| [MoonRegistrar_live_registration.cpp](./cpp_c/MoonRegistrar_live_registration.cpp) | MoonRegistrar | Running moon image registration on a live video                      |
+| [MoonDetector_c_api.c](./cpp_c/MoonDetector_c_api.c)                               | MoonDetector  | A basic usage of the C abstraction API                               |
 
 ### Building demos (for C++ & C)
 

@@ -56,7 +56,7 @@ print(f'MoonRegistration Library Version: {mr.__version__}')
 
 
 if len(argv) < 2:
-    print('Usage: ./MoonDetector_basic /path/to/image/folder')
+    print('Usage: python3 ./MoonDetector_advance.py [IMAGE_FOLDER]')
     exit(0)
 
 

@@ -77,7 +77,7 @@ You can use Docker container to develope this library.
     * This is mandatory for Windows user.
     * For other OS, your OS package manager may handle those thing for you, but it's good to set it up.
 
-> **About OpenCV non-free modules:**
+> ## **About OpenCV non-free modules:**
 > 
 > This library uses some OpenCV non-free modules. Which means those modules contain algorithms that may be patented in some countries or have some other limitations on the use. (Table below is a list of non-free models & algorithms that we use)
 > 

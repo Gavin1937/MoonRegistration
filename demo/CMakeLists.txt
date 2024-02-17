@@ -30,6 +30,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 # compile & linking
 
+# MoonDetect module
 add_executable(MoonDetector_basic ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetector_basic.cpp)
 set_target_properties(MoonDetector_basic PROPERTIES
     LANGUAGE         CXX
@@ -45,6 +46,33 @@ set_target_properties(MoonDetector_advance PROPERTIES
     LINKER_LANGUAGE  CXX
 )
 target_link_libraries(MoonDetector_advance MoonRegistration)
+
+# MoonRegistrar module
+add_executable(MoonRegistrar_basic ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrar_basic.cpp)
+set_target_properties(MoonRegistrar_basic PROPERTIES
+    LANGUAGE         CXX
+    CXX_STANDARD     ${CXX_VERSION}
+    LINKER_LANGUAGE  CXX
+)
+target_link_libraries(MoonRegistrar_basic MoonRegistration)
+
+add_executable(MoonRegistrar_advance ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrar_advance.cpp)
+set_target_properties(MoonRegistrar_advance PROPERTIES
+    LANGUAGE         CXX
+    CXX_STANDARD     ${CXX_VERSION}
+    LINKER_LANGUAGE  CXX
+)
+target_link_libraries(MoonRegistrar_advance MoonRegistration)
+
+add_executable(MoonRegistrar_live_registration ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrar_live_registration.cpp)
+set_target_properties(MoonRegistrar_live_registration PROPERTIES
+    LANGUAGE         CXX
+    CXX_STANDARD     ${CXX_VERSION}
+    LINKER_LANGUAGE  CXX
+)
+target_link_libraries(MoonRegistrar_live_registration MoonRegistration)
+
+
 
 # demonstrate abstraction C api of the library
 # since the library itself is a C++ library,
