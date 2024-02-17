@@ -30,7 +30,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 # compile & linking
 
-add_executable(MoonDetector_basic ${CMAKE_CURRENT_SOURCE_DIR}/MoonDetector_basic.cpp)
+add_executable(MoonDetector_basic ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetector_basic.cpp)
 set_target_properties(MoonDetector_basic PROPERTIES
     LANGUAGE         CXX
     CXX_STANDARD     ${CXX_VERSION}
@@ -38,7 +38,7 @@ set_target_properties(MoonDetector_basic PROPERTIES
 )
 target_link_libraries(MoonDetector_basic MoonRegistration)
 
-add_executable(MoonDetector_advance ${CMAKE_CURRENT_SOURCE_DIR}/MoonDetector_advance.cpp)
+add_executable(MoonDetector_advance ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetector_advance.cpp)
 set_target_properties(MoonDetector_advance PROPERTIES
     LANGUAGE         CXX
     CXX_STANDARD     ${CXX_VERSION}
@@ -50,7 +50,7 @@ target_link_libraries(MoonDetector_advance MoonRegistration)
 # since the library itself is a C++ library,
 # we need to set the LINKER_LANGUAGE to CXX.
 # And then we can set the LANGUAGE to C for this C program.
-add_executable(MoonDetector_c_api ${CMAKE_CURRENT_SOURCE_DIR}/MoonDetector_c_api.c)
+add_executable(MoonDetector_c_api ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetector_c_api.c)
 set_target_properties(MoonDetector_c_api PROPERTIES
     LANGUAGE         C
     LINKER_LANGUAGE  CXX
