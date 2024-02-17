@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 
 #include "MoonRegistration/macros.h"
 #include "MoonRegistration/mrconfig.h"
@@ -31,6 +32,16 @@ EXPORT_SYMBOL typedef enum class RegistrationAlgorithms
 } RegistrationAlgorithms;
 
 EXPORT_SYMBOL void create_f2d_detector(const mr::RegistrationAlgorithms algorithm, cv::Ptr<cv::Feature2D>& f2d_detector);
+
+EXPORT_SYMBOL bool default_is_good_match(
+    const cv::DMatch& m,
+    const cv::DMatch& n,
+    const float good_match_ratio,
+    const cv::KeyPoint& user_kpt,
+    const cv::KeyPoint& model_kpt,
+    const cv::Mat& user_image,
+    const cv::Mat& model_image
+);
 
 EXPORT_SYMBOL typedef class MoonRegistrar
 {
@@ -234,6 +245,48 @@ public:
         const float layer_image_transparency = 1.0,
         const cv::Vec4b* filter_px = NULL
     );
+    
+public:
+    // Following public members of mr::MoonRegistrar are function pointers
+    // They are functions handling different steps in mr::MoonRegistrar::compute_registration()
+    // You can modify them to further customize how mr::MoonRegistrar::compute_registration() works
+    // All the function pointers are default to default_... functions defined in "registrar.hpp"
+    
+    // A function pointer to a ratio test function that determines
+    // whether a pair of keypoints are good matches. It runs in a loop
+    // of all the elements in matches returned by cv::BFMatcher::knnMatch()
+    // 
+    // function signature:
+    //   bool (
+    //       const cv::DMatch& m,
+    //       const cv::DMatch& n,
+    //       const float good_match_ratio,
+    //       const cv::KeyPoint& user_kpt,
+    //       const cv::KeyPoint& model_kpt,
+    //       const cv::Mat& user_image,
+    //       const cv::Mat& model_image
+    //   )
+    // 
+    // function parameters:
+    //   - m: matches element[0]
+    //   - n: matches element[1]
+    //   - good_match_ratio: the same good_match_ratio pass into mr::MoonRegistrar::compute_registration(),
+    //     a float of n m distance ratio for filtering good matches. default 0.7
+    //   - user_kpt: user_keypoints[m.queryIdx]
+    //   - model_kpt: user_keypoints[m.trainIdx]
+    //   - user_image: a const reference to user_image
+    //   - model_image: a const reference to model_image
+    // 
+    // function pointer default points to mr::default_is_good_match()
+    std::function<bool(
+        const cv::DMatch&,
+        const cv::DMatch&,
+        const float,
+        const cv::KeyPoint&,
+        const cv::KeyPoint&,
+        const cv::Mat&,
+        const cv::Mat&
+    )> is_good_match = mr::default_is_good_match;
     
 private: // helper functions
     void __validate_registrar();

@@ -50,6 +50,19 @@ EXPORT_SYMBOL void create_f2d_detector(const mr::RegistrationAlgorithms algorith
     }
 }
 
+EXPORT_SYMBOL bool default_is_good_match(
+    const cv::DMatch& m,
+    const cv::DMatch& n,
+    const float good_match_ratio,
+    const cv::KeyPoint& user_kpt,
+    const cv::KeyPoint& model_kpt,
+    const cv::Mat& user_image,
+    const cv::Mat& model_image
+)
+{
+    return (m.distance < good_match_ratio * n.distance);
+}
+
 EXPORT_SYMBOL MoonRegistrar::MoonRegistrar()
 {
 }
@@ -177,12 +190,20 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration(
     // filter good matches
     for (auto mn : matches)
     {
-        if (mn[0].distance < good_match_ratio * mn[1].distance)
+        const cv::KeyPoint& user_kpt = this->user_keypoints[mn[0].queryIdx];
+        const cv::KeyPoint& model_kpt = this->model_keypoints[mn[0].trainIdx];
+        bool flag = this->is_good_match(
+            mn[0], mn[1],
+            good_match_ratio,
+            user_kpt, model_kpt,
+            this->user_image, this->model_image
+        );
+        if (flag)
         {
             this->good_keypoint_matches.push_back(std::vector<cv::DMatch>({mn[0]}));
             
-            tmp_user_keypoints_pt2f.push_back(this->user_keypoints[mn[0].queryIdx].pt);
-            tmp_model_keypoints_pt2f.push_back(this->model_keypoints[mn[0].trainIdx].pt);
+            tmp_user_keypoints_pt2f.push_back(user_kpt.pt);
+            tmp_model_keypoints_pt2f.push_back(model_kpt.pt);
         }
     }
     this->good_keypoint_matches.shrink_to_fit();
