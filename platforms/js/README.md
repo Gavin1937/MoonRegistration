@@ -64,7 +64,7 @@ export EMSCRIPTEN="/some/root/emsdk/upstream/emscripten"
 ```
 
 3. goto your opencv source code directory
-4. creaate a new directory called **build_wasm** (you shouldn't change this name)
+4. create a new directory called **build_wasm** (you shouldn't change this name)
 5. build opencv into WebAssembly (this will take a while)
 
 ```sh

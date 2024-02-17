@@ -79,7 +79,7 @@ You can use Docker container to develope this library.
 
 > ## **About OpenCV non-free modules:**
 > 
-> This library uses some OpenCV non-free modules. Which means those modules contain algorithms that may be patented in some countries or have some other limitations on the use. (Table below is a list of non-free models & algorithms that we use)
+> This library uses some OpenCV non-free modules. Which means those modules contain algorithms that may be patented in some countries or have some other limitations on the use. (Table below is a list of non-free modules & algorithms that we use)
 > 
 > If you want to use those non-free modules, you need to:
 > * Install an OpenCV compiled with extra modules in [OpenCV Contrib](https://github.com/opencv/opencv_contrib). 
@@ -118,7 +118,7 @@ cmake --build .
   * Or, you can turn it off to build the library into a static library `-DMR_BUILD_SHARED_LIBS=OFF`
 * Use Custom build of opencv
   * You can tell cmake to use your opencv build with flag `-DOPENCV_DIR`. This flag should point to a folder that contains cmake files like **"OpenCVConfig.cmake"** or **"opencv-config.cmake"**
-* To enable MoonRegistration library to use OpenCV non-free models and algorithms, you can set cmake flag `-DMR_ENABLE_OPENCV_NONFREE=ON`. By default, this option is `OFF` by default.
+* To enable MoonRegistration library to use OpenCV non-free module and algorithms, you can set cmake flag `-DMR_ENABLE_OPENCV_NONFREE=ON`. By default, this option is `OFF` by default.
 
 ## Install with CMake
 
