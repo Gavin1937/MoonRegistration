@@ -24,8 +24,8 @@ namespace fs = boost::filesystem;
 #endif
 
 
-// MoonRegistration library api
-#include "MoonRegistration/mrapi.hpp"
+// MoonRegistration library api MoonDetect module
+#include "MoonRegistration/MoonDetect.hpp"
 
 
 // Following functions are different steps in function mr::MoonDetector::moon_detect()

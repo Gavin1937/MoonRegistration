@@ -12,6 +12,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 file(GLOB SRC
     "src/*.c"
     "src/*.cpp"
+    "src/c_mrapi/*.c"
+    "src/c_mrapi/*.cpp"
     "src/MoonDetect/*.c"
     "src/MoonDetect/*.cpp"
     "src/MoonRegistrar/*.c"
@@ -83,7 +85,6 @@ include_directories("${MR_CONFIG_FILE_INCLUDE_DIR}")
 # build & link
 add_library(${PROJECT_NAME} ${MR_BUILD_TYPE}
     ${SRC}
-    ${HEADER}
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 # add -fPIC compile flag for MoonRegistration for unix system

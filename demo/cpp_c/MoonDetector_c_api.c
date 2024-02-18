@@ -3,31 +3,31 @@
 #include <string.h>
 
 
-// MoonRegistration library api
+// MoonRegistration library c api
 #include "MoonRegistration/c_mrapi.h"
 
 
 
 int main(int argc, char** argv)
 {
-    if (argc < 2)
+    if (argc != 2)
     {
-        printf("Usage: ./MoonDetector_c_api /path/to/image.jpg\n");
+        printf("Usage: ./MoonDetector_c_api [IMAGE_PATH]\n");
         return 0;
     }
     
-    printf("MoonRegistration Library Version: %s\n", mr_version());
+    printf("MoonRegistration Library Version: %s\n", mrc_version());
     
     const char* filepath = argv[1];
     int* final_circle = NULL;
     char* error_message = NULL;
+    mat_ptr image = NULL;
+    
+    // read image from filepath
+    image = mrc_read_image_from_filepath(filepath);
     
     
-    // calculate moon position from filepath
-    final_circle = detect_moon_from_filepath(filepath, &error_message /*set this to NULL if you don't need it*/);
-    
-    
-    // // calculate moon position from image bytes
+    // // read image from bytes
     // FILE* file_in = fopen(filepath, "rb");
     // if (file_in != NULL)
     // {
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     //     fseek(file_in, 0L, SEEK_SET);
     //     fread(buffer, sizeof(unsigned char), file_size, file_in);
     //     fclose(file_in);
-    //     final_circle = detect_moon_from_binary(buffer, (const int)file_size, &error_message /*set this to NULL if you don't need it*/);
+    //     image = mrc_read_image_from_bytes(buffer, file_size);
     //     free(buffer);
     // }
     // else
@@ -46,6 +46,8 @@ int main(int argc, char** argv)
     //     return -1;
     // }
     
+    // calculate moon position
+    final_circle = mrc_detect_moon(image, &error_message /*set this to NULL if you don't need it*/);
     
     // printing out result
     if (final_circle != NULL)
@@ -61,6 +63,7 @@ int main(int argc, char** argv)
     }
     
     free(final_circle);
+    mrc_destroy_mat_ptr(image);
     
     return 0;
 }

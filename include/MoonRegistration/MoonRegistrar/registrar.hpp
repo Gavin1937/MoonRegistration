@@ -202,6 +202,10 @@ public:
     // 
     // Parameters:
     //   - image_out: output image
+    //   - transformed_image_in: a replacement of red transformed image
+    //     if this is an empty cv::Mat, this function will generate one using user_image.
+    //     otherwise, this function will use user provided image as red image.
+    //     default is an empty cv::Mat()
     EXPORT_SYMBOL void draw_red_transformed_user_image(cv::Mat& image_out, const cv::Mat& transformed_image_in = cv::Mat());
     
     // Draw model_image, and output to image_out's green channel

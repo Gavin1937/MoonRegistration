@@ -37,6 +37,16 @@ A Cross-Platform Multi-Language library for Moon Location Detection & Moon Image
 
 ![stack layer on top of original image](./imgs/06_moon_registrar_layer_image.png)
 
+# Supporting Language
+
+|                                  | MoonDetect Module | MoonRegistrar Module |
+|----------------------------------|-------------------|----------------------|
+| C++                              | ✅                 | ✅                    |
+| C (with abstracted api)          | ✅                 | ✅                    |
+| Python3                          | ✅                 | ❌                    |
+| JavaScript (with abstracted api) | ✅                 | ❌                    |
+
+
 # Known Issues
 
 1. When building the library into WebAssembly, it will produce mismatched result (compared with C++ version) for some file, and for some other files it works perfectly.

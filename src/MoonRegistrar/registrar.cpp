@@ -42,10 +42,10 @@ EXPORT_SYMBOL void create_f2d_detector(const mr::RegistrationAlgorithms algorith
     case mr::RegistrationAlgorithms::EMPTY_ALGORITHM:
         break;
     case mr::RegistrationAlgorithms::INVALID_ALGORITHM:
-        throw std::runtime_error("Invalid Algorithm");
+        throw std::runtime_error("Invalid Registration Algorithm");
         break;
     default:
-        throw std::runtime_error("Invalid Algorithm");
+        throw std::runtime_error("Invalid Registration Algorithm");
         break;
     }
 }

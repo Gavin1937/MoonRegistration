@@ -85,3 +85,10 @@ set_target_properties(MoonDetector_c_api PROPERTIES
 )
 target_link_libraries(MoonDetector_c_api MoonRegistration)
 
+add_executable(MoonRegistrar_c_api ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrar_c_api.c)
+set_target_properties(MoonRegistrar_c_api PROPERTIES
+    LANGUAGE         C
+    LINKER_LANGUAGE  CXX
+)
+target_link_libraries(MoonRegistrar_c_api MoonRegistration)
+

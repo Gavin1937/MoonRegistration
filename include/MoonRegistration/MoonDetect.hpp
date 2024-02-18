@@ -1,4 +1,5 @@
-// This header contains all of the MoonRegistration API
+// This is a subset of MoonRegistration API, contains
+// all the headers for MoonDetect module of the library.
 
 #pragma once
 
@@ -9,6 +10,5 @@
 #include "MoonRegistration/shapes.hpp"
 #include "MoonRegistration/utils.hpp"
 
-#include "MoonRegistration/MoonDetect.hpp"
-
-#include "MoonRegistration/MoonRegistrar.hpp"
+#include "MoonRegistration/MoonDetect/selector.hpp"
+#include "MoonRegistration/MoonDetect/detector.hpp"

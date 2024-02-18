@@ -8,8 +8,8 @@
 #include <exception>
 
 
-// MoonRegistration library api
-#include "MoonRegistration/mrapi.hpp"
+// MoonRegistration library api MoonRegistrar module
+#include "MoonRegistration/MoonRegistrar.hpp"
 
 
 // Following functions are different steps in function mr::MoonRegistrar::compute_registration()

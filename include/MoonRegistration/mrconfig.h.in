@@ -14,7 +14,7 @@
     #if defined(OPENCV_ENABLE_NONFREE) && defined(HAVE_OPENCV_XFEATURES2D)
         #define MR_HAVE_OPENCV_NONFREE
     #else
-        #error "The OpenCV linked with Library doesn't support non-free algorithms or doesn't have XFeatures2D module, or you didn't enable MR_ENABLE_OPENCV_NONFREE cmake flag."
+        #error "The OpenCV linked with MoonRegistration doesn't support non-free algorithms or doesn't have XFeatures2D module."
     #endif
 #else
 #endif
