@@ -37,7 +37,7 @@ A Cross-Platform Multi-Language library for Moon Location Detection & Moon Image
 
 ![stack layer on top of original image](./imgs/06_moon_registrar_layer_image.png)
 
-# Supporting Language
+# Supported Language
 
 |                                  | MoonDetect Module | MoonRegistrar Module |
 |----------------------------------|-------------------|----------------------|

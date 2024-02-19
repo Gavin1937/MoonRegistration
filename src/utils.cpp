@@ -122,18 +122,19 @@ EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat&
 
 EXPORT_SYMBOL void stack_imgs(
     const cv::Mat& background,
-    cv::Rect background_roi,
+    const cv::Rect background_roi,
     const cv::Mat& foreground,
     cv::Mat& image_out,
-    float foreground_transparency,
+    const float foreground_transparency,
     const cv::Vec4b* filter_px
 )
 {
     // setup background & foreground, sync their size if needed.
+    // copy a const reference from background, so we don't modify it
     const cv::Mat& background_with_roi = background(background_roi);
     cv::Mat foreground_copy;
-    if (foreground.size().width > background.size().width ||
-        foreground.size().height > background.size().height)
+    if (foreground.size().width > background_with_roi.size().width ||
+        foreground.size().height > background_with_roi.size().height)
     {
         foreground_copy = foreground.clone();
         mr::sync_img_size(background_with_roi, foreground_copy);
@@ -244,17 +245,18 @@ EXPORT_SYMBOL void stack_imgs(
 
 EXPORT_SYMBOL void stack_imgs_in_place(
     cv::Mat& background,
-    cv::Rect background_roi,
+    const cv::Rect background_roi,
     const cv::Mat& foreground,
-    float foreground_transparency,
+    const float foreground_transparency,
     const cv::Vec4b* filter_px
 )
 {
     // setup background & foreground, sync their size if needed.
+    // copy a reference from background, so we can modify it in place
     cv::Mat& background_with_roi = background(background_roi);
     cv::Mat foreground_copy;
-    if (foreground.size().width > background.size().width ||
-        foreground.size().height > background.size().height)
+    if (foreground.size().width > background_with_roi.size().width ||
+        foreground.size().height > background_with_roi.size().height)
     {
         foreground_copy = foreground.clone();
         mr::sync_img_size(background_with_roi, foreground_copy);
@@ -339,7 +341,7 @@ EXPORT_SYMBOL void stack_imgs_in_place(
         };
     }
     
-    // setup image_out & fill-in pixel values
+    // fill-in pixel values
     float transparency_factor = mr::clamp<float>(foreground_transparency, 0.0, 1.0);
     background_with_roi.forEach<cv::Vec4b>(
     [

@@ -170,10 +170,10 @@ EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat&
 //     first 3 elements of filter_px. rest of elements will be ignored.
 EXPORT_SYMBOL void stack_imgs(
     const cv::Mat& background,
-    cv::Rect background_roi,
+    const cv::Rect background_roi,
     const cv::Mat& foreground,
     cv::Mat& image_out,
-    float foreground_transparency = 1.0f,
+    const float foreground_transparency = 1.0f,
     const cv::Vec4b* filter_px = NULL
 );
 
@@ -202,9 +202,9 @@ EXPORT_SYMBOL void stack_imgs(
 //     first 3 elements of filter_px. rest of elements will be ignored.
 EXPORT_SYMBOL void stack_imgs_in_place(
     cv::Mat& background,
-    cv::Rect background_roi,
+    const cv::Rect background_roi,
     const cv::Mat& foreground,
-    float foreground_transparency = 1.0f,
+    const float foreground_transparency = 1.0f,
     const cv::Vec4b* filter_px = NULL
 );
 
