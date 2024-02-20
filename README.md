@@ -54,3 +54,5 @@ A Cross-Platform Multi-Language library for Moon Location Detection & Moon Image
 # [Usage Demonstration](./demo/README.md)
 
 # [Building the Library](./BUILDING.md)
+
+# [See Changelog](./CHANGELOG.md)

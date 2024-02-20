@@ -2,7 +2,7 @@
 # CHANGELOG
 
 <details open>
-<summary><strong style="font-size:140%">v0.1.6</strong></summary>
+<summary><strong style="font-size:140%">v0.1.7</strong></summary>
 
 * Re-structured project so we can:
   * abstract WASM related code to `platform/js`
