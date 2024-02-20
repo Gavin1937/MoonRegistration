@@ -253,7 +253,7 @@ EXPORT_SYMBOL void stack_imgs_in_place(
 {
     // setup background & foreground, sync their size if needed.
     // copy a reference from background, so we can modify it in place
-    cv::Mat& background_with_roi = background(background_roi);
+    cv::Mat background_with_roi = background(background_roi);
     cv::Mat foreground_copy;
     if (foreground.size().width > background_with_roi.size().width ||
         foreground.size().height > background_with_roi.size().height)
