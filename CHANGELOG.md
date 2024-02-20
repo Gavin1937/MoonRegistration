@@ -4,6 +4,20 @@
 <details open>
 <summary><strong style="font-size:140%">v0.1.6</strong></summary>
 
+* Re-structured project so we can:
+  * abstract WASM related code to `platform/js`
+  * abstract C api to `src/c_mrapi`
+* Update OpenCV to version `4.9.0`
+* Implement MoonRegistrar module, demo, & doc
+* Further abstract functions so we can reuse them
+* Fix some bugs
+
+</details>
+
+
+<details>
+<summary><strong style="font-size:140%">v0.1.6</strong></summary>
+
 * Improve overall error handling in this library
 * Extract C API out and make it a single unit
   * We now only support an abstracted version of C API because:

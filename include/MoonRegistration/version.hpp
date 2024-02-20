@@ -7,7 +7,7 @@ namespace mr
 
 EXPORT_SYMBOL inline const char* version()
 {
-    return "v0.1.6";
+    return "v0.1.7";
 }
 
 }
