@@ -38,7 +38,7 @@ if (NOT DEFINED OPENCV_DIR AND NOT DEFINED ${OPENCV_DIR})
 # "OpenCVConfig.cmake" or "opencv-config.cmake"
 else()
     message(STATUS "Setting OPENCV_DIR: ${OPENCV_DIR}")
-    find_package(OpenCV PATHS ${OPENCV_DIR})
+    find_package(OpenCV PATHS ${OPENCV_DIR} NO_DEFAULT_PATH)
 
 endif()
 

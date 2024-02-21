@@ -91,6 +91,7 @@ class cmake_build_ext(build_ext):
                 '-DMR_BUILD_SHARED_LIBS=OFF',
                 '-DMR_ENABLE_OPENCV_NONFREE=%s' % ('ON' if self.mr_enable_opencv_nonfree else 'OFF'),
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE=%s' % self.get_ext_fullpath(ext.name),
+                (self.cmake_arguments if self.cmake_arguments else '')
             ]
             
             if not os.path.exists(self.build_temp):
@@ -132,12 +133,14 @@ class Build_ext_first(install):
     # initialize arguments for install
     # https://stackoverflow.com/a/33200591
     user_options = install.user_options + [
-        ('mr-enable-opencv-nonfree', None, 'Set CMake Flag MR_ENABLE_OPENCV_NONFREE to true')
+        ('mr-enable-opencv-nonfree', None, 'Set CMake Flag MR_ENABLE_OPENCV_NONFREE to true'),
+        ('cmake-arguments=', None, 'Add more CMake Arguments'),
     ]
     
     def initialize_options(self):
         install.initialize_options(self)
         self.mr_enable_opencv_nonfree = False
+        self.cmake_arguments = None
     
     def finalize_options(self):
         install.finalize_options(self)
@@ -146,6 +149,7 @@ class Build_ext_first(install):
         # set build_ext arguments & run it
         build_ext_command = self.distribution.get_command_obj("build_ext")
         build_ext_command.mr_enable_opencv_nonfree = self.mr_enable_opencv_nonfree
+        build_ext_command.cmake_arguments = self.cmake_arguments
         build_ext.run(build_ext_command)
         
         # run build_py
