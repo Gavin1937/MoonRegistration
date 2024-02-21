@@ -2,7 +2,7 @@
 #define UTILS_C_API_H
 
 #include <stdbool.h>
-#include <cstddef>
+#include <stddef.h>
 
 #include "MoonRegistration/macros.h"
 
