@@ -62,10 +62,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 
 # src files
-include_directories("include")
 file(GLOB SRC
     "src/*.cpp"
 )
+include_directories("include")
 
 # we need to use following function instead of pybind11_add_module
 # in order to get a .pyd file with specific output name

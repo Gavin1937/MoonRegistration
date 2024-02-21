@@ -5,6 +5,9 @@
 #include <pybind11/pybind11.h>
 namespace py = pybind11;
 
+#include "ndarray_converter.h"
+#include "cvvec3f_vector_ndarray.hpp"
+
 
 py::tuple wrap_resize_with_aspect_ratio(
     const cv::Mat& image_in,
@@ -38,3 +41,7 @@ py::tuple wrap_cut_image_from_circle(
     int radius,
     int padding
 );
+
+
+// initialize submodule
+void init_preprocessing(py::module &module);

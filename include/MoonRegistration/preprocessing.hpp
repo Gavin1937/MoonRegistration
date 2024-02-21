@@ -6,6 +6,9 @@
 #include "MoonRegistration/macros.h"
 #include "MoonRegistration/shapes.hpp"
 
+#include "MoonRegistration/mrconfig.h"
+#include "MoonRegistration/version.hpp"
+
 
 namespace mr
 {

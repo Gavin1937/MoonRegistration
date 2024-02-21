@@ -9,6 +9,8 @@
 #include <functional>
 
 #include "MoonRegistration/macros.h"
+#include "MoonRegistration/mrconfig.h"
+#include "MoonRegistration/version.hpp"
 
 
 namespace mr

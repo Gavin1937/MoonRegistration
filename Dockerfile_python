@@ -16,7 +16,7 @@ RUN cd /src/MoonRegistration && \
     mkdir build && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug && cmake --build build && \
     cd platforms/python && \
-    pip3 install wheel && python3 setup.py install && \
+    pip3 install wheel && python3 setup.py install --mr-enable-opencv-nonfree && \
     python3 setup.py bdist_wheel --py-limited-api cp38 && \
     python3 setup.py bdist_wheel --py-limited-api cp38
 
