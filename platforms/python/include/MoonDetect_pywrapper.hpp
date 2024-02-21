@@ -1,5 +1,7 @@
 #pragma once
 
+#include <opencv2/core.hpp>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <pybind11/numpy.h>
@@ -10,7 +12,10 @@ namespace py = pybind11;
 #include <memory>
 #include <functional>
 
-#include "MoonRegistration/mrapi.hpp"
+#include "MoonRegistration/MoonDetect.hpp"
+
+#include "ndarray_converter.h"
+#include "cvvec3f_vector_ndarray.hpp"
 
 
 std::vector<cv::Vec3f> wrap_find_circles_in_img(
@@ -99,3 +104,7 @@ void set_MoonDetect_coordinate_remap(
     mr::MoonDetector& self,
     std::function<mr::Circle(const py::list&, const float)> func
 );
+
+
+// initialize submodule
+void init_MoonDetect(py::module &module);

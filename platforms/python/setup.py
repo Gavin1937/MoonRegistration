@@ -88,7 +88,9 @@ class cmake_build_ext(build_ext):
             cfg = 'Debug' if os.environ.get('DISPTOOLS_DEBUG','OFF') == 'ON' else 'Release'
             
             cmake_args = [
-                '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE=%s' % self.get_ext_fullpath(ext.name)
+                '-DMR_BUILD_SHARED_LIBS=OFF',
+                '-DMR_ENABLE_OPENCV_NONFREE=%s' % ('ON' if self.mr_enable_opencv_nonfree else 'OFF'),
+                '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE=%s' % self.get_ext_fullpath(ext.name),
             ]
             
             if not os.path.exists(self.build_temp):
@@ -108,7 +110,7 @@ class cmake_build_ext(build_ext):
             opencv_match = re.search(opencv_pattern, out)
             if opencv_match:
                 opencv_dir = Path(opencv_match.group(1))
-                for f in opencv_dir.rglob(f'opencv_world*.{OS_SHARED_LIBRARY_SUFFIX}'):
+                for f in opencv_dir.rglob(f'opencv_*.{OS_SHARED_LIBRARY_SUFFIX}'):
                     if cfg == 'Debug' and f.stem.endswith('d'):
                         LIB_FILES.append(f)
                     elif cfg == 'Release' and not f.stem.endswith('d'):
@@ -127,8 +129,26 @@ class cmake_build_ext(build_ext):
             HAS_BUILT = True
 
 class Build_ext_first(install):
+    # initialize arguments for install
+    # https://stackoverflow.com/a/33200591
+    user_options = install.user_options + [
+        ('mr-enable-opencv-nonfree', None, 'Set CMake Flag MR_ENABLE_OPENCV_NONFREE to true')
+    ]
+    
+    def initialize_options(self):
+        install.initialize_options(self)
+        self.mr_enable_opencv_nonfree = False
+    
+    def finalize_options(self):
+        install.finalize_options(self)
+    
     def run(self):
-        self.run_command("build_ext")
+        # set build_ext arguments & run it
+        build_ext_command = self.distribution.get_command_obj("build_ext")
+        build_ext_command.mr_enable_opencv_nonfree = self.mr_enable_opencv_nonfree
+        build_ext.run(build_ext_command)
+        
+        # run build_py
         self.run_command("build_py")
         
         global LIB_FILES

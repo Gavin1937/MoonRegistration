@@ -8,6 +8,9 @@
 #include <functional>
 
 #include "MoonRegistration/macros.h"
+#include "MoonRegistration/mrconfig.h"
+#include "MoonRegistration/version.hpp"
+
 #include "MoonRegistration/shapes.hpp"
 #include "MoonRegistration/utils.hpp"
 

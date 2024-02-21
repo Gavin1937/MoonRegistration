@@ -1,9 +1,6 @@
-#include "../include/MoonDetect_pywrapper.hpp"
+#include "MoonDetect_pywrapper.hpp"
 
 #include <pybind11/stl.h>
-
-#include "../include/ndarray_converter.h"
-#include "../include/cvvec3f_vector_ndarray.hpp"
 
 
 std::vector<cv::Vec3f> wrap_find_circles_in_img(
@@ -270,4 +267,274 @@ void set_MoonDetect_coordinate_remap(
         }
         return func(py_result_list, resize_ratio);
     };
+}
+
+
+// initialize submodule
+void init_MoonDetect(py::module &module)
+{
+    // MoonDetect/selector.hpp
+    
+    module.def("select_circle_by_brightness_perc", mr::select_circle_by_brightness_perc,
+        py::arg("image_in"),
+        py::arg("detected_circles")
+    );
+    module.def("select_n_circles_by_brightness_perc", mr::select_n_circles_by_brightness_perc,
+        py::arg("image_in"),
+        py::arg("detected_circles"),
+        py::arg("n")
+    );
+    module.def("select_circle_by_largest_radius", mr::select_circle_by_largest_radius,
+        py::arg("image_in"),
+        py::arg("detected_circles")
+    );
+    module.def("select_n_circles_by_largest_radius", mr::select_n_circles_by_largest_radius,
+        py::arg("image_in"),
+        py::arg("detected_circles"),
+        py::arg("n")
+    );
+    module.def("select_circle_by_shape", mr::select_circle_by_shape,
+        py::arg("image_in"),
+        py::arg("detected_circles")
+    );
+    
+    
+    // MoonDetect/detector.hpp
+    
+    module.def("find_circles_in_img", wrap_find_circles_in_img,
+    py::arg("image_in"),
+    py::arg("circle_threshold"),
+    py::arg("dp"),
+    py::arg("minDist"),
+    py::arg("minRadius"),
+    py::arg("maxRadius"),
+    py::arg("param1"),
+    py::arg("param2"),
+    R"pbdoc(
+    A wrapper function around cv::HoughCircles
+    
+    Parameters:
+      - image_in: gray scaled input image
+      - circle_threshold: threshold on number of circles to search
+        if detected_circles > circle_threshold, function will throw runtime_error
+      - dp: OpenCV parameter, inverse ratio of the accumulator resolution to the image resolution
+      - minDist: OpenCV parameter, minimum distance between the centers of the detected circles
+      - minRadius: OpenCV parameter, minimum circle radius
+      - maxRadius: OpenCV parameter, maximum circle radius
+      - param1: OpenCV parameter, first method-specific parameter
+      - param2: OpenCV parameter, second method-specific parameter
+    
+    Returns:
+      - detected_circles: numpy.ndarray representing output detected circles
+    )pbdoc"
+    );
+    
+    // default stage functions
+    module.def("default_preprocess_steps", wrap_default_preprocess_steps,
+    py::arg("image_in"),
+    R"pbdoc(
+    Default function for preprocess_steps stage
+    
+    Parameters:
+      - image_in: cv2.MatLike|numpy.ndarray
+    
+    Returns:
+      - tuple[image_out:cv2.MatLike|numpy.ndarray, resize_ratio_out:float]
+    )pbdoc");
+    module.def("default_param_init", wrap_default_param_init,
+    py::arg("image_shape"),
+    py::arg("max_iteration"),
+    py::arg("circle_threshold"),
+    py::arg("dp"),
+    py::arg("minDist"),
+    py::arg("minRadiusRate"),
+    py::arg("minRadius"),
+    py::arg("maxRadiusRate"),
+    py::arg("maxRadius"),
+    py::arg("param1"),
+    py::arg("param2"),
+    R"pbdoc(
+    Default function for param_init stage
+    
+    Parameters:
+      - image_shape: mr.ImageShape
+      - max_iteration: int
+      - circle_threshold: int
+      - dp: float
+      - minDist: float
+      - minRadiusRate: float
+      - minRadius: int
+      - maxRadiusRate: float
+      - maxRadius: int
+      - param1: float
+      - param2: float
+    
+    Returns:
+      - tuple[
+        max_iteration:int, circle_threshold:int, dp:float, minDist:float,
+        minRadiusRate:float, minRadius:int, maxRadiusRate:float, maxRadius:int,
+        param1:float, param2:float
+      ]
+    )pbdoc");
+    module.def("default_iteration_param_update", wrap_default_iteration_param_update,
+    py::arg("iteration"),
+    py::arg("image_brightness_perc"),
+    py::arg("image_shape"),
+    py::arg("max_iteration"),
+    py::arg("circle_threshold"),
+    py::arg("dp"),
+    py::arg("minDist"),
+    py::arg("minRadiusRate"),
+    py::arg("minRadius"),
+    py::arg("maxRadiusRate"),
+    py::arg("maxRadius"),
+    py::arg("param1"),
+    py::arg("param2"),
+    R"pbdoc(
+    Default function for iteration_param_update stage
+    
+    Parameters:
+      - iteration: int
+      - image_brightness_perc: float
+      - image_shape: mr.ImageShape
+      - max_iteration: int
+      - circle_threshold: int
+      - dp: float
+      - minDist: float
+      - minRadiusRate: float
+      - minRadius: int
+      - maxRadiusRate: float
+      - maxRadius: int
+      - param1: float
+      - param2: float
+    
+    Returns:
+      - tuple[
+        max_iteration:int, circle_threshold:int, dp:float, minDist:float,
+        minRadiusRate:float, minRadius:int, maxRadiusRate:float, maxRadius:int,
+        param1:float, param2:float
+      ]
+    )pbdoc");
+    module.def("default_iteration_circle_select", wrap_default_iteration_circle_select,
+    py::arg("iteration"),
+    py::arg("image_in"),
+    py::arg("detected_circles"),
+    R"pbdoc(
+    Default function for iteration_circle_select stage
+    
+    Parameters:
+      - iteration: int
+      - image_in: cv2.MatLike|numpy.ndarray
+      - detected_circles: numpy.ndarray, return value of cv2.HoughCircles
+    
+    Returns:
+      - mr.Circle
+    )pbdoc");
+    module.def("default_coordinate_remap", wrap_default_coordinate_remap,
+    py::arg("result_list"),
+    py::arg("resize_ratio"),
+    R"pbdoc(
+    Default function for coordinate_remap stage
+    
+    Parameters:
+      - result_list: list[tuple(int, mr.Circle, mr.Rectangle)]
+      - resize_ratio: float
+    
+    Returns:
+      - mr.Circle
+    )pbdoc");
+    
+    // class MoonDetector
+    py::class_<mr::MoonDetector>(module, "MoonDetector")
+        .def(py::init<>())
+        // handle bytes & str param
+        .def(py::init(&new_MoonDetector),
+        py::arg("data"),
+        R"pbdoc(
+    Handling str image_filepath or bytes image_binary.
+    
+    Parameters:
+      - parameter can be one of following:
+          - str: a filepath to input image
+          - bytes: raw image bytes
+          - cv2.MatLike (numpy.ndarray), raw OpenCV image
+            this constructor will assume cv_image is a decoded pixel matrix ready to use
+            it will set cv_image to original_image directly
+            colors in cv_image MUST in BGR order
+        )pbdoc")
+        .def("is_empty", &mr::MoonDetector::is_empty)
+        .def("init_by_path", &mr::MoonDetector::init_by_path, py::arg("image_filepath"),
+        R"pbdoc(
+    (re)init mr.MoonDetector by image_filepath
+    
+    Parameters:
+      - image_filepath: str filepath
+        )pbdoc"
+        )
+        .def("init_by_byte", wrap_MoonDetect_init_by_byte, py::arg("image_binary"),
+        R"pbdoc(
+    (re)init mr.MoonDetector by image_binary
+    
+    Parameters:
+      - image_binary: bytes raw image
+        )pbdoc"
+        )
+        .def("init_by_mat", &mr::MoonDetector::init_by_mat, py::arg("image_in"),
+        R"pbdoc(
+    (re)init mr.MoonDetector by image_in
+    
+    Parameters:
+      - image_in: cv2.MatLike|numpy.ndarray image
+        )pbdoc"
+        )
+        .def("detect_moon", &mr::MoonDetector::detect_moon, R"pbdoc(
+    trying to find a circle from input image
+    thats most likely contains the moon.
+    
+    Returns:
+      - if success, return mr::Circle of the circle found
+      - if fail (input doesn't contain circle), return mr::Circle of {-1, -1, -1}
+        )pbdoc")
+        // set stage function pointers
+        .def("set_preprocess_steps", set_MoonDetect_preprocess_steps,
+        py::arg("func"),
+        R"pbdoc(
+    Set mr::MoonDetector::preprocess_steps
+    
+    Parameters:
+      - func: callable function (cv2.MatLike|numpy.ndarray) -> tuple
+        )pbdoc")
+        .def("set_param_init", set_MoonDetect_param_init,
+        py::arg("func"),
+        R"pbdoc(
+    Set mr::MoonDetector::param_init
+    
+    Parameters:
+      - func: callable function (mr.ImageShape, int, int, float, float, float, int, float, int, float, float) -> tuple
+        )pbdoc")
+        .def("set_iteration_param_update", set_MoonDetect_iteration_param_update,
+        py::arg("func"),
+        R"pbdoc(
+    Set mr::MoonDetector::iteration_param_update
+    
+    Parameters:
+      - func: callable function (int, float, mr.ImageShape, int, int, float, float, float, int, float, int, float, float) -> tuple
+        )pbdoc")
+        .def("set_iteration_circle_select", set_MoonDetect_iteration_circle_select,
+        py::arg("func"),
+        R"pbdoc(
+    Set mr::MoonDetector::iteration_circle_select
+    
+    Parameters:
+      - func: callable function (int, cv2.MatLike|numpy.ndarray, numpy.ndarray) -> mr.Circle
+        )pbdoc")
+        .def("set_coordinate_remap", set_MoonDetect_coordinate_remap,
+        py::arg("func"),
+        R"pbdoc(
+    Set mr::MoonDetector::coordinate_remap
+    
+    Parameters:
+      - func: callable function (list, float) -> mr.Circle
+        )pbdoc")
+    ;
 }
