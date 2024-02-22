@@ -13,6 +13,31 @@
 namespace mr
 {
 
+EXPORT_SYMBOL int convertHoughCirclesAlgorithm(const mr::HoughCirclesAlgorithm& algorith)
+{
+    switch (algorith)
+    {
+    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT:
+        return cv::HOUGH_GRADIENT;
+        break;
+// Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
+// This enum will be enabled if OpenCV version >= 4.8.1
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_ALT:
+        return cv::HOUGH_GRADIENT_ALT;
+        break;
+#endif
+    case mr::HoughCirclesAlgorithm::EMPTY_ALGORITHM:
+    case mr::HoughCirclesAlgorithm::INVALID_ALGORITHM:
+        throw std::runtime_error("Cannot parse empty or invalid HoughCirclesAlgorithm");
+        break;
+    
+    default:
+        throw std::runtime_error("Cannot parse empty or invalid HoughCirclesAlgorithm");
+        break;
+    }
+}
+
 EXPORT_SYMBOL void find_circles_in_img(
     const cv::Mat& image_in,
     std::vector<cv::Vec3f>& detected_circles,
@@ -22,14 +47,15 @@ EXPORT_SYMBOL void find_circles_in_img(
     const int minRadius,
     const int maxRadius,
     const double param1,
-    const double param2
+    const double param2,
+    const mr::HoughCirclesAlgorithm& algorithm
 )
 {
     detected_circles.clear();
     
     cv::HoughCircles(
         image_in, detected_circles,
-        cv::HOUGH_GRADIENT,
+        mr::convertHoughCirclesAlgorithm(algorithm),
         dp, minDist, param1, param2, minRadius, maxRadius
     );
     
@@ -343,7 +369,8 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
             circle_threshold,
             dp, minDist,
             minRadius, maxRadius,
-            param1, param2
+            param1, param2,
+            hough_circles_algorithm
         );
         
         mr::Circle circle_found = this->iteration_circle_select(

@@ -11,7 +11,8 @@ std::vector<cv::Vec3f> wrap_find_circles_in_img(
     const int minRadius,
     const int maxRadius,
     const double param1,
-    const double param2
+    const double param2,
+    const mr::HoughCirclesAlgorithm& algorithm
 )
 {
     std::vector<cv::Vec3f> output;
@@ -19,7 +20,8 @@ std::vector<cv::Vec3f> wrap_find_circles_in_img(
         image_in, output, circle_threshold,
         dp, minDist,
         minRadius, maxRadius,
-        param1, param2
+        param1, param2,
+        algorithm
     );
     return output;
 }
@@ -301,6 +303,29 @@ void init_MoonDetect(py::module &module)
     
     // MoonDetect/detector.hpp
     
+    py::enum_<mr::HoughCirclesAlgorithm>(module, "HoughCirclesAlgorithm", py::arithmetic())
+        .value("HOUGH_GRADIENT", mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+        .value("HOUGH_GRADIENT_ALT", mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_ALT)
+#endif
+        .value("EMPTY_ALGORITHM", mr::HoughCirclesAlgorithm::EMPTY_ALGORITHM)
+        .value("INVALID_ALGORITHM", mr::HoughCirclesAlgorithm::INVALID_ALGORITHM)
+    ;
+    
+    module.def("convertHoughCirclesAlgorithm", mr::convertHoughCirclesAlgorithm,
+    py::arg("algorithm"),
+    R"pbdoc(
+    A simple conversion function to convert between mr::HoughCirclesAlgorithm to OpenCV algorithm representation
+    
+    Parameters:
+      - algorithm: an enum of mr::HoughCirclesAlgorithm
+    
+    Return:
+      - If success, return int that can be use in cv::HoughCircles()
+      - If failed, throw runtime_error
+    )pbdoc"
+    );
+    
     module.def("find_circles_in_img", wrap_find_circles_in_img,
     py::arg("image_in"),
     py::arg("circle_threshold"),
@@ -310,6 +335,7 @@ void init_MoonDetect(py::module &module)
     py::arg("maxRadius"),
     py::arg("param1"),
     py::arg("param2"),
+    py::arg("algorithm") = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT,
     R"pbdoc(
     A wrapper function around cv::HoughCircles
     
@@ -323,6 +349,9 @@ void init_MoonDetect(py::module &module)
       - maxRadius: OpenCV parameter, maximum circle radius
       - param1: OpenCV parameter, first method-specific parameter
       - param2: OpenCV parameter, second method-specific parameter
+      - algorithm: mr::HoughCirclesAlgorithm to select the algorithm used in cv::HoughCircles.
+        starting from OpenCV 4.8.1, you can choose between HOUGH_GRADIENT and HOUGH_GRADIENT_ALT.
+        default to mr::HoughCirclesAlgorithm::HOUGH_GRADIENT
     
     Returns:
       - detected_circles: numpy.ndarray representing output detected circles
@@ -357,7 +386,7 @@ void init_MoonDetect(py::module &module)
     Default function for param_init stage
     
     Parameters:
-      - image_shape: mr.ImageShape
+      - image_shape: mr.utils.ImageShape
       - max_iteration: int
       - circle_threshold: int
       - dp: float
@@ -396,7 +425,7 @@ void init_MoonDetect(py::module &module)
     Parameters:
       - iteration: int
       - image_brightness_perc: float
-      - image_shape: mr.ImageShape
+      - image_shape: mr.utils.ImageShape
       - max_iteration: int
       - circle_threshold: int
       - dp: float
@@ -428,7 +457,7 @@ void init_MoonDetect(py::module &module)
       - detected_circles: numpy.ndarray, return value of cv2.HoughCircles
     
     Returns:
-      - mr.Circle
+      - mr.shapes.Circle
     )pbdoc");
     module.def("default_coordinate_remap", wrap_default_coordinate_remap,
     py::arg("result_list"),
@@ -437,11 +466,11 @@ void init_MoonDetect(py::module &module)
     Default function for coordinate_remap stage
     
     Parameters:
-      - result_list: list[tuple(int, mr.Circle, mr.Rectangle)]
+      - result_list: list[tuple(int, mr.shapes.Circle, mr.shapes.Rectangle)]
       - resize_ratio: float
     
     Returns:
-      - mr.Circle
+      - mr.shapes.Circle
     )pbdoc");
     
     // class MoonDetector
@@ -465,7 +494,7 @@ void init_MoonDetect(py::module &module)
         .def("is_empty", &mr::MoonDetector::is_empty)
         .def("init_by_path", &mr::MoonDetector::init_by_path, py::arg("image_filepath"),
         R"pbdoc(
-    (re)init mr.MoonDetector by image_filepath
+    (re)init mr.MoonDetect.MoonDetector by image_filepath
     
     Parameters:
       - image_filepath: str filepath
@@ -473,7 +502,7 @@ void init_MoonDetect(py::module &module)
         )
         .def("init_by_byte", wrap_MoonDetect_init_by_byte, py::arg("image_binary"),
         R"pbdoc(
-    (re)init mr.MoonDetector by image_binary
+    (re)init mr.MoonDetect.MoonDetector by image_binary
     
     Parameters:
       - image_binary: bytes raw image
@@ -481,7 +510,7 @@ void init_MoonDetect(py::module &module)
         )
         .def("init_by_mat", &mr::MoonDetector::init_by_mat, py::arg("image_in"),
         R"pbdoc(
-    (re)init mr.MoonDetector by image_in
+    (re)init mr.MoonDetect.MoonDetector by image_in
     
     Parameters:
       - image_in: cv2.MatLike|numpy.ndarray image
@@ -510,7 +539,7 @@ void init_MoonDetect(py::module &module)
     Set mr::MoonDetector::param_init
     
     Parameters:
-      - func: callable function (mr.ImageShape, int, int, float, float, float, int, float, int, float, float) -> tuple
+      - func: callable function (mr.utils.ImageShape, int, int, float, float, float, int, float, int, float, float) -> tuple
         )pbdoc")
         .def("set_iteration_param_update", set_MoonDetect_iteration_param_update,
         py::arg("func"),
@@ -518,7 +547,7 @@ void init_MoonDetect(py::module &module)
     Set mr::MoonDetector::iteration_param_update
     
     Parameters:
-      - func: callable function (int, float, mr.ImageShape, int, int, float, float, float, int, float, int, float, float) -> tuple
+      - func: callable function (int, float, mr.utils.ImageShape, int, int, float, float, float, int, float, int, float, float) -> tuple
         )pbdoc")
         .def("set_iteration_circle_select", set_MoonDetect_iteration_circle_select,
         py::arg("func"),
@@ -526,7 +555,7 @@ void init_MoonDetect(py::module &module)
     Set mr::MoonDetector::iteration_circle_select
     
     Parameters:
-      - func: callable function (int, cv2.MatLike|numpy.ndarray, numpy.ndarray) -> mr.Circle
+      - func: callable function (int, cv2.MatLike|numpy.ndarray, numpy.ndarray) -> mr.shapes.Circle
         )pbdoc")
         .def("set_coordinate_remap", set_MoonDetect_coordinate_remap,
         py::arg("func"),
@@ -534,7 +563,8 @@ void init_MoonDetect(py::module &module)
     Set mr::MoonDetector::coordinate_remap
     
     Parameters:
-      - func: callable function (list, float) -> mr.Circle
+      - func: callable function (list, float) -> mr.shapes.Circle
         )pbdoc")
+        .def_readwrite("hough_circles_algorithm", &mr::MoonDetector::hough_circles_algorithm)
     ;
 }

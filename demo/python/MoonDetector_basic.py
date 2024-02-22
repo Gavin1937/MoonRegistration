@@ -18,20 +18,25 @@ for dirEntry in folder.rglob('*'):
         continue
     try:
         # read image directly from filepath
-        detector = mr.MoonDetector(str(dirEntry))
+        detector = mr.MoonDetect.MoonDetector(str(dirEntry))
         
         # # read image from bytes
         # with open(dirEntry, 'rb') as file_in:
         #     buffer = file_in.read()
-        # detector = mr.MoonDetector(buffer)
+        # detector = mr.MoonDetect.MoonDetector(buffer)
         
         # # read image from cv2.MatLike (numpy.ndarray) object
         # import cv2
         # # fill-in pixel data to cv_image...
         # cv_image = cv2.imread(str(dirEntry))
-        # detector = mr.MoonDetector(cv_image)
+        # detector = mr.MoonDetect.MoonDetector(cv_image)
         
         
+        # # You can change the underlying algorithm used in cv::HoughCircles()
+        # detector.hough_circles_algorithm = mr.MoonDetect.HoughCirclesAlgorithm.HOUGH_GRADIENT
+        # # HOUGH_GRADIENT_ALT algorithm only available with OpenCV >= 4.8.1
+        # detector.hough_circles_algorithm = mr.MoonDetect.HoughCirclesAlgorithm.HOUGH_GRADIENT_ALT
+            
         # calculate moon position
         final_circle = detector.detect_moon()
         
@@ -40,8 +45,8 @@ for dirEntry in folder.rglob('*'):
         print('\n\n\n', end='')
         print(f'file: \'{dirEntry}\'')
         print(f'Circle: {final_circle}')
-        print(f'Square: {mr.circle_to_square_s(final_circle)}')
-        print(f'Rectangle: {mr.circle_to_rectangle_s(final_circle)}')
+        print(f'Square: {mr.shapes.circle_to_square_s(final_circle)}')
+        print(f'Rectangle: {mr.shapes.circle_to_rectangle_s(final_circle)}')
         
     except Exception as err:
         print(f'Exception: {err}')

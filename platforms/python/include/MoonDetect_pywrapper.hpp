@@ -26,7 +26,8 @@ std::vector<cv::Vec3f> wrap_find_circles_in_img(
     const int minRadius,
     const int maxRadius,
     const double param1,
-    const double param2
+    const double param2,
+    const mr::HoughCirclesAlgorithm& algorithm
 );
 
 // default stage functions

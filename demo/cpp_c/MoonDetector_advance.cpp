@@ -154,6 +154,10 @@ int main(int argc, char** argv)
             detector.iteration_circle_select = iteration_circle_select;
             detector.coordinate_remap = coordinate_remap;
             
+            // // You can change the underlying algorithm used in cv::HoughCircles()
+            // detector.hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT;
+            // // HOUGH_GRADIENT_ALT algorithm only available with OpenCV >= 4.8.1
+            // detector.hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_ALT;
             
             // calculate moon position
             mr::Circle final_circle = detector.detect_moon();
