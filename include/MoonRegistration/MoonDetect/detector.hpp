@@ -18,6 +18,28 @@
 namespace mr
 {
 
+EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithm
+{
+    HOUGH_GRADIENT        = 0x101,
+// Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
+// This enum will be enabled if OpenCV version >= 4.8.1
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    HOUGH_GRADIENT_ALT    = 0x102,
+#endif
+    EMPTY_ALGORITHM       = 0x001,
+    INVALID_ALGORITHM     = 0x000
+} HoughCirclesAlgorithm;
+
+// A simple conversion function to convert between mr::HoughCirclesAlgorithm to OpenCV algorithm representation
+// 
+// Parameters:
+//   - algorithm: an enum of mr::HoughCirclesAlgorithm
+// 
+// Return:
+//   - If success, return int that can be use in cv::HoughCircles()
+//   - If failed, throw runtime_error
+EXPORT_SYMBOL int convertHoughCirclesAlgorithm(const mr::HoughCirclesAlgorithm& algorith);
+
 // A wrapper function around cv::HoughCircles
 // 
 // Parameters:
@@ -31,6 +53,9 @@ namespace mr
 //   - maxRadius: OpenCV parameter, maximum circle radius
 //   - param1: OpenCV parameter, first method-specific parameter
 //   - param2: OpenCV parameter, second method-specific parameter
+//   - algorithm: mr::HoughCirclesAlgorithm to select the algorithm used in cv::HoughCircles.
+//     starting from OpenCV 4.8.1, you can choose between HOUGH_GRADIENT and HOUGH_GRADIENT_ALT.
+//     default to mr::HoughCirclesAlgorithm::HOUGH_GRADIENT
 EXPORT_SYMBOL void find_circles_in_img(
     const cv::Mat& image_in,
     std::vector<cv::Vec3f>& detected_circles,
@@ -40,7 +65,8 @@ EXPORT_SYMBOL void find_circles_in_img(
     const int minRadius,
     const int maxRadius,
     const double param1,
-    const double param2
+    const double param2,
+    const mr::HoughCirclesAlgorithm& algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT
 );
 
 EXPORT_SYMBOL void default_preprocess_steps(
@@ -142,6 +168,9 @@ public:
     std::function<void(const int, const float, const ImageShape&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> iteration_param_update = nullptr;
     std::function<mr::Circle(const int, const cv::Mat&, const std::vector<cv::Vec3f>&)> iteration_circle_select = nullptr;
     std::function<mr::Circle(const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>&, const float)> coordinate_remap = nullptr;
+    
+public:
+    mr::HoughCirclesAlgorithm hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT;
     
 private:
     float resize_ratio;
