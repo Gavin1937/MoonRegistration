@@ -7,41 +7,6 @@
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
 
-__all__ = [
-    # version.hpp
-    'version',
-    # shapes.hpp
-    'Circle', 'Square', 'Rectangle',
-    'circle_to_square_s',
-    'circle_to_square_p',
-    'circle_to_rectangle_s',
-    'circle_to_rectangle_p',
-    'is_valid_circle_s',
-    'is_valid_circle_p',
-    # utils.hpp
-    'ImageShape',
-    'calc_image_shape',
-    # imgprocess.hpp
-    'resize_with_aspect_ratio',
-    'apply_brightness_contrast',
-    'calc_img_brightness_perc',
-    'calc_circle_brightness_perc',
-    'cut_image_from_circle',
-    # MoonDetect/selector.hpp
-    'select_circle_by_brightness_perc',
-    'select_n_circles_by_brightness_perc',
-    'select_circle_by_largest_radius',
-    'select_n_circles_by_largest_radius',
-    'select_circle_by_shape',
-    # MoonDetect/detector.hpp
-    'find_circles_in_img',
-    'default_preprocess_steps',
-    'default_param_init',
-    'default_iteration_param_update',
-    'default_iteration_circle_select',
-    'default_coordinate_remap',
-    'MoonDetector',
-]
 
 __doc__ = '''
 Python wrapper for MoonRegistration Library.
@@ -77,8 +42,60 @@ if libs_dir.exists():
 
 
 try:
+    # from .libs.MoonRegistration_pywrapper import *
     from .libs.MoonRegistration_pywrapper import *
     __version__ = version()
+    __all__ = [
+        'version',
+        'shapes',
+        'imgprocess',
+        'MoonDetect',
+    ]
+    __dict__ = {
+        'version':version,
+        'shapes': {
+            'Circle':shapes.Circle,
+            'Square':shapes.Square,
+            'Rectangle':shapes.Rectangle,
+            'circle_to_square_s':shapes.circle_to_square_s,
+            'circle_to_square_p':shapes.circle_to_square_p,
+            'circle_to_rectangle_s':shapes.circle_to_rectangle_s,
+            'circle_to_rectangle_p':shapes.circle_to_rectangle_p,
+            'is_valid_circle_s':shapes.is_valid_circle_s,
+            'is_valid_circle_p':shapes.is_valid_circle_p,
+        },
+        'imgprocess': {
+            'ImageShape':imgprocess.ImageShape,
+            'calc_image_shape':imgprocess.calc_image_shape,
+            'resize_with_aspect_ratio':imgprocess.resize_with_aspect_ratio,
+            'apply_brightness_contrast':imgprocess.apply_brightness_contrast,
+            'calc_img_brightness_perc':imgprocess.calc_img_brightness_perc,
+            'calc_circle_brightness_perc':imgprocess.calc_circle_brightness_perc,
+            'cut_image_from_circle':imgprocess.cut_image_from_circle,
+            'sync_img_size':imgprocess.sync_img_size,
+            'ImageChannels':imgprocess.ImageChannels,
+            'split_img_channel':imgprocess.split_img_channel,
+            'merge_img_channel':imgprocess.merge_img_channel,
+            'stack_imgs':imgprocess.stack_imgs,
+            'stack_imgs_in_place':imgprocess.stack_imgs_in_place,
+        },
+        'MoonDetect': {
+            'select_circle_by_brightness_perc':MoonDetect.select_circle_by_brightness_perc,
+            'select_n_circles_by_brightness_perc':MoonDetect.select_n_circles_by_brightness_perc,
+            'select_circle_by_largest_radius':MoonDetect.select_circle_by_largest_radius,
+            'select_n_circles_by_largest_radius':MoonDetect.select_n_circles_by_largest_radius,
+            'select_circle_by_shape':MoonDetect.select_circle_by_shape,
+            'HoughCirclesAlgorithm':MoonDetect.HoughCirclesAlgorithm,
+            'convertHoughCirclesAlgorithm':MoonDetect.convertHoughCirclesAlgorithm,
+            'find_circles_in_img':MoonDetect.find_circles_in_img,
+            'default_preprocess_steps':MoonDetect.default_preprocess_steps,
+            'default_param_init':MoonDetect.default_param_init,
+            'default_iteration_param_update':MoonDetect.default_iteration_param_update,
+            'default_iteration_circle_select':MoonDetect.default_iteration_circle_select,
+            'default_coordinate_remap':MoonDetect.default_coordinate_remap,
+            'MoonDetector':MoonDetect.MoonDetector,
+        }
+    }
 except ImportError as ierr:
     if 'DLL' in ierr.msg:
         raise ImportError('Missing Dependencies, please make sure you install all the dependencies correctly.')
