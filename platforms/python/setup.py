@@ -89,7 +89,7 @@ class cmake_build_ext(build_ext):
             
             cmake_args = [
                 '-DMR_BUILD_SHARED_LIBS=OFF',
-                '-DMR_ENABLE_OPENCV_NONFREE=%s' % ('ON' if self.mr_enable_opencv_nonfree else 'OFF'),
+                '-DMR_ENABLE_OPENCV_NONFREE=%s' % ('ON' if hasattr(self,'mr_enable_opencv_nonfree') and self.mr_enable_opencv_nonfree else 'OFF'),
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE=%s' % self.get_ext_fullpath(ext.name),
                 (self.cmake_arguments if self.cmake_arguments else '')
             ]
