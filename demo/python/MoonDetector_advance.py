@@ -14,7 +14,7 @@ def preprocess_steps(image_in:np.ndarray) -> tuple:
     return mr.MoonDetect.default_preprocess_steps(image_in)
 
 def param_init(
-    image_shape:mr.utils.ImageShape, max_iteration:int, circle_threshold:int,
+    image_shape:mr.imgprocess.ImageShape, max_iteration:int, circle_threshold:int,
     dp:float, minDist:float,
     minRadiusRate:float, minRadius:int,
     maxRadiusRate:float, maxRadius:int,
@@ -29,7 +29,7 @@ def param_init(
     )
 
 def iteration_param_update(
-    iteration:int, image_brightness_perc:float, image_shape:mr.utils.ImageShape,
+    iteration:int, image_brightness_perc:float, image_shape:mr.imgprocess.ImageShape,
     max_iteration:int, circle_threshold:int, dp:float, minDist:float,
     minRadiusRate:float, minRadius:int,
     maxRadiusRate:float, maxRadius:int,
