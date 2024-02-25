@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "MoonRegistration/preprocessing.hpp"
+#include "MoonRegistration/imgprocess.hpp"
 #include "MoonRegistration/shapes.hpp"
 #include "MoonRegistration/utils.hpp"
 

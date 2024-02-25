@@ -14,8 +14,7 @@ namespace py = pybind11;
 
 #include "MoonRegistration/MoonDetect.hpp"
 
-#include "ndarray_converter.h"
-#include "cvvec3f_vector_ndarray.hpp"
+#include "typecvt.hpp"
 
 
 std::vector<cv::Vec3f> wrap_find_circles_in_img(

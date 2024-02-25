@@ -78,6 +78,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 # src files
 file(GLOB SRC
     "src/*.cpp"
+    "src/typecvt/*.cpp"
 )
 include_directories("include")
 

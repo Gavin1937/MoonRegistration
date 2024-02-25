@@ -67,7 +67,7 @@ public:
         // same as numpy.ndarray.resize, update dst_array's shape
         dst_array.resize(py::array::ShapeContainer({1,static_cast<int>(src.size()),3}));
         
-        handle result = handle(dst_array);
+        handle result(dst_array);
         result.inc_ref(); // increase reference count so dst_array is visible to python
         return result;
     }

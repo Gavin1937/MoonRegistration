@@ -4,7 +4,7 @@
 #include <exception>
 
 #include "MoonRegistration/MoonRegistrar/registrar.hpp"
-#include "MoonRegistration/utils.hpp"
+#include "MoonRegistration/imgprocess.hpp"
 
 // include MoonRegistration header first, so we get MR_HAVE_OPENCV_NONFREE macro
 #ifdef MR_HAVE_OPENCV_NONFREE
