@@ -1,5 +1,5 @@
 #include "MoonRegistration/MoonDetect/selector.hpp"
-#include "MoonRegistration/preprocessing.hpp"
+#include "MoonRegistration/imgprocess.hpp"
 #include "MoonRegistration/utils.hpp"
 
 

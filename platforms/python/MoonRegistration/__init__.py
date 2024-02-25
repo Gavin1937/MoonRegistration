@@ -21,7 +21,7 @@ __all__ = [
     # utils.hpp
     'ImageShape',
     'calc_image_shape',
-    # preprocessing.hpp
+    # imgprocess.hpp
     'resize_with_aspect_ratio',
     'apply_brightness_contrast',
     'calc_img_brightness_perc',

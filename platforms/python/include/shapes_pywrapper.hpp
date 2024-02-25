@@ -7,8 +7,7 @@ namespace py = pybind11;
 
 #include <string>
 
-#include "ndarray_converter.h"
-#include "cvvec3f_vector_ndarray.hpp"
+#include "typecvt.hpp"
 
 
 template<typename TYPE>

@@ -3,12 +3,11 @@ namespace py = pybind11;
 
 #include "MoonRegistration/mrapi.hpp"
 
-#include "ndarray_converter.h"
-#include "cvvec3f_vector_ndarray.hpp"
+#include "typecvt.hpp"
+
 #include "shapes_pywrapper.hpp"
-#include "utils_pywrapper.hpp"
 #include "MoonDetect_pywrapper.hpp"
-#include "preprocessing_pywrapper.hpp"
+#include "imgprocess_pywrapper.hpp"
 
 
 
@@ -26,12 +25,8 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     init_shapes(shapes_module);
     
     
-    py::module utils_module = module.def_submodule("utils", "utils description");
-    init_utils(utils_module);
-    
-    
-    py::module preprocessing_module = module.def_submodule("preprocessing", "preprocessing description");
-    init_preprocessing(preprocessing_module);
+    py::module imgprocess_module = module.def_submodule("imgprocess", "imgprocess description");
+    init_imgprocess(imgprocess_module);
     
     
     py::module MoonDetect_module = module.def_submodule("MoonDetect", "MoonDetect description");
