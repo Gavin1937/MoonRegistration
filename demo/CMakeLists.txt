@@ -31,21 +31,21 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 # compile & linking
 
 # MoonDetect module
-add_executable(MoonDetector_basic ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetector_basic.cpp)
-set_target_properties(MoonDetector_basic PROPERTIES
+add_executable(MoonDetect_basic ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetect_basic.cpp)
+set_target_properties(MoonDetect_basic PROPERTIES
     LANGUAGE         CXX
     CXX_STANDARD     ${CXX_VERSION}
     LINKER_LANGUAGE  CXX
 )
-target_link_libraries(MoonDetector_basic MoonRegistration)
+target_link_libraries(MoonDetect_basic MoonRegistration)
 
-add_executable(MoonDetector_advance ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetector_advance.cpp)
-set_target_properties(MoonDetector_advance PROPERTIES
+add_executable(MoonDetect_advance ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetect_advance.cpp)
+set_target_properties(MoonDetect_advance PROPERTIES
     LANGUAGE         CXX
     CXX_STANDARD     ${CXX_VERSION}
     LINKER_LANGUAGE  CXX
 )
-target_link_libraries(MoonDetector_advance MoonRegistration)
+target_link_libraries(MoonDetect_advance MoonRegistration)
 
 # MoonRegistrate module
 add_executable(MoonRegistrate_basic ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrate_basic.cpp)
@@ -78,12 +78,12 @@ target_link_libraries(MoonRegistrate_live_registration MoonRegistration)
 # since the library itself is a C++ library,
 # we need to set the LINKER_LANGUAGE to CXX.
 # And then we can set the LANGUAGE to C for this C program.
-add_executable(MoonDetector_c_api ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetector_c_api.c)
-set_target_properties(MoonDetector_c_api PROPERTIES
+add_executable(MoonDetect_c_api ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonDetect_c_api.c)
+set_target_properties(MoonDetect_c_api PROPERTIES
     LANGUAGE         C
     LINKER_LANGUAGE  CXX
 )
-target_link_libraries(MoonDetector_c_api MoonRegistration)
+target_link_libraries(MoonDetect_c_api MoonRegistration)
 
 add_executable(MoonRegistrate_c_api ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrate_c_api.c)
 set_target_properties(MoonRegistrate_c_api PROPERTIES

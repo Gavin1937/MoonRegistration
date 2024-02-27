@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        printf("Usage: ./MoonDetector_c_api [IMAGE_PATH]\n");
+        printf("Usage: ./MoonDetect_c_api [IMAGE_PATH]\n");
         return 0;
     }
     

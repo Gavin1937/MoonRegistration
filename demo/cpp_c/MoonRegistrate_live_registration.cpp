@@ -27,8 +27,8 @@ int main(int argc, char** argv)
     
     // ==================== MoonRegistration ====================
     
-    std::string LAYER_IMAGE = argv[0];
     std::string MODEL_IMAGE = argv[1];
+    std::string LAYER_IMAGE = argv[2];
     
     cv::Mat model_img = imread(MODEL_IMAGE, cv::IMREAD_UNCHANGED);
     cv::Mat layer_img = imread(LAYER_IMAGE, cv::IMREAD_UNCHANGED);
