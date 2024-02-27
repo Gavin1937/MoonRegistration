@@ -1,5 +1,5 @@
-# This demo is built on top of OpenCV's demo application for cv::VideoCapture class
-# https:#docs.opencv.org/4.x/d8/dfe/classcv_1_1VideoCapture.html
+# This demo is built on top of OpenCV's demo application for cv2.VideoCapture class
+# https://docs.opencv.org/4.x/dd/d43/tutorial_py_video_display.html
 # 
 # For the ease of demonstration, I will cover the code relating to MoonRegistration inside:
 # ==================== MoonRegistration ====================
