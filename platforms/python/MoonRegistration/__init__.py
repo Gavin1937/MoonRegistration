@@ -13,14 +13,49 @@ Python wrapper for MoonRegistration Library.
 MoonRegistration Is A Cross Platform C++ library for Moon Location Detection & Moon Image Registration.
 '''
 
-import os
+import os, sys
+import importlib
 from pathlib import Path
 import platform
 
 
+# Inspired by OpenCV Python's top layer __init__.py setup
+# https://github.com/opencv/opencv/blob/4.x/modules/python/package/cv2/__init__.py
+# Loading python extension submodules for this module
+def __load_py_ext_submodule_for_module(base, submodule_path):
+    submodule_name = submodule_path.split(".")[-1]
+    module_name = "{}.{}".format(base, submodule_name)
+    export_module_name = "{}.{}".format(base, submodule_name)
+    native_module = sys.modules.pop(module_name, None)
+    
+    try:
+        py_module = importlib.import_module(submodule_path)
+    except ImportError as err:
+        # Extension doesn't contain extra py code
+        return False
+    
+    if not hasattr(base, submodule_path):
+        setattr(sys.modules[base], submodule_name, py_module)
+    sys.modules[export_module_name] = py_module
+    return True
+
+# Inspired by OpenCV Python's top layer __init__.py setup
+# https://github.com/opencv/opencv/blob/4.x/modules/python/package/cv2/__init__.py
+# Collect python extension submodules under the parent of current __init__.py file
+def __collect_py_ext_submodules():
+    init_root = os.path.dirname(__file__)
+    def modules_filter(module:str):
+        # print('module:',module)
+        return (
+            os.path.isdir(os.path.join(init_root,module)) and
+            not module.endswith('libs') and
+            not module.endswith('__')
+        )
+    return filter(modules_filter, os.listdir(init_root))
+
 # os.add_dll_directory is only for windows, other platforms use PATH env variable
 # this wrapper function can handle different platforms
-def add_dll_directory(lib_folder:str):
+def __add_dll_directory(lib_folder:str):
     if platform.system() == 'Windows':
         os.add_dll_directory(lib_folder)
     elif not os.environ['PATH'].__contains__(lib_folder):
@@ -32,74 +67,25 @@ env_OpenCV_DIR = os.getenv('OpenCV_DIR')
 if env_OpenCV_DIR:
     for folder in Path(env_OpenCV_DIR).glob('**/'):
         if 'lib' in folder.name or 'bin' in folder.name:
-            add_dll_directory(str(folder.resolve()))
+            __add_dll_directory(str(folder.resolve()))
 
 
 # add libraries bring with the package
 libs_dir = Path(__file__).parent / 'libs'
 if libs_dir.exists():
-    add_dll_directory(str(libs_dir.resolve()))
+    __add_dll_directory(str(libs_dir.resolve()))
 
 
 try:
     from .libs.MoonRegistration_pywrapper import *
-    __version__ = version()
-    __all__ = [
-        'version',
-        'shapes',
-        'imgprocess',
-        'MoonDetect',
-    ]
-    __dict__ = {
-        'version':version,
-        'shapes': {
-            'Circle':shapes.Circle,
-            'Square':shapes.Square,
-            'Rectangle':shapes.Rectangle,
-            'circle_to_square_s':shapes.circle_to_square_s,
-            'circle_to_square_p':shapes.circle_to_square_p,
-            'circle_to_rectangle_s':shapes.circle_to_rectangle_s,
-            'circle_to_rectangle_p':shapes.circle_to_rectangle_p,
-            'is_valid_circle_s':shapes.is_valid_circle_s,
-            'is_valid_circle_p':shapes.is_valid_circle_p,
-        },
-        'imgprocess': {
-            'ImageShape':imgprocess.ImageShape,
-            'calc_image_shape':imgprocess.calc_image_shape,
-            'resize_with_aspect_ratio':imgprocess.resize_with_aspect_ratio,
-            'apply_brightness_contrast':imgprocess.apply_brightness_contrast,
-            'calc_img_brightness_perc':imgprocess.calc_img_brightness_perc,
-            'calc_circle_brightness_perc':imgprocess.calc_circle_brightness_perc,
-            'cut_image_from_circle':imgprocess.cut_image_from_circle,
-            'sync_img_size':imgprocess.sync_img_size,
-            'ImageChannels':imgprocess.ImageChannels,
-            'split_img_channel':imgprocess.split_img_channel,
-            'merge_img_channel':imgprocess.merge_img_channel,
-            'stack_imgs':imgprocess.stack_imgs,
-            'stack_imgs_in_place':imgprocess.stack_imgs_in_place,
-        },
-        'MoonDetect': {
-            'select_circle_by_brightness_perc':MoonDetect.select_circle_by_brightness_perc,
-            'select_n_circles_by_brightness_perc':MoonDetect.select_n_circles_by_brightness_perc,
-            'select_circle_by_largest_radius':MoonDetect.select_circle_by_largest_radius,
-            'select_n_circles_by_largest_radius':MoonDetect.select_n_circles_by_largest_radius,
-            'select_circle_by_shape':MoonDetect.select_circle_by_shape,
-            'HoughCirclesAlgorithm':MoonDetect.HoughCirclesAlgorithm,
-            'convertHoughCirclesAlgorithm':MoonDetect.convertHoughCirclesAlgorithm,
-            'find_circles_in_img':MoonDetect.find_circles_in_img,
-            'default_preprocess_steps':MoonDetect.default_preprocess_steps,
-            'default_param_init':MoonDetect.default_param_init,
-            'default_iteration_param_update':MoonDetect.default_iteration_param_update,
-            'default_iteration_circle_select':MoonDetect.default_iteration_circle_select,
-            'default_coordinate_remap':MoonDetect.default_coordinate_remap,
-            'MoonDetector':MoonDetect.MoonDetector,
-        },
-        'MoonRegistrar': {
-            'RegistrationAlgorithms':MoonRegistrar.RegistrationAlgorithms,
-            'default_is_good_match':MoonRegistrar.default_is_good_match,
-            'MoonRegistrar':MoonRegistrar.MoonRegistrar,
-        }
-    }
+    __version__:str = version()
+    
+    for submodule in __collect_py_ext_submodules():
+        print('submodule:',submodule)
+        __load_py_ext_submodule_for_module(
+            'MoonRegistration',
+            '.'.join(['MoonRegistration','libs','MoonRegistration_pywrapper',submodule])
+        )
 except ImportError as ierr:
     if 'DLL' in ierr.msg:
         raise ImportError('Missing Dependencies, please make sure you install all the dependencies correctly.')
