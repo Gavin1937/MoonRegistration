@@ -4,7 +4,7 @@
 
 extern "C" {
 
-EXPORT_SYMBOL extern inline const char* mrc_version()
+EXPORT_SYMBOL const char* mrc_version()
 {
     return mr::version();
 }

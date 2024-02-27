@@ -18,7 +18,7 @@
 extern "C" {
 #endif
 
-EXPORT_SYMBOL extern inline const char* mrc_version();
+EXPORT_SYMBOL const char* mrc_version();
 
 #if defined(__cplusplus)
 }
