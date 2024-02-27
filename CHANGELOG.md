@@ -2,6 +2,17 @@
 # CHANGELOG
 
 <details open>
+<summary><strong style="font-size:140%">v0.1.8</strong></summary>
+
+* add python wrapper for the library
+* further divide the library into smaller modules and rename them so they make sense
+* add HOUGH_CIRCLE_ALT support for circle detection (not optimized yet)
+* fix a few bugs
+
+</details>
+
+
+<details>
 <summary><strong style="font-size:140%">v0.1.7</strong></summary>
 
 * Re-structured project so we can:
