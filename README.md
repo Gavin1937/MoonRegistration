@@ -15,31 +15,31 @@ A Cross-Platform Multi-Language library for Moon Location Detection & Moon Image
 
 ![moon detector](./imgs/01_moon_detector.png)
 
-## MoonRegistrar
+## MoonRegistrate
 
 * Using a provided model image as reference, run image registration algorithm on the moon part, and tries to find matching points
 
-![registrate user image](./imgs/01_moon_registrar_matched_keypoints.png)
+![registrate user image](./imgs/01_moon_registrate_matched_keypoints.png)
 
 * So we can compute a homography matrix from these matching points, and "rotate" images as we want
 
 * Rotate original image to match model image
 
-![rotate original image](./imgs/02_moon_registrar_registrate_user_image.png)
+![rotate original image](./imgs/02_moon_registrate_registrate_user_image.png)
 
 * Color code original image and model image, so we can stack them together to see the error
 
-![green model image (rotated to original image's perspective)](./imgs/03_moon_registrar_green_model_image.png)
-![red original image](./imgs/04_moon_registrar_red_transformed_user_image.png)
-![stacked image](./imgs/05_moon_registrar_stacked_red_green_image.png)
+![green model image (rotated to original image's perspective)](./imgs/03_moon_registrate_green_model_image.png)
+![red original image](./imgs/04_moon_registrate_red_transformed_user_image.png)
+![stacked image](./imgs/05_moon_registrate_stacked_red_green_image.png)
 
 * Draw a layer on top of original image
 
-![stack layer on top of original image](./imgs/06_moon_registrar_layer_image.png)
+![stack layer on top of original image](./imgs/06_moon_registrate_layer_image.png)
 
 # Supported Language
 
-|                                  | MoonDetect Module | MoonRegistrar Module |
+|                                  | MoonDetect Module | MoonRegistrate Module |
 |----------------------------------|-------------------|----------------------|
 | C++                              | ✅                 | ✅                    |
 | C (with abstracted api)          | ✅                 | ✅                    |

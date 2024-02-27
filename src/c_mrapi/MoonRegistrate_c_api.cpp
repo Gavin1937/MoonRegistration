@@ -1,8 +1,8 @@
 #include <opencv2/core/mat.hpp>
 
-#include "MoonRegistration/c_mrapi/MoonRegistrar_c_api.h"
+#include "MoonRegistration/c_mrapi/MoonRegistrate_c_api.h"
 #include "MoonRegistration/c_mrapi/internal_c_api.hpp"
-#include "MoonRegistration/MoonRegistrar.hpp"
+#include "MoonRegistration/MoonRegistrate.hpp"
 
 
 extern "C" {

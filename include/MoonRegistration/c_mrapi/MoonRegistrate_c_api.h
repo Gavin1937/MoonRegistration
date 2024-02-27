@@ -1,5 +1,5 @@
-#ifndef MOONREGISTRAR_C_API_H
-#define MOONREGISTRAR_C_API_H
+#ifndef MOONREGISTRATE_C_API_H
+#define MOONREGISTRATE_C_API_H
 
 #include "MoonRegistration/macros.h"
 #include "MoonRegistration/c_mrapi/utils_c_api.h"

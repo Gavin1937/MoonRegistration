@@ -10,7 +10,7 @@
 
 #include "MoonRegistration/macros.h"
 #include "MoonRegistration/c_mrapi/MoonDetect_c_api.h"
-#include "MoonRegistration/c_mrapi/MoonRegistrar_c_api.h"
+#include "MoonRegistration/c_mrapi/MoonRegistrate_c_api.h"
 #include "MoonRegistration/c_mrapi/utils_c_api.h"
 
 

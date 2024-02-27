@@ -47,30 +47,30 @@ set_target_properties(MoonDetector_advance PROPERTIES
 )
 target_link_libraries(MoonDetector_advance MoonRegistration)
 
-# MoonRegistrar module
-add_executable(MoonRegistrar_basic ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrar_basic.cpp)
-set_target_properties(MoonRegistrar_basic PROPERTIES
+# MoonRegistrate module
+add_executable(MoonRegistrate_basic ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrate_basic.cpp)
+set_target_properties(MoonRegistrate_basic PROPERTIES
     LANGUAGE         CXX
     CXX_STANDARD     ${CXX_VERSION}
     LINKER_LANGUAGE  CXX
 )
-target_link_libraries(MoonRegistrar_basic MoonRegistration)
+target_link_libraries(MoonRegistrate_basic MoonRegistration)
 
-add_executable(MoonRegistrar_advance ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrar_advance.cpp)
-set_target_properties(MoonRegistrar_advance PROPERTIES
+add_executable(MoonRegistrate_advance ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrate_advance.cpp)
+set_target_properties(MoonRegistrate_advance PROPERTIES
     LANGUAGE         CXX
     CXX_STANDARD     ${CXX_VERSION}
     LINKER_LANGUAGE  CXX
 )
-target_link_libraries(MoonRegistrar_advance MoonRegistration)
+target_link_libraries(MoonRegistrate_advance MoonRegistration)
 
-add_executable(MoonRegistrar_live_registration ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrar_live_registration.cpp)
-set_target_properties(MoonRegistrar_live_registration PROPERTIES
+add_executable(MoonRegistrate_live_registration ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrate_live_registration.cpp)
+set_target_properties(MoonRegistrate_live_registration PROPERTIES
     LANGUAGE         CXX
     CXX_STANDARD     ${CXX_VERSION}
     LINKER_LANGUAGE  CXX
 )
-target_link_libraries(MoonRegistrar_live_registration MoonRegistration)
+target_link_libraries(MoonRegistrate_live_registration MoonRegistration)
 
 
 
@@ -85,10 +85,10 @@ set_target_properties(MoonDetector_c_api PROPERTIES
 )
 target_link_libraries(MoonDetector_c_api MoonRegistration)
 
-add_executable(MoonRegistrar_c_api ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrar_c_api.c)
-set_target_properties(MoonRegistrar_c_api PROPERTIES
+add_executable(MoonRegistrate_c_api ${CMAKE_CURRENT_SOURCE_DIR}/cpp_c/MoonRegistrate_c_api.c)
+set_target_properties(MoonRegistrate_c_api PROPERTIES
     LANGUAGE         C
     LINKER_LANGUAGE  CXX
 )
-target_link_libraries(MoonRegistrar_c_api MoonRegistration)
+target_link_libraries(MoonRegistrate_c_api MoonRegistration)
 

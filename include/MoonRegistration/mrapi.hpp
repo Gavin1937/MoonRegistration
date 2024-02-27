@@ -11,4 +11,4 @@
 
 #include "MoonRegistration/MoonDetect.hpp"
 
-#include "MoonRegistration/MoonRegistrar.hpp"
+#include "MoonRegistration/MoonRegistrate.hpp"

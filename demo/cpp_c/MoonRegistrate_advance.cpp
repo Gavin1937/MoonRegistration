@@ -8,8 +8,8 @@
 #include <exception>
 
 
-// MoonRegistration library api MoonRegistrar module
-#include "MoonRegistration/MoonRegistrar.hpp"
+// MoonRegistration library api MoonRegistrate module
+#include "MoonRegistration/MoonRegistrate.hpp"
 
 
 // Following functions are different steps in function mr::MoonRegistrar::compute_registration()
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 {
     if (argc != 4)
     {
-        std::cout << "Usage: ./MoonRegistrar_advance [USER_IMAGE] [MODEL_IMAGE] [LAYER_IMAGE]\n";
+        std::cout << "Usage: ./MoonRegistrate_advance [USER_IMAGE] [MODEL_IMAGE] [LAYER_IMAGE]\n";
         return 0;
     }
     
