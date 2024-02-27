@@ -12,9 +12,9 @@
 
 | Name                                                                                 | Module         | Description                                                          |
 |--------------------------------------------------------------------------------------|----------------|----------------------------------------------------------------------|
-| [MoonDetector_basic.cpp](./cpp_c/MoonDetector_basic.cpp)                             | MoonDetector   | A basic usage, easy and quick                                        |
-| [MoonDetector_advance.cpp](./cpp_c/MoonDetector_advance.cpp)                         | MoonDetector   | An advanced usage, you can further customize moon image detection    |
-| [MoonDetector_c_api.c](./cpp_c/MoonDetector_c_api.c)                                 | MoonDetector   | A basic usage of the C abstraction API                               |
+| [MoonDetect_basic.cpp](./cpp_c/MoonDetect_basic.cpp)                                 | MoonDetect     | A basic usage, easy and quick                                        |
+| [MoonDetect_advance.cpp](./cpp_c/MoonDetect_advance.cpp)                             | MoonDetect     | An advanced usage, you can further customize moon image detection    |
+| [MoonDetect_c_api.c](./cpp_c/MoonDetect_c_api.c)                                     | MoonDetect     | A basic usage of the C abstraction API                               |
 | [MoonRegistrate_basic.cpp](./cpp_c/MoonRegistrate_basic.cpp)                         | MoonRegistrate | A basic usage, easy and quick                                        |
 | [MoonRegistrate_advance.cpp](./cpp_c/MoonRegistrate_advance.cpp)                     | MoonRegistrate | An advanced usage, you can further customize moon image registration |
 | [MoonRegistrate_live_registration.cpp](./cpp_c/MoonRegistrate_live_registration.cpp) | MoonRegistrate | Running moon image registration on a live video                      |
@@ -51,10 +51,13 @@ cmake --build
 
 ## Python
 
-| Name                                                        | Module       | Description                                                                                              |
-|-------------------------------------------------------------|--------------|----------------------------------------------------------------------------------------------------------|
-| [MoonDetector_basic.py](./python/MoonDetector_basic.py)     | MoonDetector | A basic usage of MoonRegistration Python Wrapper api                                                     |
-| [MoonDetector_advance.py](./python/MoonDetector_advance.py) | MoonDetector | An advanced usage of MoonRegistration Python Wrapper api, you can customize each steps in moon detection |
+| Name                                                                                | Module         | Description                                                                                                  |
+|-------------------------------------------------------------------------------------|----------------|--------------------------------------------------------------------------------------------------------------|
+| [MoonDetect_basic.py](./python/MoonDetect_basic.py)                                 | MoonDetect     | A basic usage of MoonRegistration Python Wrapper api                                                         |
+| [MoonDetect_advance.py](./python/MoonDetect_advance.py)                             | MoonDetect     | An advanced usage of MoonRegistration Python Wrapper api, you can customize steps in moon detection          |
+| [MoonRegistrate_basic.py](./python/MoonRegistrate_basic.py)                         | MoonRegistrate | A basic usage of MoonRegistration Python Wrapper api                                                         |
+| [MoonRegistrate_advance.py](./python/MoonRegistrate_advance.py)                     | MoonRegistrate | An advanced usage of MoonRegistration Python Wrapper api, you can customize steps in moon image registration |
+| [MoonRegistrate_live_registration.py](./python/MoonRegistrate_live_registration.py) | MoonRegistrate | Running moon image registration on a live video                                                              |
 
 To play with these demo applications,
 

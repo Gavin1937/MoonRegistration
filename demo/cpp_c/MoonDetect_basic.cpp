@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        std::cout << "Usage: ./MoonDetector_basic [IMAGE_FOLDER]\n";
+        std::cout << "Usage: ./MoonDetect_basic [IMAGE_FOLDER]\n";
         return 0;
     }
     
