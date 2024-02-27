@@ -7,7 +7,6 @@
 namespace py = pybind11;
 
 #include <vector>
-#include <iostream>
 
 
 // custom pybind11 caster for cv::DMatch and cv2.DMatch
