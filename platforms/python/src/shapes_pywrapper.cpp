@@ -78,4 +78,10 @@ void init_shapes(py::module &module)
         py::arg("y"),
         py::arg("radius")
     );
+    module.def("rectangle_to_roi", mr::rectangle_to_roi,
+        py::arg("rectangle")
+    );
+    module.def("roi_to_rectangle", mr::roi_to_rectangle,
+        py::arg("roi")
+    );
 }

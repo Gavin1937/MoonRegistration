@@ -7,7 +7,6 @@
 namespace py = pybind11;
 
 #include <vector>
-#include <iostream>
 
 
 // custom pybind11 caster for cv::KeyPoint and cv2.KeyPoint
@@ -35,7 +34,6 @@ public:
         }
         catch (std::exception& err)
         {
-            std::cout << err.what() << std::endl;
             throw err;
         }
         

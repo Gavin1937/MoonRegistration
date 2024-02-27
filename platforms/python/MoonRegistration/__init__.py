@@ -81,7 +81,6 @@ try:
     __version__:str = version()
     
     for submodule in __collect_py_ext_submodules():
-        print('submodule:',submodule)
         __load_py_ext_submodule_for_module(
             'MoonRegistration',
             '.'.join(['MoonRegistration','libs','MoonRegistration_pywrapper',submodule])
