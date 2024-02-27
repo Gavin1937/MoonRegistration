@@ -146,7 +146,7 @@ cv::Mat wrap_stack_imgs(
     if (py::isinstance<py::iterable>(filter_px))
     {
         if (py::len(filter_px) != 4)
-            throw std::runtime_error("Input background_roi must be length of 4");
+            throw std::runtime_error("Input filter_px must be length of 4");
         
         idx = 0;
         for (auto it : filter_px)
@@ -208,7 +208,7 @@ cv::Mat wrap_stack_imgs_in_place(
     if (py::isinstance<py::iterable>(filter_px))
     {
         if (py::len(filter_px) != 4)
-            throw std::runtime_error("Input background_roi must be length of 4");
+            throw std::runtime_error("Input filter_px must be length of 4");
         
         idx = 0;
         for (auto it : filter_px)

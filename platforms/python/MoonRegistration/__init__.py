@@ -42,7 +42,6 @@ if libs_dir.exists():
 
 
 try:
-    # from .libs.MoonRegistration_pywrapper import *
     from .libs.MoonRegistration_pywrapper import *
     __version__ = version()
     __all__ = [
@@ -94,6 +93,11 @@ try:
             'default_iteration_circle_select':MoonDetect.default_iteration_circle_select,
             'default_coordinate_remap':MoonDetect.default_coordinate_remap,
             'MoonDetector':MoonDetect.MoonDetector,
+        },
+        'MoonRegistrar': {
+            'RegistrationAlgorithms':MoonRegistrar.RegistrationAlgorithms,
+            'default_is_good_match':MoonRegistrar.default_is_good_match,
+            'MoonRegistrar':MoonRegistrar.MoonRegistrar,
         }
     }
 except ImportError as ierr:

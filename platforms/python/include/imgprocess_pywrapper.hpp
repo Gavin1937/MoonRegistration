@@ -3,6 +3,7 @@
 #include <opencv2/core/mat.hpp>
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 namespace py = pybind11;
 
 #include "typecvt.hpp"
@@ -59,16 +60,16 @@ cv::Mat wrap_stack_imgs(
     const cv::Mat& background,
     const py::object& background_roi,
     const cv::Mat& foreground,
-    const float foreground_transparency,
-    const py::object& filter_px
+    const float foreground_transparency = 1.0f,
+    const py::object& filter_px = py::none()
 );
 
 cv::Mat wrap_stack_imgs_in_place(
     cv::Mat& background,
     const py::object& background_roi,
     const cv::Mat& foreground,
-    const float foreground_transparency,
-    const py::object& filter_px
+    const float foreground_transparency = 1.0f,
+    const py::object& filter_px = py::none()
 );
 
 
