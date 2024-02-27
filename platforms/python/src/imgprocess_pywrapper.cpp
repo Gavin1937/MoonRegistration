@@ -1,3 +1,12 @@
+#include <opencv2/core/mat.hpp>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+namespace py = pybind11;
+
+#include "MoonRegistration/imgprocess.hpp"
+
+#include "typecvt.hpp"
 #include "imgprocess_pywrapper.hpp"
 
 

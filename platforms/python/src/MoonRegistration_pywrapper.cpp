@@ -11,8 +11,6 @@ namespace py = pybind11;
 #include "MoonRegistrar_pywrapper.hpp"
 
 
-
-
 PYBIND11_MODULE(MoonRegistration_pywrapper, module)
 {
     NDArrayConverter::init_numpy();
@@ -38,4 +36,3 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     init_MoonRegistrar(MoonRegistrar_module);
     
 }
-

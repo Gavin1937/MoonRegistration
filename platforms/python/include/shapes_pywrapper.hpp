@@ -1,13 +1,9 @@
 #pragma once
 
-#include <opencv2/core.hpp>
-
 #include <pybind11/pybind11.h>
 namespace py = pybind11;
 
 #include <string>
-
-#include "typecvt.hpp"
 
 
 template<typename TYPE>
