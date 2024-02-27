@@ -6,8 +6,9 @@ namespace py = pybind11;
 #include "typecvt.hpp"
 
 #include "shapes_pywrapper.hpp"
-#include "MoonDetect_pywrapper.hpp"
 #include "imgprocess_pywrapper.hpp"
+#include "MoonDetect_pywrapper.hpp"
+#include "MoonRegistrar_pywrapper.hpp"
 
 
 
@@ -31,6 +32,10 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     
     py::module MoonDetect_module = module.def_submodule("MoonDetect", "MoonDetect description");
     init_MoonDetect(MoonDetect_module);
+    
+    
+    py::module MoonRegistrar_module = module.def_submodule("MoonRegistrar", "MoonRegistrar description");
+    init_MoonRegistrar(MoonRegistrar_module);
     
 }
 
