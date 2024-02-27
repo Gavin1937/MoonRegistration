@@ -1,3 +1,9 @@
+#include <opencv2/core.hpp>
+
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
+#include "typecvt.hpp"
 #include "shapes_pywrapper.hpp"
 
 #include "MoonRegistration/shapes.hpp"

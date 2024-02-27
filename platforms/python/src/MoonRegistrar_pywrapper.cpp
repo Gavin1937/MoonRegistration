@@ -1,6 +1,17 @@
+#include <opencv2/core.hpp>
+#include <opencv2/features2d.hpp>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/functional.h>
+namespace py = pybind11;
+
+#include <functional>
+
+#include "typecvt.hpp"
 #include "MoonRegistrar_pywrapper.hpp"
 
-#include <opencv2/features2d.hpp>
+#include "MoonRegistration/MoonRegistrar.hpp"
 
 
 std::unique_ptr<mr::MoonRegistrar> new_MoonRegistrar(

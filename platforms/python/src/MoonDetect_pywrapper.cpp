@@ -1,6 +1,20 @@
+#include <opencv2/core.hpp>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/functional.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
+namespace py = pybind11;
+
+#include <string>
+#include <vector>
+#include <memory>
+#include <functional>
+
+#include "typecvt.hpp"
 #include "MoonDetect_pywrapper.hpp"
 
-#include <pybind11/stl.h>
+#include "MoonRegistration/MoonDetect.hpp"
 
 
 std::vector<cv::Vec3f> wrap_find_circles_in_img(
