@@ -5,4 +5,4 @@ namespace py = pybind11;
 
 
 // initialize submodule
-void init_MoonRegistrar(py::module &module);
+void init_MoonRegistrate(py::module &module);

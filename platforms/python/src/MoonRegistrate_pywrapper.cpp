@@ -9,9 +9,9 @@ namespace py = pybind11;
 #include <functional>
 
 #include "typecvt.hpp"
-#include "MoonRegistrar_pywrapper.hpp"
+#include "MoonRegistrate_pywrapper.hpp"
 
-#include "MoonRegistration/MoonRegistrar.hpp"
+#include "MoonRegistration/MoonRegistrate.hpp"
 
 
 std::unique_ptr<mr::MoonRegistrar> new_MoonRegistrar(
@@ -241,9 +241,9 @@ void set_MoonRegistrar_is_good_match(
 
 
 // initialize submodule
-void init_MoonRegistrar(py::module &module)
+void init_MoonRegistrate(py::module &module)
 {
-    // MoonRegistrar/registrar.hpp
+    // MoonRegistrate/registrar.hpp
     
     py::enum_<mr::RegistrationAlgorithms>(module, "RegistrationAlgorithms", py::arithmetic())
         .value("SIFT", mr::RegistrationAlgorithms::SIFT)

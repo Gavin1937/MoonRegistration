@@ -1,7 +1,7 @@
 import shapes
 import imgprocess
 import MoonDetect
-import MoonRegistrar
+import MoonRegistrate
 
 from .shapes import (
     Circle,
@@ -16,7 +16,7 @@ from .MoonDetect import (
     HoughCirclesAlgorithm,
     MoonDetector,
 )
-from .MoonRegistrar import (
+from .MoonRegistrate import (
     RegistrationAlgorithms,
     MoonRegistrar,
 )
@@ -36,7 +36,7 @@ __all__: list[str] = [
     'HoughCirclesAlgorithm',
     'MoonDetector',
     
-    'MoonRegistrar',
+    'MoonRegistrate',
     'RegistrationAlgorithms',
     'MoonRegistrar',
     

@@ -8,15 +8,15 @@
 #include <exception>
 
 
-// MoonRegistration library api MoonRegistrar module
-#include "MoonRegistration/MoonRegistrar.hpp"
+// MoonRegistration library api MoonRegistrate module
+#include "MoonRegistration/MoonRegistrate.hpp"
 
 
 int main(int argc, char** argv)
 {
     if (argc != 4)
     {
-        std::cout << "Usage: ./MoonRegistrar_basic [USER_IMAGE] [MODEL_IMAGE] [LAYER_IMAGE]\n";
+        std::cout << "Usage: ./MoonRegistrate_basic [USER_IMAGE] [MODEL_IMAGE] [LAYER_IMAGE]\n";
         return 0;
     }
     

@@ -16,8 +16,8 @@ file(GLOB SRC
     "src/c_mrapi/*.cpp"
     "src/MoonDetect/*.c"
     "src/MoonDetect/*.cpp"
-    "src/MoonRegistrar/*.c"
-    "src/MoonRegistrar/*.cpp"
+    "src/MoonRegistrate/*.c"
+    "src/MoonRegistrate/*.cpp"
 )
 include_directories("include")
 

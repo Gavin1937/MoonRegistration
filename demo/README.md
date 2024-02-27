@@ -10,15 +10,15 @@
 
 ## C++ & C
 
-| Name                                                                               | Module        | Description                                                          |
-|------------------------------------------------------------------------------------|---------------|----------------------------------------------------------------------|
-| [MoonDetector_basic.cpp](./cpp_c/MoonDetector_basic.cpp)                           | MoonDetector  | A basic usage, easy and quick                                        |
-| [MoonDetector_advance.cpp](./cpp_c/MoonDetector_advance.cpp)                       | MoonDetector  | An advanced usage, you can further customize moon image detection    |
-| [MoonDetector_c_api.c](./cpp_c/MoonDetector_c_api.c)                               | MoonDetector  | A basic usage of the C abstraction API                               |
-| [MoonRegistrar_basic.cpp](./cpp_c/MoonRegistrar_basic.cpp)                         | MoonRegistrar | A basic usage, easy and quick                                        |
-| [MoonRegistrar_advance.cpp](./cpp_c/MoonRegistrar_advance.cpp)                     | MoonRegistrar | An advanced usage, you can further customize moon image registration |
-| [MoonRegistrar_live_registration.cpp](./cpp_c/MoonRegistrar_live_registration.cpp) | MoonRegistrar | Running moon image registration on a live video                      |
-| [MoonRegistrar_c_api.c](./cpp_c/MoonRegistrar_c_api.c)                             | MoonRegistrar | A basic usage of the C abstraction API                               |
+| Name                                                                                 | Module         | Description                                                          |
+|--------------------------------------------------------------------------------------|----------------|----------------------------------------------------------------------|
+| [MoonDetector_basic.cpp](./cpp_c/MoonDetector_basic.cpp)                             | MoonDetector   | A basic usage, easy and quick                                        |
+| [MoonDetector_advance.cpp](./cpp_c/MoonDetector_advance.cpp)                         | MoonDetector   | An advanced usage, you can further customize moon image detection    |
+| [MoonDetector_c_api.c](./cpp_c/MoonDetector_c_api.c)                                 | MoonDetector   | A basic usage of the C abstraction API                               |
+| [MoonRegistrate_basic.cpp](./cpp_c/MoonRegistrate_basic.cpp)                         | MoonRegistrate | A basic usage, easy and quick                                        |
+| [MoonRegistrate_advance.cpp](./cpp_c/MoonRegistrate_advance.cpp)                     | MoonRegistrate | An advanced usage, you can further customize moon image registration |
+| [MoonRegistrate_live_registration.cpp](./cpp_c/MoonRegistrate_live_registration.cpp) | MoonRegistrate | Running moon image registration on a live video                      |
+| [MoonRegistrate_c_api.c](./cpp_c/MoonRegistrate_c_api.c)                             | MoonRegistrate | A basic usage of the C abstraction API                               |
 
 ### Building demos (for C++ & C)
 
