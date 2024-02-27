@@ -91,14 +91,19 @@ class cmake_build_ext(build_ext):
                 '-DMR_BUILD_SHARED_LIBS=OFF',
                 '-DMR_ENABLE_OPENCV_NONFREE=%s' % ('ON' if hasattr(self,'mr_enable_opencv_nonfree') and self.mr_enable_opencv_nonfree else 'OFF'),
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE=%s' % self.get_ext_fullpath(ext.name),
-                (self.cmake_arguments if self.cmake_arguments else '')
+                (self.cmake_arguments if hasattr(self, 'cmake_arguments') and self.cmake_arguments else '')
             ]
             
             if not os.path.exists(self.build_temp):
                 os.makedirs(self.build_temp)
             
             # Config
-            proc = subprocess.Popen(['cmake', ext.cmake_lists_dir] + cmake_args, cwd=self.build_temp, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            proc = subprocess.Popen(
+                ['cmake', '-S', '.', '-B', str(Path(self.build_temp).resolve())] + cmake_args,
+                cwd=ext.cmake_lists_dir,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
             
             # searching for 3rd party dependencies library location from cmake output
             out, err = proc.communicate()
@@ -150,7 +155,6 @@ class Build_ext_first(install):
         build_ext_command = self.distribution.get_command_obj("build_ext")
         build_ext_command.mr_enable_opencv_nonfree = self.mr_enable_opencv_nonfree
         build_ext_command.cmake_arguments = self.cmake_arguments
-        build_ext.run(build_ext_command)
         
         # run build_py
         self.run_command("build_py")
@@ -185,7 +189,27 @@ class Build_ext_first(install):
 # this is due to the glob pattern in PACKAGE_FILES only be evaluate once and not updating after build_ext
 # so we need to run bdist_wheel twice when build folder is empty
 class My_bdist_wheel(bdist_wheel):
+    # initialize arguments for install
+    # https://stackoverflow.com/a/33200591
+    user_options = bdist_wheel.user_options + [
+        ('mr-enable-opencv-nonfree', None, 'Set CMake Flag MR_ENABLE_OPENCV_NONFREE to true'),
+        ('cmake-arguments=', None, 'Add more CMake Arguments'),
+    ]
+    
+    def initialize_options(self):
+        bdist_wheel.initialize_options(self)
+        self.mr_enable_opencv_nonfree = False
+        self.cmake_arguments = None
+    
+    def finalize_options(self):
+        bdist_wheel.finalize_options(self)
+    
     def run(self):
+        # set build_ext arguments & run it
+        build_ext_command = self.distribution.get_command_obj("build_ext")
+        build_ext_command.mr_enable_opencv_nonfree = self.mr_enable_opencv_nonfree
+        build_ext_command.cmake_arguments = self.cmake_arguments
+        
         # copy additional libraries to wheel build dir
         loc_bdist_dir = ROOT / self.bdist_dir
         loc_bdist_dir = (loc_bdist_dir/'MoonRegistration/libs')
@@ -218,7 +242,13 @@ def main():
         ],
         setup_requires=['wheel'],
         
-        packages=['MoonRegistration'],
+        packages=[
+            'MoonRegistration',
+            'MoonRegistration.shapes',
+            'MoonRegistration.imgprocess',
+            'MoonRegistration.MoonDetect',
+            'MoonRegistration.MoonRegistrate',
+        ],
         ext_modules=[CMakeExtension(
             name="MoonRegistration",
             cmake_lists_dir=str(ROOT.resolve()),
