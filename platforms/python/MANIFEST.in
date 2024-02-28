@@ -1,8 +1,8 @@
-include *.py
 include MoonRegistration/**/*.py
+include MoonRegistration/**/*.pyi
 include *.md
 global-exclude *.pyc
 include requirements.txt
 include .gitignore
-include LICENSE
+include ../../LICENSE
 include MANIFEST.in
