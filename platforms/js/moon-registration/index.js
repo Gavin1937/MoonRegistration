@@ -32,11 +32,11 @@ let MoonRegistration = {
         canvas.height = img.height;
         // Draw image onto canvas
         // we MUST draw img, otherwise canvas won't contain any data
-        const ctx = canvas.getContext('2d', { colorSpace: "srgb" });
+        const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0);
 
         const image = ctx.getImageData(0, 0, img.width, img.height);
-
+        
         const p = instance._mrwasm_create_image_buffer(image.data.length);
         instance.HEAP8.set(image.data, p);
 

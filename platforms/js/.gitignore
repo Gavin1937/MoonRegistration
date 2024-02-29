@@ -2,6 +2,9 @@
 # files
 *.wasm
 *.js
+*.sh
+*.ps1
+*.bat
 *test*
 
 # folders
