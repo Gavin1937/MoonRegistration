@@ -8,3 +8,7 @@
 /build/
 /data/
 /dist/
+
+# whitelist
+!moon-registration/index.js
+!moon-registration/package.json

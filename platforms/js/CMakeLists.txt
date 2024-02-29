@@ -53,7 +53,10 @@ file(GLOB SRC
 add_executable(${PROJECT_NAME}
     ${SRC}
 )
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    LINKER_LANGUAGE CXX
+    OUTPUT_NAME "MoonRegistration"
+)
 
 # linking
 # linking with manully built opencv_wasm
