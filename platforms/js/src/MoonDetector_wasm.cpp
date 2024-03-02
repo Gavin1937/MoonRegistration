@@ -65,7 +65,7 @@ int* mrwasm_detect_moon(
         img_binary
     );
     cv::Mat cvtImage;
-    cv::cvtColor(image, cvtImage, cv::COLOR_RGBA2BGR);
+    cv::cvtColor(image, cvtImage, cv::COLOR_RGBA2BGRA);
     
     // clone data from shared heap to c++ local heap
     // preventing potential modification from js side

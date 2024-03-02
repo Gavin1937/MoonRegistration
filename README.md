@@ -43,7 +43,7 @@ A Cross-Platform Multi-Language library for Moon Location Detection & Moon Image
 |----------------------------------|-------------------|----------------------|
 | C++                              | ✅                 | ✅                    |
 | C (with abstracted api)          | ✅                 | ✅                    |
-| Python3                          | ✅                 | ❌                    |
+| Python3                          | ✅                 | ✅                    |
 | JavaScript (with abstracted api) | ✅                 | ❌                    |
 
 
