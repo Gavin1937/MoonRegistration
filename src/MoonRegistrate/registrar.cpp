@@ -100,10 +100,10 @@ EXPORT_SYMBOL void MoonRegistrar::update_images(
     const std::string& model_image_path
 )
 {
-    this->user_image = cv::imread(user_image_path, cv::IMREAD_COLOR);
+    this->user_image = cv::imread(user_image_path, cv::IMREAD_UNCHANGED);
     if (this->user_image.empty())
         throw std::runtime_error("Input User Image is empty");
-    this->model_image = cv::imread(model_image_path, cv::IMREAD_COLOR);
+    this->model_image = cv::imread(model_image_path, cv::IMREAD_UNCHANGED);
     if (this->user_image.empty())
         throw std::runtime_error("Input User Image is empty");
     
@@ -116,10 +116,10 @@ EXPORT_SYMBOL void MoonRegistrar::update_images(
     const std::vector<unsigned char>& model_image_binary
 )
 {
-    this->user_image = cv::imdecode(user_image_binary, cv::IMREAD_COLOR);
+    this->user_image = cv::imdecode(user_image_binary, cv::IMREAD_UNCHANGED);
     if (this->user_image.empty())
         throw std::runtime_error("Input User Image is empty");
-    this->model_image = cv::imdecode(model_image_binary, cv::IMREAD_COLOR);
+    this->model_image = cv::imdecode(model_image_binary, cv::IMREAD_UNCHANGED);
     if (this->user_image.empty())
         throw std::runtime_error("Input User Image is empty");
     

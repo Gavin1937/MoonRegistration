@@ -131,7 +131,7 @@ try:
     stacked_red_green_image:numpy.ndarray = registrar.draw_stacked_red_green_image()
     cv2.imwrite("./output/05_stacked_red_green_image.png", stacked_red_green_image)
     
-    layer_image_in = cv2.imread(layer_image, cv2.IMREAD_COLOR)
+    layer_image_in = cv2.imread(layer_image, cv2.IMREAD_UNCHANGED)
     layer_image_out:numpy.ndarray = registrar.draw_layer_image(layer_image_in)
     cv2.imwrite("./output/06_layer_image.png", layer_image_out)
     

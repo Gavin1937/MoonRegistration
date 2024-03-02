@@ -166,7 +166,7 @@ int main(int argc, char** argv)
         registrar.draw_stacked_red_green_image(stacked_red_green_image);
         cv::imwrite("./output/05_stacked_red_green_image.png", stacked_red_green_image);
         
-        cv::Mat layer_image_in = cv::imread(layer_image, cv::IMREAD_COLOR);
+        cv::Mat layer_image_in = cv::imread(layer_image, cv::IMREAD_UNCHANGED);
         cv::Mat layer_image_out;
         registrar.draw_layer_image(layer_image_in, layer_image_out);
         cv::imwrite("./output/06_layer_image.png", layer_image_out);

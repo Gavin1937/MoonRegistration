@@ -288,14 +288,14 @@ EXPORT_SYMBOL void MoonDetector::init_by_path(const std::string& image_filepath)
 {
     if (!file_exists(image_filepath))
         throw std::runtime_error("Empty Input Image");
-    this->original_image = cv::imread(image_filepath, cv::IMREAD_COLOR);
+    this->original_image = cv::imread(image_filepath, cv::IMREAD_UNCHANGED);
     if (this->original_image.empty())
         throw std::runtime_error("Empty Input Image");
 }
 
 EXPORT_SYMBOL void MoonDetector::init_by_byte(const std::vector<unsigned char>& image_binary)
 {
-    this->original_image = cv::imdecode(cv::Mat(image_binary), cv::IMREAD_COLOR);
+    this->original_image = cv::imdecode(cv::Mat(image_binary), cv::IMREAD_UNCHANGED);
     if (this->original_image.empty())
         throw std::runtime_error("Empty Input Image");
 }
