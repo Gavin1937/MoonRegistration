@@ -23,7 +23,7 @@ docker build -t moonregistration_python -f .\Dockerfile_python .
 docker run -it --rm --name moonregistration_python moonregistration_python
 ```
 
-3. The Docker container you just launched contains MoonRegistration library in its python environment, you can goto `demo` folder under the repository root to play with [MoonDetector_basic.py](../../demo/MoonDetector_basic.py) file. This file contains a basic example of using this library. Checkout [Usage Section for more detail](#usage)
+1. The Docker container you just launched contains MoonRegistration library in its python environment, you can goto [demo folder](../../demo/README.md) under the repository root to play with all the demo scripts. Checkout [Usage Section for more detail](#usage)
 
 ## Build & Install From Source
 
@@ -73,7 +73,7 @@ Once you installed this library into your python environment, you can import it 
 import MoonRegistration as mr
 ```
 
-You can checkout [MoonDetector_basic.py](../../demo/MoonDetector_basic.py) in [demo folder](../../demo/README.md) for a simple use case.
+You can checkout [demo folder](../../demo/README.md) for some simple usages.
 
 # Special Thanks
 
