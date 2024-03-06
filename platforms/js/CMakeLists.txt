@@ -30,8 +30,38 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_BINARY_DIR}/
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 
-# functions export to wasm
-set(EXPORTED_FUNCTIONS "_mrwasm_create_image_buffer,_mrwasm_destroy_image_buffer,_mrwasm_detect_moon,_mrwasm_circle_to_square,_mrwasm_circle_to_rectangle")
+# functions to export to wasm
+set(UTILS_FUNCTION "_mrwasm_create_image_buffer,_mrwasm_create_image_ptr,_mrwasm_destroy_image")
+set(SHAPES_FUNCTION "_mrwasm_circle_to_square,_mrwasm_circle_to_rectangle")
+set(MOONDETECT_FUNCTION "_mrwasm_detect_moon")
+
+option(MRWASM_BUILD_MODULE:STRING "Configure which MoonRegistration WASM module to build" "All")
+if (NOT DEFINED MRWASM_BUILD_MODULE)
+    set(MRWASM_BUILD_MODULE "All")
+endif()
+
+if("${MRWASM_BUILD_MODULE}" STREQUAL "MoonDetect")
+    string(JOIN "," EXPORTED_FUNCTIONS
+        ${UTILS_FUNCTION}
+        ${SHAPES_FUNCTION}
+        ${MOONDETECT_FUNCTION}
+    )
+# elseif("${MRWASM_BUILD_MODULE}" STREQUAL "MoonRegistrate")
+#     string(JOIN "," EXPORTED_FUNCTIONS
+#         ${UTILS_FUNCTION}
+#         ${SHAPES_FUNCTION}
+#         ${MOONDETECT_FUNCTION}
+#         ${MOONREGISTRATE_FUNCTION}
+#     )
+elseif("${MRWASM_BUILD_MODULE}" STREQUAL "All")
+    string(JOIN "," EXPORTED_FUNCTIONS
+        ${UTILS_FUNCTION}
+        ${SHAPES_FUNCTION}
+        ${MOONDETECT_FUNCTION}
+    )
+else()
+    message(SEND_ERROR "Cannot reconize build module type: ${MRWASM_BUILD_MODULE}")
+endif()
 
 
 # report
@@ -39,6 +69,7 @@ message(STATUS "============== MR WASM Build Config ==============")
 message(STATUS "OPENCV_SRC: ${OPENCV_SRC}")
 message(STATUS "OPENCV_DIR: ${OPENCV_DIR}")
 message(STATUS "INCLUDE_DIRECTORIES: ${OPENCV_SRC}/include;${OPENCV_SRC}/build_wasm;${opencv_include_modules}")
+message(STATUS "MRWASM_BUILD_MODULE: ${MRWASM_BUILD_MODULE}")
 message(STATUS "EXPORTED_FUNCTIONS: ${EXPORTED_FUNCTIONS}")
 message(STATUS "==================================================")
 
@@ -82,6 +113,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS
     -s EXPORT_ES6=1 \
     -s USE_ES6_IMPORT_META=1 \
     -s ALLOW_MEMORY_GROWTH=1 \
+    -s NO_DISABLE_EXCEPTION_CATCHING \
     "
 )
 

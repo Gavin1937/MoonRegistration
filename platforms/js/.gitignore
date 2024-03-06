@@ -1,7 +1,5 @@
 
 # files
-*.wasm
-*.js
 *.sh
 *.ps1
 *.bat
@@ -11,7 +9,3 @@
 /build/
 /data/
 /dist/
-
-# whitelist
-!moon-registration/index.js
-!moon-registration/package.json

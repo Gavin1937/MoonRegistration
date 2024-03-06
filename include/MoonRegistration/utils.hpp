@@ -86,14 +86,15 @@ template<typename COMP_TYPE> EXPORT_SYMBOL void find_n_circles(
     for (auto vec : detected_circles)
     {
         COMP_TYPE value = calc_value_func(vec);
+        bool filter_value = filter_value_func(value);
         
         // minheap.size() < n
-        if (filter_value_func(value) && minheap.size() < n)
+        if (filter_value && minheap.size() < n)
         {
             minheap.push(std::make_pair(value,vec));
         }
         // minheap.size() >= n
-        else if (filter_value_func(value) && value > minheap.top().first)
+        else if (filter_value && value > minheap.top().first)
         {
             minheap.pop();
             minheap.push(std::make_pair(value,vec));

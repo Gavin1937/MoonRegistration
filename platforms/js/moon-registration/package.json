@@ -1,11 +1,7 @@
 {
   "name": "moon-registration",
-  "version": "v0.1.0",
-  "description": "",
+  "description": "MoonRegistration Library JavaScript Wrapper",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": ""
+  "author": "Gavin1937"
 }
