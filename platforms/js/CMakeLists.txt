@@ -21,6 +21,9 @@ include_directories("${OPENCV_SRC}/build_wasm")
 file(GLOB opencv_include_modules "${OPENCV_SRC}/modules/*/include")
 include_directories(${opencv_include_modules})
 
+if (MR_ENABLE_OPENCV_NONFREE)
+    message(SEND_ERROR "OpenCV JS doesn't support Non-Free modules and XFeatures2D module")
+endif()
 
 # we need to add MoonRegistration library 2 directories above us
 # and also compile it as static library
@@ -31,9 +34,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 
 # functions to export to wasm
-set(UTILS_FUNCTION "_mrwasm_create_image_buffer,_mrwasm_create_image_ptr,_mrwasm_destroy_image")
+set(UTILS_FUNCTION "_mrwasm_create_image_buffer,_mrwasm_create_image_ptr,_mrwasm_destroy_image,_mrwasm_create_ImageHandlerData,_mrwasm_destroy_ImageHandlerData")
 set(SHAPES_FUNCTION "_mrwasm_circle_to_square,_mrwasm_circle_to_rectangle")
 set(MOONDETECT_FUNCTION "_mrwasm_detect_moon")
+set(MOONREGISTRATE_FUNCTION "_mrwasm_draw_layer_image")
 
 option(MRWASM_BUILD_MODULE:STRING "Configure which MoonRegistration WASM module to build" "All")
 if (NOT DEFINED MRWASM_BUILD_MODULE)
@@ -46,18 +50,18 @@ if("${MRWASM_BUILD_MODULE}" STREQUAL "MoonDetect")
         ${SHAPES_FUNCTION}
         ${MOONDETECT_FUNCTION}
     )
-# elseif("${MRWASM_BUILD_MODULE}" STREQUAL "MoonRegistrate")
-#     string(JOIN "," EXPORTED_FUNCTIONS
-#         ${UTILS_FUNCTION}
-#         ${SHAPES_FUNCTION}
-#         ${MOONDETECT_FUNCTION}
-#         ${MOONREGISTRATE_FUNCTION}
-#     )
+elseif("${MRWASM_BUILD_MODULE}" STREQUAL "MoonRegistrate")
+    string(JOIN "," EXPORTED_FUNCTIONS
+        ${UTILS_FUNCTION}
+        ${SHAPES_FUNCTION}
+        ${MOONREGISTRATE_FUNCTION}
+    )
 elseif("${MRWASM_BUILD_MODULE}" STREQUAL "All")
     string(JOIN "," EXPORTED_FUNCTIONS
         ${UTILS_FUNCTION}
         ${SHAPES_FUNCTION}
         ${MOONDETECT_FUNCTION}
+        ${MOONREGISTRATE_FUNCTION}
     )
 else()
     message(SEND_ERROR "Cannot reconize build module type: ${MRWASM_BUILD_MODULE}")
@@ -107,6 +111,8 @@ target_link_libraries(${PROJECT_NAME} ${opencv_js_lib_core})
 # otherwise cmake will take multiple strings as multiple args
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS
     " \
+    --bind \
+    -s USE_ZLIB=1 \
     -s EXPORTED_RUNTIME_METHODS=cwrap \
     -s EXPORTED_FUNCTIONS=${EXPORTED_FUNCTIONS} \
     -s MODULARIZE=1 \

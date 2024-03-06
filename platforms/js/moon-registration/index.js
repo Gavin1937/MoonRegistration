@@ -9,6 +9,8 @@ export {
   circle_to_rectangle,
   // MoonDetect.js
   detect_moon,
+  // MoonRegistrate.js
+  draw_layer_image,
 };
 
 import { instance } from './wasm_loader.js';
@@ -19,3 +21,4 @@ import {
   circle_to_rectangle,
 } from './shapes.js';
 import { detect_moon } from './MoonDetect.js';
+import { draw_layer_image } from './MoonRegistrate.js';

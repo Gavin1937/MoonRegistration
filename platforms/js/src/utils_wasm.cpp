@@ -3,9 +3,40 @@
 
 #include <emscripten/emscripten.h>
 
+#include "utils_wasm.hpp"
+
 
 extern "C"
 {
+
+EMSCRIPTEN_KEEPALIVE
+void* mrwasm_create_ImageHandlerData(
+    int img_width,
+    int img_height,
+    int img_data_length,
+    long buffer_ptr,
+    long image_ptr
+)
+{
+    ImageHandlerData* ret = new ImageHandlerData();
+    ret->img_width = img_width;
+    ret->img_height = img_height;
+    ret->img_data_length = img_data_length;
+    ret->buffer_ptr = buffer_ptr;
+    ret->image_ptr = image_ptr;
+    
+    return reinterpret_cast<void*>(ret);
+}
+
+EMSCRIPTEN_KEEPALIVE
+void mrwasm_destroy_ImageHandlerData(void* ptr)
+{
+    if (ptr)
+    {
+        ImageHandlerData* tmp = reinterpret_cast<ImageHandlerData*>(ptr);
+        delete tmp;
+    }
+}
 
 EMSCRIPTEN_KEEPALIVE
 uint8_t* mrwasm_create_image_buffer(const int img_binary_length)

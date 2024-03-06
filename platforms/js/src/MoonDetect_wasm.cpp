@@ -27,7 +27,7 @@ extern "C"
 EMSCRIPTEN_KEEPALIVE
 int* mrwasm_detect_moon(void* img_ptr)
 {
-    cv::Mat *cvtImage = reinterpret_cast<cv::Mat*>(img_ptr);
+    cv::Mat* cvtImage = reinterpret_cast<cv::Mat*>(img_ptr);
     
     // clone data from shared heap to c++ local heap
     // preventing potential modification from js side
