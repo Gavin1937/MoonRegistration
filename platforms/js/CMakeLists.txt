@@ -34,12 +34,29 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 
 # functions to export to wasm
-set(MOONREGISTRATION_FUNCTION "_mrwasm_version")
-set(UTILS_FUNCTION "_mrwasm_destroy_ImageHandlerData,_mrwasm_create_image_buffer,_mrwasm_create_image_ptr,_mrwasm_destroy_image,_mrwasm_destroy_RectangleAndImageHandlerData")
-set(SHAPES_FUNCTION "_mrwasm_circle_to_square,_mrwasm_circle_to_rectangle")
-set(IMGPROCESS_FUNCTION "_mrwasm_cut_image_from_circle")
-set(MOONDETECT_FUNCTION "_mrwasm_detect_moon")
-set(MOONREGISTRATE_FUNCTION "_mrwasm_draw_layer_image")
+set(MOONREGISTRATION_FUNCTION
+    "_mrwasm_version"
+)
+set(UTILS_FUNCTION
+    "_mrwasm_destroy_ImageHandlerData"
+    "_mrwasm_create_image_buffer"
+    "_mrwasm_create_image_ptr"
+    "_mrwasm_destroy_image"
+    "_mrwasm_destroy_RectangleAndImageHandlerData"
+)
+set(SHAPES_FUNCTION
+    "_mrwasm_circle_to_square"
+    "_mrwasm_circle_to_rectangle"
+)
+set(IMGPROCESS_FUNCTION
+    "_mrwasm_cut_image_from_circle"
+)
+set(MOONDETECT_FUNCTION
+    "_mrwasm_detect_moon"
+)
+set(MOONREGISTRATE_FUNCTION
+    "_mrwasm_draw_layer_image"
+)
 
 option(MRWASM_BUILD_MODULE:STRING "Configure which MoonRegistration WASM module to build" "All")
 if (NOT DEFINED MRWASM_BUILD_MODULE)
@@ -122,13 +139,14 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS
     " \
     --bind \
     -s USE_ZLIB=1 \
-    -s EXPORTED_RUNTIME_METHODS=cwrap \
+    -s MEMORY64=0 \
     -s EXPORTED_FUNCTIONS=${EXPORTED_FUNCTIONS} \
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
     -s USE_ES6_IMPORT_META=1 \
     -s ALLOW_MEMORY_GROWTH=1 \
-    -s NO_DISABLE_EXCEPTION_CATCHING \
+    -s NO_DISABLE_EXCEPTION_CATCHING=1 \
+    -s MAXIMUM_MEMORY=2GB \
     "
 )
 
