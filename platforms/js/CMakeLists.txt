@@ -34,8 +34,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 
 # functions to export to wasm
-set(UTILS_FUNCTION "_mrwasm_destroy_ImageHandlerData,_mrwasm_create_image_buffer,_mrwasm_create_image_ptr,_mrwasm_destroy_image")
+set(UTILS_FUNCTION "_mrwasm_destroy_ImageHandlerData,_mrwasm_create_image_buffer,_mrwasm_create_image_ptr,_mrwasm_destroy_image,_mrwasm_destroy_RectangleAndImageHandlerData")
 set(SHAPES_FUNCTION "_mrwasm_circle_to_square,_mrwasm_circle_to_rectangle")
+set(IMGPROCESS_FUNCTION "_mrwasm_cut_image_from_circle")
 set(MOONDETECT_FUNCTION "_mrwasm_detect_moon")
 set(MOONREGISTRATE_FUNCTION "_mrwasm_draw_layer_image")
 
@@ -48,18 +49,22 @@ if("${MRWASM_BUILD_MODULE}" STREQUAL "MoonDetect")
     string(JOIN "," EXPORTED_FUNCTIONS
         ${UTILS_FUNCTION}
         ${SHAPES_FUNCTION}
+        ${IMGPROCESS_FUNCTION}
         ${MOONDETECT_FUNCTION}
     )
 elseif("${MRWASM_BUILD_MODULE}" STREQUAL "MoonRegistrate")
     string(JOIN "," EXPORTED_FUNCTIONS
         ${UTILS_FUNCTION}
         ${SHAPES_FUNCTION}
+        ${IMGPROCESS_FUNCTION}
+        ${MOONDETECT_FUNCTION}
         ${MOONREGISTRATE_FUNCTION}
     )
 elseif("${MRWASM_BUILD_MODULE}" STREQUAL "All")
     string(JOIN "," EXPORTED_FUNCTIONS
         ${UTILS_FUNCTION}
         ${SHAPES_FUNCTION}
+        ${IMGPROCESS_FUNCTION}
         ${MOONDETECT_FUNCTION}
         ${MOONREGISTRATE_FUNCTION}
     )

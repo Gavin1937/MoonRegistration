@@ -116,7 +116,7 @@ EXPORT_SYMBOL void cut_ref_image_from_circle(
     int padding         = 15
 );
 
-// Cut a square image using input circle and output a cv::Mat copy of input
+// Cut a square image using input circle and output it as a cv::Mat copy of input
 // 
 // Parameters:
 //   - image_in: input image

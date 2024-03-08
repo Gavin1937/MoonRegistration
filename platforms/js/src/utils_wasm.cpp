@@ -1,6 +1,8 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core/mat.hpp>
 
+#include "MoonRegistration/shapes.hpp"
+
 #include "utils_wasm.hpp"
 
 
@@ -30,6 +32,50 @@ void mrwasm_destroy_ImageHandlerData(void* ptr)
     if (ptr)
     {
         ImageHandlerData* tmp = reinterpret_cast<ImageHandlerData*>(ptr);
+        delete tmp;
+    }
+}
+
+void* mrwasm_create_RectangleAndImageHandlerData(
+    int img_width,
+    int img_height,
+    int img_data_length,
+    int buffer_ptr,
+    int image_ptr,
+    int top_left_x,
+    int top_left_y,
+    int bottom_right_x,
+    int bottom_right_y
+)
+{
+    ImageHandlerData* handler = new ImageHandlerData();
+    handler->img_width = img_width;
+    handler->img_height = img_height;
+    handler->img_data_length = img_data_length;
+    handler->buffer_ptr = buffer_ptr;
+    handler->image_ptr = image_ptr;
+    
+    int* rect = new int[4];
+    rect[0] = top_left_x;
+    rect[1] = top_left_y;
+    rect[2] = bottom_right_x;
+    rect[3] = bottom_right_y;
+    
+    RectangleAndImageHandlerData* ret = new RectangleAndImageHandlerData();
+    ret->handler = reinterpret_cast<int>(handler);
+    ret->rectangle = reinterpret_cast<int>(rect);
+    return reinterpret_cast<void*>(ret);
+}
+
+void mrwasm_destroy_RectangleAndImageHandlerData(void* ptr)
+{
+    if (ptr)
+    {
+        RectangleAndImageHandlerData* tmp = reinterpret_cast<RectangleAndImageHandlerData*>(ptr);
+        mrwasm_destroy_ImageHandlerData(
+            reinterpret_cast<void*>(tmp->handler)
+        );
+        delete[] reinterpret_cast<mr::Rectangle*>(tmp->rectangle);
         delete tmp;
     }
 }

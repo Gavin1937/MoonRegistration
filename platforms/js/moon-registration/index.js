@@ -7,6 +7,8 @@ export {
   Circle, Square, Rectangle,
   circle_to_square,
   circle_to_rectangle,
+  // imgprocess.js
+  cut_image_from_circle,
   // MoonDetect.js
   detect_moon,
   // MoonRegistrate.js
@@ -21,6 +23,7 @@ import {
   circle_to_square,
   circle_to_rectangle,
 } from './shapes.js';
+import { cut_image_from_circle } from './imgprocess.js';
 import { detect_moon } from './MoonDetect.js';
 import {
   draw_layer_image,

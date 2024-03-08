@@ -353,7 +353,7 @@ void init_imgprocess(py::module &module)
         py::arg("radius"),
         py::arg("padding")         = 15,
         R"pbdoc(
-    Cut a square image using input circle and output a cv2.MatLike|numpy.ndarray copy of input
+    Cut a square image using input circle and output it as a cv2.MatLike|numpy.ndarray copy of input
     
     Parameters:
       - image_in: input image
