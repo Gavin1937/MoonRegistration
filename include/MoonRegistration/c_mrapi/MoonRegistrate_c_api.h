@@ -20,7 +20,7 @@ extern "C" {
 #define MRC_INVALID_ALGORITHM         0x000
 
 
-// Run mr::MoonRegistrar::draw_layer_image() from image filepath
+// Run mr::MoonRegistrar::draw_layer_image() from input image
 // 
 // Parameters:
 //   - user_image: a mat_ptr to user image, you can read image using mrc_read_image_from_... functions

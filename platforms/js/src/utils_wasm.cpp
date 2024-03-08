@@ -1,21 +1,18 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core/mat.hpp>
 
-#include <emscripten/emscripten.h>
-
 #include "utils_wasm.hpp"
 
 
 extern "C"
 {
 
-EMSCRIPTEN_KEEPALIVE
 void* mrwasm_create_ImageHandlerData(
     int img_width,
     int img_height,
     int img_data_length,
-    long buffer_ptr,
-    long image_ptr
+    int buffer_ptr,
+    int image_ptr
 )
 {
     ImageHandlerData* ret = new ImageHandlerData();
@@ -28,7 +25,6 @@ void* mrwasm_create_ImageHandlerData(
     return reinterpret_cast<void*>(ret);
 }
 
-EMSCRIPTEN_KEEPALIVE
 void mrwasm_destroy_ImageHandlerData(void* ptr)
 {
     if (ptr)
@@ -38,13 +34,11 @@ void mrwasm_destroy_ImageHandlerData(void* ptr)
     }
 }
 
-EMSCRIPTEN_KEEPALIVE
 uint8_t* mrwasm_create_image_buffer(const int img_binary_length)
 {
     return (new uint8_t[img_binary_length * sizeof(uint8_t)]);
 }
 
-EMSCRIPTEN_KEEPALIVE
 void* mrwasm_create_image_ptr(
     uint8_t* img_binary,
     const int img_binary_length,
@@ -80,7 +74,6 @@ void* mrwasm_create_image_ptr(
     return reinterpret_cast<void*>(output);
 }
 
-EMSCRIPTEN_KEEPALIVE
 void mrwasm_destroy_image(uint8_t* img_binary, void* img_ptr)
 {
     delete[] img_binary;

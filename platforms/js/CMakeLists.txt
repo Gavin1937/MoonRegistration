@@ -34,7 +34,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 
 # functions to export to wasm
-set(UTILS_FUNCTION "_mrwasm_create_image_buffer,_mrwasm_create_image_ptr,_mrwasm_destroy_image,_mrwasm_create_ImageHandlerData,_mrwasm_destroy_ImageHandlerData")
+set(UTILS_FUNCTION "_mrwasm_destroy_ImageHandlerData,_mrwasm_create_image_buffer,_mrwasm_create_image_ptr,_mrwasm_destroy_image")
 set(SHAPES_FUNCTION "_mrwasm_circle_to_square,_mrwasm_circle_to_rectangle")
 set(MOONDETECT_FUNCTION "_mrwasm_detect_moon")
 set(MOONREGISTRATE_FUNCTION "_mrwasm_draw_layer_image")

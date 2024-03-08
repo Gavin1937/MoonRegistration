@@ -16,6 +16,35 @@ class ImageHandler {
   }
   
   /**
+   * Load image from C++ ImageHandlerData struct returned from C++ function
+   * 
+   * @param {int} ptr C++ pointer to an ImageHandlerData struct
+   * @returns {Promise<boolean>} true if success
+   */
+  async load_from_ImageHandlerData(ptr) {
+    let self = this;
+    return new Promise((resolve, reject) => {
+      instance.ready.then(async function() {
+        try {
+          const data_list = new Int32Array(instance.HEAP32.buffer, ptr, 5);
+          
+          self.img_width = data_list[0];
+          self.img_height = data_list[1];
+          self.img_data_length = data_list[2];
+          self.buffer_ptr = data_list[3];
+          self.image_ptr = data_list[4];
+          
+          await instance._mrwasm_destroy_ImageHandlerData(ptr);
+          
+          resolve(true);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+  
+  /**
    * Load image from JS to C++ via Data URL
    * 
    * {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs}

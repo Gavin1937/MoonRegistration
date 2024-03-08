@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-// Run mr::MoonDetector::detect_moon() from image filepath
+// Run mr::MoonDetector::detect_moon() from input image
 // 
 // Parameters:
 //   - image: a mat_ptr to the image, you can read image using mrc_read_image_from_... functions

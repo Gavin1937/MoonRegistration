@@ -1,12 +1,9 @@
 #include "MoonRegistration/shapes.hpp"
 
-#include <emscripten/emscripten.h>
-
 
 extern "C"
 {
 
-EMSCRIPTEN_KEEPALIVE
 int* mrwasm_circle_to_square(int x, int y, int radius)
 {
     mr::Square square = mr::circle_to_square_p(x, y, radius);
@@ -20,7 +17,6 @@ int* mrwasm_circle_to_square(int x, int y, int radius)
     return output;
 }
 
-EMSCRIPTEN_KEEPALIVE
 int* mrwasm_circle_to_rectangle(int x, int y, int radius)
 {
     mr::Rectangle rectangle = mr::circle_to_rectangle_p(x, y, radius);
@@ -36,4 +32,3 @@ int* mrwasm_circle_to_rectangle(int x, int y, int radius)
 }
 
 }
-

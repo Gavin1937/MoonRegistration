@@ -1,18 +1,14 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include <emscripten/emscripten.h>
-
 #include "MoonRegistration/MoonRegistrate.hpp"
 
 #include "utils_wasm.hpp"
 
-#include <iostream>
 
 extern "C"
 {
 
-EMSCRIPTEN_KEEPALIVE
 void* mrwasm_draw_layer_image(
     void* user_image,
     void* model_image,
@@ -32,7 +28,6 @@ void* mrwasm_draw_layer_image(
     );
     
     registrar.compute_registration();
-    std::cout << "after compute_registration\n";
     
     cv::Mat* image_out = new cv::Mat();
     cv::Vec4b* vec4b_filter_px = NULL;
@@ -46,7 +41,6 @@ void* mrwasm_draw_layer_image(
             filter_px_ptr[3]
         );
     }
-    std::cout << "before draw_layer_image\n";
     
     registrar.draw_layer_image(
         *layer_image_ptr, *image_out,
@@ -59,19 +53,12 @@ void* mrwasm_draw_layer_image(
     // convert image_out from BGRA to RGBA so the color don't go wrong
     cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
     
-    
-    // ImageHandlerData ret;
-    // ret.img_width = static_cast<long>(image_out->size[1]);
-    // ret.img_height = static_cast<long>(image_out->size[0]);
-    // ret.img_data_length = static_cast<long>(image_out->total() * image_out->elemSize());
-    // ret.buffer_ptr = reinterpret_cast<long>(image_out->data);
-    // ret.image_ptr = reinterpret_cast<long>(image_out);
     return mrwasm_create_ImageHandlerData(
         static_cast<int>(image_out->size[1]),
         static_cast<int>(image_out->size[0]),
         static_cast<int>(image_out->total() * image_out->elemSize()),
-        reinterpret_cast<long>(image_out->data),
-        reinterpret_cast<long>(image_out)
+        reinterpret_cast<int>(image_out->data),
+        reinterpret_cast<int>(image_out)
     );
 }
 

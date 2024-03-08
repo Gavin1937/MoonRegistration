@@ -1,5 +1,3 @@
-#include <emscripten/emscripten.h>
-
 #include "MoonRegistration/MoonDetect.hpp"
 
 
@@ -24,7 +22,6 @@ extern "C"
 // 6. free the memory when we are done from js side (mrwasm_destroy_image)
 
 
-EMSCRIPTEN_KEEPALIVE
 int* mrwasm_detect_moon(void* img_ptr)
 {
     cv::Mat* cvtImage = reinterpret_cast<cv::Mat*>(img_ptr);
@@ -44,4 +41,3 @@ int* mrwasm_detect_moon(void* img_ptr)
 }
 
 }
-
