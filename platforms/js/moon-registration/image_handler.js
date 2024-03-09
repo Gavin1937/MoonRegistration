@@ -10,6 +10,7 @@ class ImageHandler {
   constructor() {
     this.img_width = null;
     this.img_height = null;
+    this.data_url = null;
     this.img_data_length = null;
     this.buffer_ptr = null;
     this.image_ptr = null;
@@ -56,6 +57,7 @@ class ImageHandler {
     let self = this;
     return new Promise((resolve, reject) => {
       instance.ready.then(_ => {
+        self.data_url= data_url;
         let img = new Image();
         img.src = data_url;
         
@@ -143,11 +145,15 @@ class ImageHandler {
       instance.ready.then(async function() {
         try {
           if (self.is_valid_image()) {
+            if (self.data_url) {
+              await URL.revokeObjectURL(self.data_url);
+            }
             await instance._mrwasm_destroy_image(self.buffer_ptr, self.image_ptr);
           }
           
           self.img_width = null;
           self.img_height = null;
+          self.data_url = null;
           self.img_data_length = null;
           self.buffer_ptr = null;
           self.image_ptr = null;
@@ -163,27 +169,68 @@ class ImageHandler {
   /**
    * Read image pixel data from C++ to JS
    * 
-   * @returns {Uint8Array} Uint8Array
+   * @returns {Promise<Uint8Array>} Uint8Array
    */
-  get_uint8_array() {
-    return new Uint8Array(
-      instance.HEAP8.buffer,
-      this.buffer_ptr,
-      this.img_data_length
-    );
+  async get_uint8_array() {
+    let self = this;
+    return new Promise((resolve, reject) => {
+      instance.ready.then(async function() {
+        try {
+          resolve(new Uint8Array(
+            instance.HEAP8.buffer,
+            self.buffer_ptr,
+            self.img_data_length
+          ));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
   
   /**
    * Read image pixel data from C++ to JS
    * 
-   * @returns {Uint8ClampedArray} Uint8ClampedArray
+   * @returns {Promise<Uint8ClampedArray>} Uint8ClampedArray
    */
-  get_uint8_clamped_array() {
-    return new Uint8ClampedArray(
-      instance.HEAP8.buffer,
-      this.buffer_ptr,
-      this.img_data_length
-    );
+  async get_uint8_clamped_array() {
+    let self = this;
+    return new Promise((resolve, reject) => {
+      instance.ready.then(async function() {
+        try {
+          resolve(new Uint8ClampedArray(
+            instance.HEAP8.buffer,
+            self.buffer_ptr,
+            self.img_data_length
+          ));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+  
+  /**
+   * Convert ImageHandler to ImageData object for Canvas API
+   * 
+   * @returns {Promise<ImageData>} ImageData object
+   */
+  async to_ImageData() {
+    let self = this;
+    return new Promise((resolve, reject) => {
+      instance.ready.then(async function() {
+        try {
+          let data = await self.get_uint8_clamped_array();
+          resolve(new ImageData(
+            data,
+            self.img_width,
+            self.img_height
+          ));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
   
   /**

@@ -57,7 +57,7 @@ async function draw_layer_image(
           filter_px
         );
         let ret = new ImageHandler();
-        ret.load_from_ImageHandlerData(ptr);
+        await ret.load_from_ImageHandlerData(ptr);
         await instance._mrwasm_destroy_ImageHandlerData(ptr);
         
         resolve(ret);

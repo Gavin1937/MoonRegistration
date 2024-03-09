@@ -1,3 +1,5 @@
+#include <exception>
+
 #include "MoonRegistration/MoonDetect.hpp"
 
 
@@ -24,20 +26,27 @@ extern "C"
 
 int* mrwasm_detect_moon(void* img_ptr)
 {
-    cv::Mat* cvtImage = reinterpret_cast<cv::Mat*>(img_ptr);
-    
-    // clone data from shared heap to c++ local heap
-    // preventing potential modification from js side
-    mr::MoonDetector detector(cvtImage->clone());
-    mr::Circle circle = detector.detect_moon();
-    
-    // we must re-interpret mr::Circle into an int array
-    // in order for js to understand it
-    int* output = (int*)malloc(3*sizeof(int));
-    output[0] = circle.x;
-    output[1] = circle.y;
-    output[2] = circle.radius;
-    return output;
+    try
+    {
+        cv::Mat* cvtImage = reinterpret_cast<cv::Mat*>(img_ptr);
+        
+        // clone data from shared heap to c++ local heap
+        // preventing potential modification from js side
+        mr::MoonDetector detector(cvtImage->clone());
+        mr::Circle circle = detector.detect_moon();
+        
+        // we must re-interpret mr::Circle into an int array
+        // in order for js to understand it
+        int* output = (int*)malloc(3*sizeof(int));
+        output[0] = circle.x;
+        output[1] = circle.y;
+        output[2] = circle.radius;
+        return output;
+    }
+    catch(const std::exception& error)
+    {
+        throw error;
+    }
 }
 
 }

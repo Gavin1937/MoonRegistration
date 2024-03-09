@@ -21,14 +21,16 @@ include_directories("${OPENCV_SRC}/build_wasm")
 file(GLOB opencv_include_modules "${OPENCV_SRC}/modules/*/include")
 include_directories(${opencv_include_modules})
 
+# make sure opencv non-free is disabled
 if (MR_ENABLE_OPENCV_NONFREE)
     message(SEND_ERROR "OpenCV JS doesn't support Non-Free modules and XFeatures2D module")
 endif()
+set(MR_ENABLE_OPENCV_NONFREE OFF)
 
 # we need to add MoonRegistration library 2 directories above us
 # and also compile it as static library
 set(MR_BUILD_SHARED_LIBS OFF)
-set(OPENCV_DIR "${OPENCV_SRC}/build_wasm")
+set(OpenCV_DIR "${OPENCV_SRC}/build_wasm")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_BINARY_DIR}/MoonRegistration)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
@@ -97,7 +99,7 @@ endif()
 # report
 message(STATUS "============== MR WASM Build Config ==============")
 message(STATUS "OPENCV_SRC: ${OPENCV_SRC}")
-message(STATUS "OPENCV_DIR: ${OPENCV_DIR}")
+message(STATUS "OpenCV_DIR: ${OpenCV_DIR}")
 message(STATUS "INCLUDE_DIRECTORIES: ${OPENCV_SRC}/include;${OPENCV_SRC}/build_wasm;${opencv_include_modules}")
 message(STATUS "MRWASM_BUILD_MODULE: ${MRWASM_BUILD_MODULE}")
 message(STATUS "EXPORTED_FUNCTIONS: ${EXPORTED_FUNCTIONS}")
@@ -144,8 +146,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
     -s USE_ES6_IMPORT_META=1 \
-    -s ALLOW_MEMORY_GROWTH=1 \
     -s NO_DISABLE_EXCEPTION_CATCHING=1 \
+    -s ALLOW_MEMORY_GROWTH=1 \
     -s MAXIMUM_MEMORY=2GB \
     "
 )
