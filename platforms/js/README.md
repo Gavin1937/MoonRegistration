@@ -97,3 +97,8 @@ emmake make
 
 9. once building is done, you can start using `MoonRegistration.js` and `MoonRegistration.wasm`
 
+
+# Known Issues
+
+1. When building the library into WebAssembly, it will produce mismatched result (compared with C++ version) for some file, and for some other files it works perfectly.
+
