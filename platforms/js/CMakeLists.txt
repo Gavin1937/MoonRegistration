@@ -153,3 +153,27 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS
 )
 
 target_link_libraries(${PROJECT_NAME} MoonRegistration)
+
+
+# install as a js module package
+# setup install directory
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
+
+# install js wrapper layer
+install(
+    DIRECTORY "${CMAKE_SOURCE_DIR}/moon-registration/"
+    DESTINATION "moon-registration"
+    FILES_MATCHING
+    PATTERN "*.js"
+    PATTERN "*.json"
+    PATTERN "moon-registration/lib/*" EXCLUDE
+)
+# install wasm binary
+install(
+    FILES "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MoonRegistration.js"
+    DESTINATION "moon-registration/lib"
+)
+install(
+    FILES "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MoonRegistration.wasm"
+    DESTINATION "moon-registration/lib"
+)
