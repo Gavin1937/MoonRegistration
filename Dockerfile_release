@@ -10,19 +10,25 @@ WORKDIR /src/MoonRegistration
 COPY . .
 
 # build MoonRegistration lib in Release Mode
-RUN \
-    # compile linux version
-    mkdir /src/MoonRegistration/build_linux && cd /src/MoonRegistration/build_linux && \
+
+# compile linux version
+RUN mkdir /src/MoonRegistration/build_linux && cd /src/MoonRegistration/build_linux && \
     cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_SHARED_LIBS=OFF .. && \
-    cmake --build . && \
+    cmake --build . --config=Release && \
+    cmake --install . --prefix release && \
     cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_SHARED_LIBS=ON .. && \
-    cmake --build . && \
-    # compile wasm version
-    mkdir /src/MoonRegistration/platforms/js/build_wasm && \
+    cmake --build . --config=Release && \
+    cmake --install . --prefix release
+
+# compile wasm version
+RUN mkdir /src/MoonRegistration/platforms/js/build_wasm && \
     cd /src/MoonRegistration/platforms/js/build_wasm && \
-    emcmake cmake -DCMAKE_BUILD_TYPE=Release -DOPENCV_SRC="$OPENCV_SRC" .. && \
+    emcmake cmake -DCMAKE_BUILD_TYPE=Release -DOPENCV_SRC="$OPENCV_SRC" .. -DMRWASM_BUILD_MODULE="MoonDetect" && \
     emmake make && \
-    # pack release
-    cd /src/MoonRegistration && python3 PackReleaseZip.py
+    cmake --install . --prefix install && \
+    mkdir "release" && mv "install/moon-registration" "release"
+
+# pack release
+RUN cd /src/MoonRegistration && python3 PackReleaseZip.py
 
 ENTRYPOINT ["/bin/bash"]

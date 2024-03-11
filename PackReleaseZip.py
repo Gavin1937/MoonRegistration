@@ -36,17 +36,15 @@ if __name__ == "__main__":
         VERSION = file.read().strip();
     ARCHITECTURES = [
         ("linux-x86_64", "build_linux"),
-        ("wasm", "platforms/js/build_wasm"),
+        ("js", "platforms/js/build_wasm"),
     ]
     for ARC,BUILD_PATH in ARCHITECTURES:
         BUILD_PATH = ROOT/BUILD_PATH
         pack(ROOT, {
-            "name": "MoonRegistration",
+            "name": "",
             "archive_name": "MoonRegistration-"+VERSION+"-"+ARC+".zip",
             "singlefiles": [],
             "recursivefile": [
-                (BUILD_PATH, BUILD_PATH/"bin"),
-                (BUILD_PATH, BUILD_PATH/"lib"),
-                (ROOT, ROOT/"include" if "wasm" not in ARC else None),
+                (BUILD_PATH/"release", BUILD_PATH/"release"),
             ],
         })
