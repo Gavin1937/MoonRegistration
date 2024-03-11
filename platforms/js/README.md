@@ -128,6 +128,29 @@ When running CMake initialization, you can supply arguments to CMake.
 > [Checkout MoonRegistrate.js for detail](./moon-registration/MoonRegistrate.js)
 
 
+# Usage
+
+**This is an ES6 module**
+
+So simply import it like:
+
+```js
+import {functions_name} from 'moon-registration';
+```
+
+Or dynamically import it:
+
+```html
+<script>
+  ...
+  const mr = await import("./moon-registration/index.js");
+  ...
+</script>
+```
+
+You can checkout [demo folder](../../demo/README.md) for some simple usages.
+
+
 # Limitation & Known Issues
 
 1. WebAssembly version of the MoonDetect module will produce different result (compared with C++ version) for some file, and for some other files it works fine.

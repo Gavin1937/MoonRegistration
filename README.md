@@ -40,11 +40,11 @@ A Cross-Platform Multi-Language library for Moon Location Detection & Moon Image
 # Supported Language
 
 |                                  | MoonDetect Module | MoonRegistrate Module |
-|----------------------------------|-------------------|----------------------|
-| C++                              | ✅                 | ✅                    |
-| C (with abstracted api)          | ✅                 | ✅                    |
-| Python3                          | ✅                 | ✅                    |
-| JavaScript (with abstracted api) | ✅                 | ❌                    |
+|----------------------------------|-------------------|-----------------------|
+| C++                              | ✅                 | ✅                     |
+| C (with abstracted api)          | ✅                 | ✅                     |
+| Python3                          | ✅                 | ✅                     |
+| JavaScript (with abstracted api) | ✅                 | ✅                     |
 
 
 # [Usage Demonstration](./demo/README.md)
