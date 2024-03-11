@@ -74,3 +74,25 @@ python3 /path/to/demo_name.py
 import MoonRegistration as mr
 ```
 
+
+## JavaScript
+
+| Name                                                        | Module         | Description                                                                  |
+|-------------------------------------------------------------|----------------|------------------------------------------------------------------------------|
+| [MoonDetect_basic.html](./js/MoonDetect_basic.html)         | MoonDetect     | A basic usage of JavaScript Wrapper api, demonstrating MoonDetect module     |
+| [MoonRegistrate_basic.html](./js/MoonRegistrate_basic.html) | MoonRegistrate | A basic usage of JavaScript Wrapper api, demonstrating MoonRegistrate module |
+
+### Setup demo
+
+1. [Build JavaScript library by yourself](../platforms/js/README.md#build), or [download pre-built library](https://github.com/Gavin1937/MoonRegistration/releases/latest)
+2. Then, simply put the JavaScript module `moon-registration` folder into the demo folder `demo/js` (same level with all the html files).
+3. Launch a web server from `demo/js` folder. Here is an example of using Python3 to launch a web server at port `9000`:
+
+```sh
+cd demo/js
+python3 -m http.server 9000
+```
+
+4. While playing with demo applications, you can open your browser's devtools panel and take a look at the console output.
+5. If you encounters "Memory out of bounds" exception, [checkout this explanation](../platforms/js/README.md#limitation--known-issues)
+
