@@ -2,6 +2,14 @@
 # CHANGELOG
 
 <details open>
+<summary><strong style="font-size:140%">v0.1.9</strong></summary>
+
+* add proper javascript wrapper layer for the library
+
+</details>
+
+
+<details>
 <summary><strong style="font-size:140%">v0.1.8</strong></summary>
 
 * add python wrapper for the library
