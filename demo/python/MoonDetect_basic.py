@@ -36,7 +36,7 @@ for dirEntry in folder.rglob('*'):
         # detector.hough_circles_algorithm = mr.MoonDetect.HoughCirclesAlgorithm.HOUGH_GRADIENT
         # # HOUGH_GRADIENT_ALT algorithm only available with OpenCV >= 4.8.1
         # detector.hough_circles_algorithm = mr.MoonDetect.HoughCirclesAlgorithm.HOUGH_GRADIENT_ALT
-            
+        
         # calculate moon position
         final_circle = detector.detect_moon()
         

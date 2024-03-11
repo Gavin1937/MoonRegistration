@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>MoonDetect_basic</title>
+</head>
+
+<body>
+  <input type="file" id="file-selector" accept=".jpg, .jpeg, .png" />
+  <div id="result"></div>
+  <div id="canvas"></div>
+</body>
+
+<script>
+  async function onImageLoad(event) {
+    const file_object = event.target.files[0];
+    
+    try {
+      // dynamically import ES6 module
+      const mr = await import("./moon-registration/index.js")
+      console.log('version:', await mr.version());
+      
+      // load image to WASM from File object
+      console.log('file:', file_object.name);
+      image_handler = new mr.ImageHandler();
+      if (!await image_handler.load_from_fileobject(file_object)) {
+        throw new Error('Cannot load file from File object');
+      }
+      // // following load methods also available
+      // await image_handler.load_from_dataurl(URL.createObjectURL(...));
+      // await image_handler.load_from_blobobj(new Blob(...));
+      // await image_handler.load_from_uint8array(new Uint8Array(...));
+      
+      // convert ImageHandler to ImageData for Canvas API
+      const img_data = await image_handler.to_ImageData();
+      const img_width = image_handler.img_width;
+      const img_height = image_handler.img_height;
+      
+      // calculate moon position
+      let circle = await mr.detect_moon(image_handler);
+      
+      // destroy image after we are done
+      // You should destroy resources thats not need anymore to avoid memory leak
+      if (!await image_handler.destroy_image()) {
+        throw new Error('Failed to destroy image');
+      }
+      
+      
+      // printing out result
+      let square = await mr.circle_to_square(circle)
+      let rectangle = await mr.circle_to_rectangle(circle);
+      console.log(circle);
+      console.log(square);
+      console.log(rectangle);
+      
+      console.log(img_data);
+      console.log('img_width:', img_width);
+      console.log('img_height:', img_height);
+      
+      let result_div = document.getElementById('result');
+      let p1 = document.createElement('p')
+      p1.innerText = `Circle: ${JSON.stringify(circle)}`;
+      result_div.append(p1);
+      let p2 = document.createElement('p')
+      p2.innerText = `Square: ${JSON.stringify(square)}`;
+      result_div.append(p2);
+      let p3 = document.createElement('p')
+      p3.innerText = `Rectangle: ${JSON.stringify(rectangle)}`;
+      result_div.append(p3);
+      let p4 = document.createElement('p')
+      p4.innerText = `img_width: ${img_width}`;
+      result_div.append(p4);
+      let p5 = document.createElement('p')
+      p5.innerText = `img_height: ${img_height}`;
+      result_div.append(p5);
+      
+      // draw input image to a Canvas
+      let canvas = document.createElement('Canvas');
+      canvas.width = img_width;
+      canvas.height = img_height;
+      let ctx = canvas.getContext('2d');
+      ctx.putImageData(img_data, 0, 0);
+      
+      let div_canvas = document.getElementById('canvas');
+      div_canvas.innerHTML = '';
+      canvas.style.width = '60%';
+      canvas.style.height = '60%';
+      div_canvas.append(canvas);
+      
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (image_handler) {
+        if (!await image_handler.destroy_image()) {
+          throw new Error('Failed to destroy image');
+        }
+      }
+    }
+  }
+  
+  document.querySelector('#file-selector').onchange = onImageLoad;
+</script>
+
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>MoonRegistrate_basic</title>
+</head>
+
+<body>
+  <form id="form" onsubmit="onSubmit(event)">
+    <input type="file" id="file-selector-user" accept=".jpg, .jpeg, .png" value="user image">user image</input>
+    <br>
+    <input type="file" id="file-selector-model" accept=".jpg, .jpeg, .png" value="model image">model image</input>
+    <br>
+    <input type="file" id="file-selector-layer" accept=".jpg, .jpeg, .png" value="layer image">layer image</input>
+    <br>
+    <select id="algorithm-select">
+      <option selected value="SIFT">SIFT</option>
+      <option value="ORB">ORB</option>
+      <option value="AKAZE">AKAZE</option>
+      <option value="BRISK">BRISK</option>
+    </select>
+    <span>algorithm</span>
+    <br>
+    <input type="number" step="0.0001" id="transparency-input" value="1.0" placeholder="1.0">layer_image_transparency</input>
+    <br>
+    <input type="text" id="filter-px-input" value="0xff000000" placeholder="0xff000000">filter_px integer (Use -1 to disable filtering)</input>
+    <br>
+    <input type="submit" />
+  </form>
+  <div id="result"></div>
+  <div id="canvas"></div>
+</body>
+
+<script>
+  async function destroy_ImageHandler(handler) {
+    if (handler) {
+      if (!await handler.destroy_image()) {
+        throw new Error('Failed to destroy image');
+      }
+    }
+  }
+  async function onSubmit(event) {
+    event.preventDefault();
+    let user_image_handler = null;
+    let model_image_handler = null;
+    let layer_image_handler = null;
+    let output_image = null;
+    
+    try {
+      // dynamically import ES6 module
+      var mr = await import("./moon-registration/index.js");
+      console.log('version:', await mr.version());
+      
+      // load user image from File object
+      let user_input = document.querySelector('#file-selector-user');
+      let user_file = user_input.files[0];
+      console.log(user_file.name);
+      user_image_handler = new mr.ImageHandler();
+      await user_image_handler.load_from_fileobject(user_file);
+      
+      // load model image from File object
+      let model_input = document.querySelector('#file-selector-model');
+      let model_file = model_input.files[0];
+      console.log(model_file.name);
+      model_image_handler = new mr.ImageHandler();
+      await model_image_handler.load_from_fileobject(model_file);
+      
+      // load layer image from File object
+      let layer_input = document.querySelector('#file-selector-layer');
+      let layer_file = layer_input.files[0];
+      console.log(layer_file.name);
+      layer_image_handler = new mr.ImageHandler();
+      await layer_image_handler.load_from_fileobject(layer_file);
+      
+      // // following load methods also available
+      // await image_handler.load_from_dataurl(URL.createObjectURL(...));
+      // await image_handler.load_from_blobobj(new Blob(...));
+      // await image_handler.load_from_uint8array(new Uint8Array(...));
+      
+      
+      // read algorithm
+      let algorithm_select = document.querySelector('#algorithm-select');
+      let algorithm = algorithm_select.value;
+      if (algorithm === "SIFT")
+        algorithm = mr.RegistrationAlgorithms.SIFT;
+      else if (algorithm === "ORB")
+        algorithm = mr.RegistrationAlgorithms.ORB;
+      else if (algorithm === "AKAZE")
+        algorithm = mr.RegistrationAlgorithms.AKAZE;
+      else if (algorithm === "BRISK")
+        algorithm = mr.RegistrationAlgorithms.BRISK;
+      else
+        algorithm = mr.RegistrationAlgorithms.INVALID_ALGORITHM;
+      console.log('algorithm:', algorithm);
+      
+      // read layer_image_transparency
+      // this is a 0~1 float representing the percentage of layer image transparency
+      let transparency_input = document.querySelector('#transparency-input');
+      let transparency = Number(transparency_input.value);
+      console.log('transparency:', transparency);
+      
+      // read filter_px
+      // This is an int to represent a 4-bytes unsigned char* array.
+      // This is represents the pixel value with color channel ordered in BGRA.
+      // And the default value is representing pixel value (0,0,0,255) in little-endian.
+      // 0xff000000 => A(0xff), R(0x00), G(0x00), B(0x00)
+      // e.g. 0x01020304 => A(0x04), R(0x03), G(0x02), B(0x01)
+      // Use -1 to disable filtering
+      let filter_px_input = document.querySelector('#filter-px-input');
+      let filter_px = Number(filter_px_input.value);
+      console.log('filter_px:', filter_px);
+      
+      
+      // run mr::MoonRegistrate::draw_layer_image
+      output_image = await mr.draw_layer_image(
+        user_image_handler,
+        model_image_handler,
+        layer_image_handler,
+        algorithm, transparency, filter_px
+      );
+      console.log('output_image:', output_image);
+      
+      
+      // destroy user, model, & layer images
+      // You should destroy resources thats not need anymore to avoid memory leak
+      destroy_ImageHandler(user_image_handler);
+      destroy_ImageHandler(model_image_handler);
+      destroy_ImageHandler(layer_image_handler);
+      
+      
+      // draw input image to a Canvas
+      let canvas = document.createElement('Canvas');
+      canvas.width = output_image.img_width;
+      canvas.height = output_image.img_height;
+      let ctx = canvas.getContext('2d');
+      const imgdata = await output_image.to_ImageData();
+      ctx.putImageData(imgdata, 0, 0);
+      delete imgdata;
+      
+      let div_canvas = document.getElementById('canvas');
+      div_canvas.innerHTML = '';
+      canvas.style.width = '60%';
+      canvas.style.height = '60%';
+      div_canvas.append(canvas);
+      
+      // destroy output image
+      destroy_ImageHandler(output_image);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      destroy_ImageHandler(user_image_handler);
+      destroy_ImageHandler(model_image_handler);
+      destroy_ImageHandler(layer_image_handler);
+      destroy_ImageHandler(output_image);
+    }
+  }
+</script>
+
+</html>
