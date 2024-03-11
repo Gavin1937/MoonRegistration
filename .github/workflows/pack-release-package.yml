@@ -38,12 +38,12 @@ jobs:
         tag: '${{ env.RELEASE_VERSION }}'
         overwrite: true
     
-    - name: Release wasm
+    - name: Release js
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: './MoonRegistration-${{ env.RELEASE_VERSION }}-wasm.zip'
-        asset_name: 'MoonRegistration-${{ env.RELEASE_VERSION }}-wasm.zip'
+        file: './MoonRegistration-${{ env.RELEASE_VERSION }}-js.zip'
+        asset_name: 'MoonRegistration-${{ env.RELEASE_VERSION }}-js.zip'
         tag: '${{ env.RELEASE_VERSION }}'
         overwrite: true
 
