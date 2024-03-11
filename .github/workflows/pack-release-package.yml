@@ -27,7 +27,7 @@ jobs:
     - name: Copy Package Out
       run: |
         docker cp moonregistration-container:"/src/MoonRegistration/MoonRegistration-${{ env.RELEASE_VERSION }}-linux-x86_64.zip" .
-        docker cp moonregistration-container:"/src/MoonRegistration/MoonRegistration-${{ env.RELEASE_VERSION }}-wasm.zip" .
+        docker cp moonregistration-container:"/src/MoonRegistration/MoonRegistration-${{ env.RELEASE_VERSION }}-js.zip" .
     
     - name: Release linux-x86_64
       uses: svenstaro/upload-release-action@v2
