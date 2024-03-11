@@ -1,0 +1,21 @@
+{
+    "ProjectName": "MoonRegistration",
+    "Version": "./VERSION",
+    "Matrix": null,
+    "Cmd": {
+        "WorkingDir": "$REPO_ROOT/",
+        "BuildDirName": "build",
+        "BuildCmd": [
+            "cmake -DCMAKE_BUILD_TYPE=Release -S . -B \"$BuildDirName\"",
+            "cmake --build \"$BuildDirName\" --config=Release",
+            "cmake --install \"$BuildDirName\" --prefix \"$BuildDirName/install\""
+        ],
+        "PackRelease": {
+            "ArchiveBaseName": "MoonRegistration",
+            "Files": [],
+            "Folders": [
+                "$BuildDirName/install"
+            ]
+        }
+    }
+}
