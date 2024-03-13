@@ -70,9 +70,10 @@ class ImageHandler {
           canvas.height = self.img_height;
           
           try {
+            // use colorSpace srgb so we can keep the consistency
+            const ctx = canvas.getContext('2d', {colorSpace: 'srgb'});
             // Draw image onto canvas
             // we MUST draw img, otherwise canvas won't contain any data
-            const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
             
             const canvas_image = ctx.getImageData(0, 0, self.img_width, self.img_height);
