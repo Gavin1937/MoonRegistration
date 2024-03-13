@@ -133,7 +133,9 @@
       let canvas = document.createElement('Canvas');
       canvas.width = output_image.img_width;
       canvas.height = output_image.img_height;
-      let ctx = canvas.getContext('2d');
+      let ctx = canvas.getContext('2d', {
+        'colorSpace': 'srgb'
+      });
       const imgdata = await output_image.to_ImageData();
       ctx.putImageData(imgdata, 0, 0);
       delete imgdata;

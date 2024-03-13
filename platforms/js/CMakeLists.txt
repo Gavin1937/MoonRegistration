@@ -157,7 +157,9 @@ target_link_libraries(${PROJECT_NAME} MoonRegistration)
 
 # install as a js module package
 # setup install directory
-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
+endif()
 
 # install js wrapper layer
 install(

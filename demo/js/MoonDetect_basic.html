@@ -79,7 +79,9 @@
       let canvas = document.createElement('Canvas');
       canvas.width = img_width;
       canvas.height = img_height;
-      let ctx = canvas.getContext('2d');
+      let ctx = canvas.getContext('2d', {
+        'colorSpace': 'srgb'
+      });
       ctx.putImageData(img_data, 0, 0);
       
       let div_canvas = document.getElementById('canvas');
