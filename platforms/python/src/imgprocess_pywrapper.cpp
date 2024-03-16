@@ -372,6 +372,9 @@ void init_imgprocess(py::module &module)
         py::arg("secondary"),
         R"pbdoc(
     Sync the width & height of secondary image to primary image
+    Resize secondary image with aspect ratio base on its longer side.
+    If secondary.longer_side is width, resize to primary.width
+    If secondary.longer_side is height, resize to primary.height
     
     Parameters:
       - primary: image for sync reference
@@ -443,7 +446,8 @@ void init_imgprocess(py::module &module)
     Note:
       - this function is designed to work with different number of color channels
       - if foreground size is bigger then background size, this function will call mr::sync_img_size()
-        to sync it with background
+        to sync it with background. However, if background and foreground images have different shape,
+        width/height ratio hugely different, this function would likely causing problems.
       - image_out will follow the maximum number of channels between two input images,
         thus if one input is grayscale image and another is not, then it will become
         the blue channel of image_out, as OpenCV uses BGRA pixel order.
@@ -479,7 +483,8 @@ void init_imgprocess(py::module &module)
     Note:
       - this function is designed to work with different number of color channels
       - if foreground size is bigger then background size, this function will call mr::sync_img_size()
-        to sync it with background
+        to sync it with background. However, if background and foreground images have different shape,
+        width/height ratio hugely different, this function would likely causing problems.
       - if foreground number of channel is greater then background, this function will sync
         its number of channel with background
       - when using filter_px, we only read number of elements corresponding to

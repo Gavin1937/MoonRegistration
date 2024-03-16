@@ -236,7 +236,23 @@ EXPORT_SYMBOL void cut_image_from_circle(
 
 EXPORT_SYMBOL void sync_img_size(const cv::Mat &primary, cv::Mat &secondary)
 {
-    cv::resize(secondary, secondary, primary.size());
+    int primary_width = primary.size[1];
+    int primary_height = primary.size[0];
+    mr::ImageShape secondary_shape = mr::calc_image_shape(secondary);
+    
+    float ratio_out;
+    int param_width = -1;
+    int param_height = -1;
+    int param_longer_side = -1;
+    if (secondary_shape.longer_side == secondary_shape.width)
+        param_width = primary_width;
+    else
+        param_height = primary_height;
+    
+    mr::resize_with_aspect_ratio(
+        secondary, secondary, ratio_out,
+        param_width, param_height, param_longer_side
+    );
 }
 
 
@@ -379,7 +395,7 @@ EXPORT_SYMBOL void stack_imgs(
         max_channel, transparency_factor,
         filter_px, &select_fore_px_val
     ]
-    (cv::Vec4b& unused_param, const int* position)
+    (cv::Vec4b&, const int* position)
     {
         // accessing image pixel using uchar* to the underlying cv::Mat,
         // so we can handle images with unknown channel number easier
@@ -539,7 +555,7 @@ EXPORT_SYMBOL void stack_imgs_in_place(
         transparency_factor,
         filter_px, &select_fore_px_val
     ]
-    (cv::Vec4b& unused_param, const int* position)
+    (cv::Vec4b&, const int* position)
     {
         // accessing image pixel using uchar* to the underlying cv::Mat,
         // so we can handle images with unknown channel number easier
