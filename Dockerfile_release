@@ -3,7 +3,7 @@ FROM gavin1937/emsdk-cv-wasm:4.9.0
 # setup enviroments
 RUN \
     apt update -y && \
-    apt install -y libopencv-dev nano vim less git
+    apt install -y git libpython3-dev
 
 # setup working dir & copy source code
 WORKDIR /src/MoonRegistration
@@ -11,24 +11,9 @@ COPY . .
 
 # build MoonRegistration lib in Release Mode
 
-# compile linux version
-RUN mkdir /src/MoonRegistration/build_linux && cd /src/MoonRegistration/build_linux && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_SHARED_LIBS=OFF .. && \
-    cmake --build . --config=Release && \
-    cmake --install . --prefix release && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DMR_BUILD_SHARED_LIBS=ON .. && \
-    cmake --build . --config=Release && \
-    cmake --install . --prefix release
-
-# compile wasm version
-RUN mkdir /src/MoonRegistration/platforms/js/build_wasm && \
-    cd /src/MoonRegistration/platforms/js/build_wasm && \
-    emcmake cmake -DCMAKE_BUILD_TYPE=Release -DOPENCV_SRC="$OPENCV_SRC" -DMRWASM_BUILD_MODULE="All" .. && \
-    emmake make && \
-    cmake --install . --prefix install && \
-    mkdir "release" && mv "install/moon-registration" "release"
-
-# pack release
-RUN cd /src/MoonRegistration && python3 PackReleaseZip.py
+RUN python3 Release.py ./release_config.json
+RUN python3 Release.py ./platforms/python/release_config.json
+RUN python3 Release.py ./platforms/js/release_config.json
+RUN mkdir archives && mv *.zip archives
 
 ENTRYPOINT ["/bin/bash"]

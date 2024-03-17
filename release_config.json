@@ -1,20 +1,34 @@
 {
     "ProjectName": "MoonRegistration",
-    "Version": "./VERSION",
-    "Matrix": null,
+    "Version": "$REPO_ROOT/VERSION",
+    "Matrix": {
+        "nonfree": [
+            {
+                "value": "0",
+                "attributes": [""]
+            },
+            {
+                "value": "1",
+                "attributes": ["nonfree"]
+            }
+        ]
+    },
     "Cmd": {
         "WorkingDir": "$REPO_ROOT/",
         "BuildDirName": "build",
         "BuildCmd": [
-            "cmake -DCMAKE_BUILD_TYPE=Release -S . -B \"$BuildDirName\"",
-            "cmake --build \"$BuildDirName\" --config=Release",
-            "cmake --install \"$BuildDirName\" --prefix \"$BuildDirName/install\""
+            "cmake -DCMAKE_BUILD_TYPE=Release -S . -B $BuildDirName -DMR_BUILD_SHARED_LIBS=OFF -DMR_ENABLE_OPENCV_NONFREE=$nonfree",
+            "cmake --build $BuildDirName --config=Release",
+            "cmake --install $BuildDirName --prefix $BuildDirName/install",
+            "cmake -DCMAKE_BUILD_TYPE=Release -S . -B $BuildDirName -DMR_BUILD_SHARED_LIBS=ON -DMR_ENABLE_OPENCV_NONFREE=$nonfree",
+            "cmake --build $BuildDirName --config=Release",
+            "cmake --install $BuildDirName --prefix $BuildDirName/install"
         ],
         "PackRelease": {
             "ArchiveBaseName": "MoonRegistration",
             "Files": [],
             "Folders": [
-                "$BuildDirName/install"
+                "$WorkingDir/$BuildDirName/install"
             ]
         }
     }

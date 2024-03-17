@@ -1,0 +1,34 @@
+{
+    "ProjectName": "MoonRegistration-js",
+    "Version": "$REPO_ROOT/VERSION",
+    "Matrix": {
+        "build_module": [
+            {
+                "value": "MoonDetect",
+                "attributes": ["detect"]
+            },
+            {
+                "value": "MoonRegistrate",
+                "attributes": ["registrate"]
+            }
+        ]
+    },
+    "Cmd": {
+        "WorkingDir": "$REPO_ROOT/platforms/js",
+        "BuildDirName": "build_wasm",
+        "BuildCmd": [
+            "emcmake cmake -DCMAKE_BUILD_TYPE=Release -DOPENCV_SRC=$OPENCV_SRC -DMRWASM_BUILD_MODULE=$build_module -S . -B $BuildDirName",
+            "cd $BuildDirName && emmake make",
+            "cmake --install $BuildDirName --prefix $BuildDirName/install",
+            "rm -rf $WorkingDir/$BuildDirName/install/lib",
+            "rm -rf $WorkingDir/$BuildDirName/install/include"
+        ],
+        "PackRelease": {
+            "ArchiveBaseName": "",
+            "Files": [],
+            "Folders": [
+                "$WorkingDir/$BuildDirName/install"
+            ]
+        }
+    }
+}

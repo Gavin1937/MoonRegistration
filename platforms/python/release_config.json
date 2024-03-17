@@ -1,0 +1,30 @@
+{
+    "ProjectName": "MoonRegistration-python",
+    "Version": "$REPO_ROOT/VERSION",
+    "Matrix": {
+        "nonfree": [
+            {
+                "value": "",
+                "attributes": [""]
+            },
+            {
+                "value": "--mr-enable-opencv-nonfree",
+                "attributes": ["nonfree"]
+            }
+        ]
+    },
+    "Cmd": {
+        "WorkingDir": "$REPO_ROOT/platforms/python",
+        "BuildDirName": "build",
+        "BuildCmd": [
+            "python setup.py bdist_wheel $nonfree"
+        ],
+        "PackRelease": {
+            "ArchiveBaseName": "",
+            "Files": [],
+            "Folders": [
+                "$WorkingDir/dist"
+            ]
+        }
+    }
+}

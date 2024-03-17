@@ -23,8 +23,10 @@
 /**/*output*/
 /**/*data*/
 /testing/
+/archives/
 
 # white list
 !demo/data
 !demo/data/*
 !imgs/*
+!**/release_config.json

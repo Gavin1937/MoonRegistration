@@ -1,6 +1,16 @@
 *.bat
 *.ps1
 *.sh
+*.zip
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
 
 .git
 .vscode
@@ -8,3 +18,4 @@
 **/build_wasm
 **/output
 testing
+archives

@@ -1,11 +1,9 @@
-FROM ubuntu:22.04
+FROM gavin1937/emsdk-cv-wasm:4.9.0
 
 # setup enviroments
-ENV DEBIAN_FRONTEND=noninteractive \
-    TZ=America/Los_Angeles
 RUN \
     apt update -y && \
-    apt install -y tzdata gcc g++ gdb cmake make libopencv-dev nano vim less git
+    apt install -y gdb nano vim less git
 
 # setup working dir & copy source code
 WORKDIR /src/MoonRegistration
