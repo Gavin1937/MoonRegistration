@@ -19,31 +19,21 @@ jobs:
         echo "VERSION_STR=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
     
     - name: Build & Package
-      run: docker build -t moonregistration -f Dockerfile_release .
+      run: docker build -t moonregistration -f ./dockerfiles/release_env.dockerfile .
     
     - name: Create Container
       run: docker create --name moonregistration-container moonregistration
     
     - name: Copy Package Out
       run: |
-        docker cp moonregistration-container:"/src/MoonRegistration/MoonRegistration-${{ env.RELEASE_VERSION }}-linux-x86_64.zip" .
-        docker cp moonregistration-container:"/src/MoonRegistration/MoonRegistration-${{ env.RELEASE_VERSION }}-js.zip" .
+        docker cp moonregistration-container:"/src/MoonRegistration/archives/" .
     
-    - name: Release linux-x86_64
+    - name: Release archives
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: './MoonRegistration-${{ env.RELEASE_VERSION }}-linux-x86_64.zip'
-        asset_name: 'MoonRegistration-${{ env.RELEASE_VERSION }}-linux-x86_64.zip'
-        tag: '${{ env.RELEASE_VERSION }}'
+        file: './archives/MoonRegistration*.zip'
+        file_glob: true
         overwrite: true
-    
-    - name: Release js
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: './MoonRegistration-${{ env.RELEASE_VERSION }}-js.zip'
-        asset_name: 'MoonRegistration-${{ env.RELEASE_VERSION }}-js.zip'
         tag: '${{ env.RELEASE_VERSION }}'
-        overwrite: true
 

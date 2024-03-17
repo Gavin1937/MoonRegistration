@@ -14,7 +14,7 @@ If you just want to try out this library, you can build it with docker using fol
 1. Under the repository root, build Docker image
 
 ```sh
-docker build -t moonregistration_python -f .\Dockerfile_python .
+docker build -t moonregistration_python -f ./dockerfiles/python_demo.dockerfile .
 ```
 
 2. Run Docker container

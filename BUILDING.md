@@ -20,7 +20,7 @@ This project uses CMake (version >= 3.11) as its build system. You need to [inst
 build the docker image with:
 
 ```sh
-docker build -t moonregistration -f .\Dockerfile .
+docker build -t moonregistration -f ./dockerfiles/cpp_demo.dockerfile .
 ```
 
 once docker image is built, all MoonRegistration library is inside the container, launch the container by:
@@ -38,7 +38,7 @@ all the build environments are set, so you can easily rebuild the library follow
 build the docker image with:
 
 ```sh
-docker build -t moonregistration -f .\Dockerfile_release .
+docker build -t moonregistration -f ./dockerfiles/release_env.dockerfile .
 ```
 
 once docker image is built, all MoonRegistration library is inside the container, launch the container by:
@@ -60,7 +60,7 @@ You can use Docker container to develope this library.
   * After installation, you can use [VSCode Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) to search & execute command: `Dev Containers: Reopen in Container`
   * This command will reopen this folder inside a Dev Container
   * If git is breaking inside Dev Container, follow [this doc](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials) to fix it.
-* If you don't use VSCode as your Editor, you can launch a container from [./Dockerfile_dev](./Dockerfile_dev) and trying to connect to it.
+* If you don't use VSCode as your Editor, you can launch a container from [./dockerfiles/dev_env.dockerfile](./dockerfiles/dev_env.dockerfile) and trying to connect to it.
   * Remember to mount repository root into this container.
 
 

@@ -12,7 +12,7 @@ We build C++ library into WebAssembly, and then wrap it with a JavaScript abstra
 1. Under the repository root, build Docker image with:
 
 ```sh
-docker build -t moonregistration_wasm -f .\Dockerfile_wasm .
+docker build -t moonregistration_wasm -f ./dockerfiles/js_wasm_demo.dockerfile .
 ```
 
 2. Once docker image is built, all MoonRegistration library is inside the container, launch the container by:
@@ -78,12 +78,12 @@ python ./platforms/js/build_js.py build_wasm --build_wasm
 
 * Also note that, you can add cmake flag for opencv by supplying python flag `--cmake_option`. This flag allows you to build opencv wasm library with opencv_contrib and other opencv flags.
   * [learn more in here](https://docs.opencv.org/4.x/d4/da1/tutorial_js_setup.html)
-  * [Checkout Dockerfile_wasm for some example](../../Dockerfile_wasm)
+  * [Checkout js_wasm_demo.dockerfile for some example](../../dockerfiles/js_wasm_demo.dockerfile)
   * [Checkout how I build OpenCV in this Dockerfile](https://github.com/Gavin1937/emsdk-cv-wasm/blob/main/Dockerfile)
 
-6. go to `MoonRegistration` folder and goto `platforms/js` folder
-7. create a new directory called `build_wasm` and go inside
-8. build MoonRegistration wasm
+1. go to `MoonRegistration` folder and goto `platforms/js` folder
+2. create a new directory called `build_wasm` and go inside
+3. build MoonRegistration wasm
 
 CMake initialize
 
