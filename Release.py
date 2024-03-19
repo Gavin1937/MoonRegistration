@@ -5,6 +5,7 @@ import os, sys
 import platform, shutil
 from pathlib import Path
 from zipfile import ZipFile
+from itertools import product
 from subprocess import Popen, PIPE, CalledProcessError
 
 
@@ -47,18 +48,33 @@ def collectMetadata():
     
     return metadata
 
-def build(metadata:dict, cmds:list, env:dict):
-    for cmd in cmds:
-        cmd = os.path.expandvars(cmd)
-        cmd = cmd.split(' ')
-        if cmd[0] == 'python':
-            exe = sys.executable
+def build(metadata:dict, cmds:list, cmd_matrix:dict, env:dict):
+    def _update_cmd_env():
+        tmp_env = env.copy()
+        if cmd_matrix is not None:
+            tmp_env = env.copy()
+            expanded_matrix = (dict(zip(cmd_matrix.keys(), values)) for values in product(*cmd_matrix.values()))
+            for i in expanded_matrix:
+                for k,v in i.items():
+                    tmp_env[k] = v
+                os.environ = tmp_env
+                yield i
         else:
-            exe = shutil.which(cmd[0])
-        exe = exe if exe is not None else cmd[0]
-        newcmd = [exe, *cmd[1:]] if metadata['platform'] == 'win' else ' '.join([exe, *cmd[1:]])
-        print(newcmd)
-        execute(newcmd, env, env['WorkingDir'])
+            yield dict()
+    
+    for cmd_env in _update_cmd_env():
+        print('cmd env:', cmd_env)
+        for cmd in cmds:
+            cmd = os.path.expandvars(cmd)
+            cmd = cmd.split(' ')
+            if cmd[0] == 'python':
+                exe = sys.executable
+            else:
+                exe = shutil.which(cmd[0])
+            exe = exe if exe is not None else cmd[0]
+            newcmd = [exe, *cmd[1:]] if metadata['platform'] == 'win' else ' '.join([exe, *cmd[1:]])
+            print(newcmd)
+            execute(newcmd, env, env['WorkingDir'])
 
 def pack(zip_filename:str, metadata:dict, config:dict, env:dict):
     with ZipFile(zip_filename, 'w') as zp:
@@ -76,6 +92,7 @@ def pack(zip_filename:str, metadata:dict, config:dict, env:dict):
             for file in folder.rglob('*'):
                 if file.is_file():
                     zp.write(file, f"{config['ArchiveBaseName']}/{file.relative_to(folder)}")
+    print('output to:', zip_filename)
 
 
 def main():
@@ -126,20 +143,22 @@ def main():
         print('working_dir:', working_dir)
         print('build_dir_name:', build_dir_name)
         
-        build(metadata, config['Cmd']['BuildCmd'], loc_build_env)
+        build_cmd_matrix = config['Cmd']['BuildCmdMatrix'] if 'BuildCmdMatrix' in config['Cmd'] else None
+        build(metadata, config['Cmd']['BuildCmd'], build_cmd_matrix, loc_build_env)
         
         attribute_str = '-'.join(attributes)
         if len(attribute_str) > 0:
             attribute_str = '-'+attribute_str
         package_name = f'{config["ProjectName"]}-{metadata["app_version"]}-{metadata["platform"]}{metadata["architecture"]}{attribute_str}.zip'
         pack(package_name, metadata, config['Cmd']['PackRelease'], loc_build_env)
+        os.environ = loc_build_env
     
     if matrix is None:
         _build_once(build_env, '')
     else:
         tmp_build_env = build_env.copy()
         for k,v in matrix.items():
-            print(k, v)
+            print('build env:', k, v)
             for i in v:
                 tmp_build_env[k] = i['value']
                 _build_once(tmp_build_env, i['attributes'])

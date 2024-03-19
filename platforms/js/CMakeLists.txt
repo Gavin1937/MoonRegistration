@@ -180,3 +180,10 @@ install(
     FILES "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MoonRegistration.wasm"
     DESTINATION "moon-registration/lib"
 )
+# install VERSION
+install(
+    FILES
+        "${CMAKE_CURRENT_LIST_DIR}/../../VERSION"
+        "${CMAKE_CURRENT_LIST_DIR}/../../LICENSE"
+    DESTINATION "moon-registration"
+)

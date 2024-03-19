@@ -5,4 +5,5 @@ global-exclude *.pyc
 include requirements.txt
 include .gitignore
 include ../../LICENSE
+include ../../VERSION
 include MANIFEST.in

@@ -27,6 +27,10 @@ VERSION = {}
 with open(ROOT/'../../VERSION', 'r', encoding='utf-8') as file:
     VERSION = {'__version__':file.read().strip()}
 
+LICENSE = None
+with open(ROOT/'../../LICENSE', 'r', encoding='utf-8') as file:
+    LICENSE = file.read()
+
 requirements = []
 with open('requirements.txt', 'r', encoding='utf-8') as file:
     requirements = [line.strip() for line in file.readlines() if len(line.strip()) > 0]
@@ -229,6 +233,7 @@ def main():
     setup(
         name="MoonRegistration",
         version=VERSION['__version__'],
+        license=LICENSE,
         description="Python wrapper for MoonRegistration library",
         author="Gavin1937",
         url='https://github.com/Gavin1937/MoonRegistration',

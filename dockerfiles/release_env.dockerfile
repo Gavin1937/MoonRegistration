@@ -14,6 +14,6 @@ COPY . .
 RUN python3 Release.py ./release_config.json
 RUN python3 Release.py ./platforms/python/release_config.json
 RUN python3 Release.py ./platforms/js/release_config.json
-RUN mkdir archives && mv *.zip archives
+RUN if [ -d "archives" ]; then rm -rf archives; fi && mkdir archives && mv *.zip archives
 
 ENTRYPOINT ["/bin/bash"]

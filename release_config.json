@@ -4,11 +4,11 @@
     "Matrix": {
         "nonfree": [
             {
-                "value": "0",
+                "value": "OFF",
                 "attributes": [""]
             },
             {
-                "value": "1",
+                "value": "ON",
                 "attributes": ["nonfree"]
             }
         ]
@@ -16,13 +16,18 @@
     "Cmd": {
         "WorkingDir": "$REPO_ROOT/",
         "BuildDirName": "build",
+        "BuildCmdMatrix": {
+            "sharelib": [
+                "OFF", "ON"
+            ],
+            "buildtype": [
+                "Release", "Debug"
+            ]
+        },
         "BuildCmd": [
-            "cmake -DCMAKE_BUILD_TYPE=Release -S . -B $BuildDirName -DMR_BUILD_SHARED_LIBS=OFF -DMR_ENABLE_OPENCV_NONFREE=$nonfree",
-            "cmake --build $BuildDirName --config=Release",
-            "cmake --install $BuildDirName --prefix $BuildDirName/install",
-            "cmake -DCMAKE_BUILD_TYPE=Release -S . -B $BuildDirName -DMR_BUILD_SHARED_LIBS=ON -DMR_ENABLE_OPENCV_NONFREE=$nonfree",
-            "cmake --build $BuildDirName --config=Release",
-            "cmake --install $BuildDirName --prefix $BuildDirName/install"
+            "cmake -DCMAKE_BUILD_TYPE=$buildtype -S . -B $BuildDirName -DMR_BUILD_SHARED_LIBS=$sharelib -DMR_ENABLE_OPENCV_NONFREE=$nonfree",
+            "cmake --build $BuildDirName --config=$buildtype",
+            "cmake --install $BuildDirName --prefix $BuildDirName/install --config=$buildtype"
         ],
         "PackRelease": {
             "ArchiveBaseName": "MoonRegistration",

@@ -12,8 +12,8 @@ COPY . .
 # build MoonRegistration lib
 RUN cd /src/MoonRegistration && \
     mkdir build && \
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug && cmake --build build && \
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug && cmake --build build --config=Debug && \
     cd demo && mkdir build && \
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug && cmake --build build
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug && cmake --build build --config=Debug
 
 ENTRYPOINT ["/bin/bash"]

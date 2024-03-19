@@ -14,6 +14,10 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE AND DEFINED ENV{CMAKE_TOOLCHAIN_FILE})
 endif()
 
 
+# add "d" at the end of debug library
+set(CMAKE_DEBUG_POSTFIX "d")
+
+
 # src files
 file(GLOB SRC
     "src/*.c"
@@ -125,6 +129,7 @@ endif()
 # install binary
 install(
     TARGETS ${PROJECT_NAME}
+    CONFIGURATIONS Debug Release
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
@@ -140,4 +145,11 @@ install(
     DIRECTORY "${MR_CONFIG_FILE_INCLUDE_DIR}/"
     DESTINATION "include"
     FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
+# install VERSION
+install(
+    FILES
+        "${CMAKE_CURRENT_LIST_DIR}/VERSION"
+        "${CMAKE_CURRENT_LIST_DIR}/LICENSE"
+    DESTINATION "."
 )

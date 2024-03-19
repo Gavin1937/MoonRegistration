@@ -19,15 +19,15 @@
         "BuildCmd": [
             "emcmake cmake -DCMAKE_BUILD_TYPE=Release -DOPENCV_SRC=$OPENCV_SRC -DMRWASM_BUILD_MODULE=$build_module -S . -B $BuildDirName",
             "cd $BuildDirName && emmake make",
-            "cmake --install $BuildDirName --prefix $BuildDirName/install",
-            "rm -rf $WorkingDir/$BuildDirName/install/lib",
-            "rm -rf $WorkingDir/$BuildDirName/install/include"
+            "cmake --install $BuildDirName --prefix $BuildDirName/tmp",
+            "mkdir -p $BuildDirName/release",
+            "cp -r $BuildDirName/tmp/moon-registration/ $BuildDirName/release/"
         ],
         "PackRelease": {
             "ArchiveBaseName": "",
             "Files": [],
             "Folders": [
-                "$WorkingDir/$BuildDirName/install"
+                "$WorkingDir/$BuildDirName/release"
             ]
         }
     }
