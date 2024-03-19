@@ -6,8 +6,13 @@ export {
   circle_to_square,
   circle_to_rectangle,
 } from './shapes.js';
-export { cut_image_from_circle } from './imgprocess.js';
-export { detect_moon } from './MoonDetect.js';
+export {
+  cut_image_from_circle,
+  stack_imgs,
+} from './imgprocess.js';
+export {
+  detect_moon,
+} from './MoonDetect.js';
 export {
   draw_layer_image,
   RegistrationAlgorithms,

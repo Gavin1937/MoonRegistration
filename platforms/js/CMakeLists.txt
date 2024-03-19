@@ -52,6 +52,7 @@ set(SHAPES_FUNCTION
 )
 set(IMGPROCESS_FUNCTION
     "_mrwasm_cut_image_from_circle"
+    "_mrwasm_stack_imgs"
 )
 set(MOONDETECT_FUNCTION
     "_mrwasm_detect_moon"

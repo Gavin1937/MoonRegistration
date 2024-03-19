@@ -42,5 +42,55 @@ void* mrwasm_cut_image_from_circle(
     }
 }
 
+void* mrwasm_stack_imgs(
+    void* background,
+    const int roi_x, const int roi_y,
+    const int roi_width, const int roi_height,
+    void* foreground,
+    const float foreground_transparency,
+    const int filter_px
+)
+{
+    try
+    {
+        cv::Mat* background_ptr = reinterpret_cast<cv::Mat*>(background);
+        cv::Mat* foreground_ptr = reinterpret_cast<cv::Mat*>(foreground);
+        
+        cv::Rect background_roi(roi_x, roi_y, roi_width, roi_height);
+        
+        cv::Vec4b* vec4b_filter_px = NULL;
+        if (filter_px)
+        {
+            const unsigned char* filter_px_ptr = reinterpret_cast<const unsigned char*>(&filter_px);
+            vec4b_filter_px = new cv::Vec4b(
+                filter_px_ptr[0],
+                filter_px_ptr[1],
+                filter_px_ptr[2],
+                filter_px_ptr[3]
+            );
+        }
+        
+        cv::Mat* image_out = new cv::Mat();
+        mr::stack_imgs(
+            *background_ptr, background_roi,
+            *foreground_ptr, *image_out,
+            foreground_transparency,
+            vec4b_filter_px
+        );
+        
+        if (vec4b_filter_px)
+            delete vec4b_filter_px;
+        
+        // convert image_out from BGRA to RGBA so the color don't go wrong
+        cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
+        
+        return mrwasm_create_ImageHandlerData(image_out);
+    }
+    catch(const std::exception& error)
+    {
+        throw error;
+    }
+}
+
 }
 

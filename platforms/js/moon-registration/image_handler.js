@@ -168,7 +168,7 @@ class ImageHandler {
   }
   
   /**
-   * Read image pixel data from C++ to JS
+   * Get Uint8Array of pixel data
    * 
    * @returns {Promise<Uint8Array>} Uint8Array
    */
@@ -190,7 +190,7 @@ class ImageHandler {
   }
   
   /**
-   * Read image pixel data from C++ to JS
+   * Get Uint8ClampedArray of pixel data
    * 
    * @returns {Promise<Uint8ClampedArray>} Uint8ClampedArray
    */
