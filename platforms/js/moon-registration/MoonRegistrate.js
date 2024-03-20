@@ -1,4 +1,9 @@
-export { draw_layer_image, RegistrationAlgorithms };
+export {
+  draw_layer_image,
+  RegistrationAlgorithms,
+  transform_user_image,
+  transform_layer_image
+};
 
 import { instance } from './wasm_loader.js';
 import { ImageHandler } from './image_handler.js';
@@ -23,6 +28,85 @@ class RegistrationAlgorithms {
 }
 
 /**
+ * Same as mr::transform_image(), but using user_image as image_in.
+ * Using computed homography_matrix to apply a perspective transformation to user_image.
+ * "Rotate" user_image to match model_image's perspective.
+ * 
+ * @param {ImageHandler} user_image_handler ImageHandler of user_image
+ * @param {ImageHandler} model_image_handler ImageHandler of model_image
+ * @param {int} algorithm use class RegistrationAlgorithms to select the algorithm for registration, can be:
+ * SIFT, ORB, AKAZE, BRISK, EMPTY_ALGORITHM, INVALID_ALGORITHM
+ * Default SIFT
+ * @returns {Promise<ImageHandler>} output ImageHandler object
+ */
+async function transform_user_image(
+  user_image_handler,
+  model_image_handler,
+  algorithm = RegistrationAlgorithms.SIFT
+)
+{
+  return new Promise((resolve, reject) => {
+    instance.ready.then(async function() {
+      try {
+        let ptr = await instance._mrwasm_transform_user_image(
+          user_image_handler.image_ptr,
+          model_image_handler.image_ptr,
+          algorithm
+        );
+        let ret = new ImageHandler();
+        await ret.load_from_ImageHandlerData(ptr);
+        await instance._mrwasm_destroy_ImageHandlerData(ptr);
+        
+        resolve(ret);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+/**
+ * Wrapper around mr::transform_image_inverse(), transform any layer image.
+ * Using computed homography_matrix to transform layer_image_in in the perspective of user_image.
+ * "Rotate" layer_image_in to match user_image's perspective.
+ * 
+ * @param {ImageHandler} user_image_handler ImageHandler of user_image
+ * @param {ImageHandler} model_image_handler ImageHandler of model_image
+ * @param {ImageHandler} layer_image_handler ImageHandler of layer_image
+ * @param {int} algorithm use class RegistrationAlgorithms to select the algorithm for registration, can be:
+ * SIFT, ORB, AKAZE, BRISK, EMPTY_ALGORITHM, INVALID_ALGORITHM
+ * Default SIFT
+ * @returns {Promise<ImageHandler>} output ImageHandler object
+ */
+async function transform_layer_image(
+  user_image_handler,
+  model_image_handler,
+  layer_image_handler,
+  algorithm = RegistrationAlgorithms.SIFT
+)
+{
+  return new Promise((resolve, reject) => {
+    instance.ready.then(async function() {
+      try {
+        let ptr = await instance._mrwasm_transform_layer_image(
+          user_image_handler.image_ptr,
+          model_image_handler.image_ptr,
+          layer_image_handler.image_ptr,
+          algorithm
+        );
+        let ret = new ImageHandler();
+        await ret.load_from_ImageHandlerData(ptr);
+        await instance._mrwasm_destroy_ImageHandlerData(ptr);
+        
+        resolve(ret);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+/**
  * Run mr::MoonRegistrar::draw_layer_image on input image
  * 
  * @param {ImageHandler} user_image_handler ImageHandler of user_image
@@ -30,6 +114,7 @@ class RegistrationAlgorithms {
  * @param {ImageHandler} layer_image_handler ImageHandler of layer_image
  * @param {int} algorithm use class RegistrationAlgorithms to select the algorithm for registration, can be:
  * SIFT, ORB, AKAZE, BRISK, EMPTY_ALGORITHM, INVALID_ALGORITHM
+ * Default SIFT
  * @param {float} layer_image_transparency a 0~1 float percentage changing layer image's transparency
  * @param {int} filter_px a 4-bytes integer that represents BGRA value of a pixel in each of its bytes.
  * function will use it to filter the pixel in layer image, set it to -1 if you don't need it.

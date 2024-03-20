@@ -58,6 +58,8 @@ set(MOONDETECT_FUNCTION
     "_mrwasm_detect_moon"
 )
 set(MOONREGISTRATE_FUNCTION
+    "_mrwasm_transform_user_image"
+    "_mrwasm_transform_layer_image"
     "_mrwasm_draw_layer_image"
 )
 

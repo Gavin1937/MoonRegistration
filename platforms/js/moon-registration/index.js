@@ -16,6 +16,8 @@ export {
 export {
   draw_layer_image,
   RegistrationAlgorithms,
+  transform_user_image,
+  transform_layer_image
 } from './MoonRegistrate.js';
 
 /**
