@@ -150,6 +150,16 @@ EXPORT_SYMBOL void MoonRegistrar::update_f2d_detector(const cv::Ptr<cv::Feature2
     this->f2d_detector = f2d_detector;
 }
 
+EXPORT_SYMBOL void MoonRegistrar::update_homography_matrix(const cv::Mat& homography_matrix)
+{
+    this->homography_matrix = homography_matrix;
+}
+
+EXPORT_SYMBOL void MoonRegistrar::update_good_keypoint_matches(const std::vector<std::vector<cv::DMatch>>& good_keypoint_matches)
+{
+    this->good_keypoint_matches = good_keypoint_matches;
+}
+
 
 EXPORT_SYMBOL void MoonRegistrar::compute_registration(
     const int knn_k,
@@ -223,19 +233,19 @@ EXPORT_SYMBOL void MoonRegistrar::compute_registration(
 
 EXPORT_SYMBOL void MoonRegistrar::transform_image(const cv::Mat& image_in, cv::Mat& image_out)
 {
-    this->__validate_registrar();
+    this->__validate_image_matrix();
     cv::warpPerspective(image_in, image_out, this->homography_matrix, image_in.size());
 }
 
 EXPORT_SYMBOL void MoonRegistrar::transform_image_inverse(const cv::Mat& image_in, cv::Mat& image_out)
 {
-    this->__validate_registrar();
+    this->__validate_image_matrix();
     cv::warpPerspective(image_in, image_out, this->homography_matrix.inv(), image_in.size());
 }
 
 EXPORT_SYMBOL void MoonRegistrar::transform_user_image(cv::Mat& image_out)
 {
-    this->__validate_registrar();
+    this->__validate_image_matrix();
     this->transform_image(this->user_image, image_out);
 }
 
@@ -338,7 +348,7 @@ EXPORT_SYMBOL void MoonRegistrar::draw_layer_image(
     const cv::Vec4b* filter_px
 )
 {
-    this->__validate_registrar();
+    this->__validate_image_matrix();
     
     // pre-process layer image
     cv::Mat processed_layer_image;
@@ -384,6 +394,14 @@ void MoonRegistrar::__validate_registrar()
         throw std::runtime_error("Empty user_image or model_image");
     if (this->homography_matrix.empty() || this->user_keypoints.empty() || this->model_keypoints.empty() || this->good_keypoint_matches.empty())
         throw std::runtime_error("Empty homography_matrix, good_keypoint_matches, user_keypoints, or model_keypoints");
+}
+
+void MoonRegistrar::__validate_image_matrix()
+{
+    if (this->user_image.empty() || this->model_image.empty())
+        throw std::runtime_error("Empty user_image or model_image");
+    if (this->homography_matrix.empty())
+        throw std::runtime_error("Empty homography_matrix");
 }
 
 }

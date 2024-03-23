@@ -131,5 +131,58 @@ void* mrwasm_draw_layer_image(
     }
 }
 
+void* mrwasm_draw_layer_image_no_compute(
+    void* user_image,
+    void* model_image,
+    void* layer_image,
+    void* homography_matrix,
+    const float layer_image_transparency,
+    const int filter_px
+)
+{
+    try
+    {
+        cv::Mat* user_image_ptr = reinterpret_cast<cv::Mat*>(user_image);
+        cv::Mat* model_image_ptr = reinterpret_cast<cv::Mat*>(model_image);
+        cv::Mat* layer_image_ptr = reinterpret_cast<cv::Mat*>(layer_image);
+        cv::Mat* homography_matrix_ptr = reinterpret_cast<cv::Mat*>(homography_matrix);
+        
+        mr::MoonRegistrar registrar;
+        registrar.update_images(*user_image_ptr, *model_image_ptr);
+        registrar.update_f2d_detector(mr::RegistrationAlgorithms::EMPTY_ALGORITHM);
+        registrar.update_homography_matrix(*homography_matrix_ptr);
+        
+        cv::Mat* image_out = new cv::Mat();
+        cv::Vec4b* vec4b_filter_px = NULL;
+        if (filter_px)
+        {
+            const unsigned char* filter_px_ptr = reinterpret_cast<const unsigned char*>(&filter_px);
+            vec4b_filter_px = new cv::Vec4b(
+                filter_px_ptr[0],
+                filter_px_ptr[1],
+                filter_px_ptr[2],
+                filter_px_ptr[3]
+            );
+        }
+        
+        registrar.draw_layer_image(
+            *layer_image_ptr, *image_out,
+            layer_image_transparency,
+            vec4b_filter_px
+        );
+        if (vec4b_filter_px)
+            delete vec4b_filter_px;
+        
+        // convert image_out from BGRA to RGBA so the color don't go wrong
+        cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
+        
+        return mrwasm_create_ImageHandlerData(image_out);
+    }
+    catch(const std::exception& error)
+    {
+        throw error;
+    }
+}
+
 }
 

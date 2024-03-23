@@ -32,7 +32,7 @@ set(MR_ENABLE_OPENCV_NONFREE OFF)
 set(MR_BUILD_SHARED_LIBS OFF)
 set(OpenCV_DIR "${OPENCV_SRC}/build_wasm")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_BINARY_DIR}/MoonRegistration)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
+include_directories(${MR_INCLUDE_DIR})
 
 
 # functions to export to wasm
@@ -45,6 +45,8 @@ set(UTILS_FUNCTION
     "_mrwasm_create_image_ptr"
     "_mrwasm_destroy_image"
     "_mrwasm_destroy_RectangleAndImageHandlerData"
+    "_mrwasm_create_homography_matrix_ptr"
+    "_mrwasm_destroy_homography_matrix_ptr"
 )
 set(SHAPES_FUNCTION
     "_mrwasm_circle_to_square"
@@ -61,6 +63,7 @@ set(MOONREGISTRATE_FUNCTION
     "_mrwasm_transform_user_image"
     "_mrwasm_transform_layer_image"
     "_mrwasm_draw_layer_image"
+    "_mrwasm_draw_layer_image_no_compute"
 )
 
 option(MRWASM_BUILD_MODULE:STRING "Configure which MoonRegistration WASM module to build" "All")

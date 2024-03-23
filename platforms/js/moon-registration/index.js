@@ -14,10 +14,11 @@ export {
   detect_moon,
 } from './MoonDetect.js';
 export {
-  draw_layer_image,
   RegistrationAlgorithms,
   transform_user_image,
-  transform_layer_image
+  transform_layer_image,
+  draw_layer_image,
+  draw_layer_image_no_compute,
 } from './MoonRegistrate.js';
 
 /**

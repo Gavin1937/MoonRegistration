@@ -334,6 +334,24 @@ void init_MoonRegistrate(py::module &module)
       - algorithm: mr::RegistrationAlgorithms enum object
         )pbdoc"
         )
+        .def("update_homography_matrix", &mr::MoonRegistrar::update_homography_matrix,
+        py::arg("homography_matrix"),
+        R"pbdoc(
+    update homography_matrix
+    
+    Parameters:
+      - homography_matrix: cv2.MatLike|numpy.ndarray matrix
+        )pbdoc"
+        )
+        .def("update_good_keypoint_matches", &mr::MoonRegistrar::update_good_keypoint_matches,
+        py::arg("good_keypoint_matches"),
+        R"pbdoc(
+    update good_keypoint_matches
+    
+    Parameters:
+      - good_keypoint_matches: list[list[cv2.DMatch]]
+        )pbdoc"
+        )
         .def("get_homography_matrix", &mr::MoonRegistrar::get_homography_matrix)
         .def("get_user_image", &mr::MoonRegistrar::get_user_image)
         .def("get_user_keypoints", &mr::MoonRegistrar::get_user_keypoints)

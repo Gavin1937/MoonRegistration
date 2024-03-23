@@ -164,4 +164,42 @@ void mrwasm_destroy_image(uint8_t* img_binary, void* img_ptr)
     }
 }
 
+void* mrwasm_create_homography_matrix_ptr(
+    uint8_t* matrix_binary
+)
+{
+    try
+    {
+        float* matrix_binary_float = reinterpret_cast<float*>(matrix_binary);
+        cv::Mat* ret = new cv::Mat(
+            3, 3,
+            // CV_MAKETYPE(1, CV_32F),
+            CV_32F,
+            matrix_binary_float
+        );
+        
+        return reinterpret_cast<void*>(ret);
+    }
+    catch(const std::exception& error)
+    {
+        throw error;
+    }
+}
+
+void mrwasm_destroy_homography_matrix_ptr(void* ptr)
+{
+    try
+    {
+        if (ptr)
+        {
+            cv::Mat* tmp = reinterpret_cast<cv::Mat*>(ptr);
+            delete tmp;
+        }
+    }
+    catch(const std::exception& error)
+    {
+        throw error;
+    }
+}
+
 }

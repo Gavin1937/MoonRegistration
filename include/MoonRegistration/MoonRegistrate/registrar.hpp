@@ -94,6 +94,12 @@ public:
     // (re)init f2d_detector with custom cv::Ptr<cv::Feature2D>
     EXPORT_SYMBOL void update_f2d_detector(const cv::Ptr<cv::Feature2D>& f2d_detector);
     
+    // update homography_matrix
+    EXPORT_SYMBOL void update_homography_matrix(const cv::Mat& homography_matrix);
+    
+    // update good_keypoint_matches
+    EXPORT_SYMBOL void update_good_keypoint_matches(const std::vector<std::vector<cv::DMatch>>& good_keypoint_matches);
+    
     
     // getters
     
@@ -295,6 +301,7 @@ public:
     
 private: // helper functions
     void __validate_registrar();
+    void __validate_image_matrix();
     
 private:
     cv::Ptr<cv::Feature2D> f2d_detector;
