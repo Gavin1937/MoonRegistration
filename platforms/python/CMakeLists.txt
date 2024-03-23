@@ -60,19 +60,20 @@ endif()
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 
-message(STATUS "============= MR Python Build Config =============")
-message(STATUS "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
-message(STATUS "PYTHON_EXECUTABLE: ${PYTHON_EXECUTABLE}")
-message(STATUS "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
-message(STATUS "NUMPY_INCLUDE_DIR: ${NUMPY_INCLUDE_DIR}")
-message(STATUS "==================================================")
-
-
 # we need to add MoonRegistration library 2 directories above us
 # and also compile it as static library
 set(MR_BUILD_SHARED_LIBS OFF)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_BINARY_DIR}/MoonRegistration)
 include_directories(${MR_INCLUDE_DIR})
+
+
+message(STATUS "============= MR Python Build Config =============")
+message(STATUS "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
+message(STATUS "PYTHON_EXECUTABLE: ${PYTHON_EXECUTABLE}")
+message(STATUS "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
+message(STATUS "NUMPY_INCLUDE_DIR: ${NUMPY_INCLUDE_DIR}")
+message(STATUS "MR_INCLUDE_DIR: ${MR_INCLUDE_DIR}")
+message(STATUS "==================================================")
 
 
 # src files

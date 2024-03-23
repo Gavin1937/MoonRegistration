@@ -16,6 +16,7 @@ RUN cd /src/MoonRegistration && \
     cd platforms/python && \
     pip3 install wheel && \
     python3 setup.py install && \
-    python3 setup.py bdist_wheel --py-limited-api cp38
+    python3 setup.py bdist_wheel --py-limited-api cp310 && \
+    pip3 install -r requirements.txt
 
 ENTRYPOINT ["/bin/bash"]
