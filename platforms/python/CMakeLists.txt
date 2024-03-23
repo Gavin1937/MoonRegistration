@@ -72,7 +72,7 @@ message(STATUS "==================================================")
 # and also compile it as static library
 set(MR_BUILD_SHARED_LIBS OFF)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_BINARY_DIR}/MoonRegistration)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
+include_directories(${MR_INCLUDE_DIR})
 
 
 # src files

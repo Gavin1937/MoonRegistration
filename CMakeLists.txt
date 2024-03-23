@@ -90,6 +90,9 @@ configure_file(
 )
 # add newly generated mrconfig.h to include directories
 include_directories("${MR_CONFIG_FILE_INCLUDE_DIR}")
+set(MR_MAIN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH "Main include directory")
+set(tmp_include_dirs "${MR_MAIN_INCLUDE_DIR}" "${MR_CONFIG_FILE_INCLUDE_DIR}")
+set(MR_INCLUDE_DIR ${tmp_include_dirs}  CACHE PATH "MR_INCLUDE_DIR")
 
 
 # build & link

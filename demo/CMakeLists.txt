@@ -25,7 +25,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../ ${CMAKE_CURRENT_BINARY_DIR}/Moo
 
 # setup include path for your project
 # so you can use `#include "MoonRegistration/mrapi.h"`
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
+include_directories(${MR_INCLUDE_DIR})
 
 
 # compile & linking
