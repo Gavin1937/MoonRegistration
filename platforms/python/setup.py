@@ -44,7 +44,6 @@ LIB_FILES = (
 DATA_FILES = None
 PACKAGE_DATA = {
     'MoonRegistration':[
-        f'./MoonRegistration/**/*.py',
         f'./build/**/*.{OS_SHARED_LIBRARY_SUFFIX}',
         f'./build/**/*.{OS_PYEXT_SUFFIX}',
     ],
