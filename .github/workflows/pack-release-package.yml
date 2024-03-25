@@ -50,7 +50,9 @@ jobs:
         7z x opencv-4.9.0.zip -o"opencv-4.9.0"
         $env:OpenCV_DIR="$(pwd)\opencv-4.9.0"
         $env:COMSPEC="$((Get-Command powershell).Source)"
-        python -m pip install wheel
+        python -m venv .venv
+        .\.venv\Scripts\activate
+        pip install wheel
         python Release.py ./release_config.json
         python Release.py ./platforms/python/release_config.json
         mkdir archives
