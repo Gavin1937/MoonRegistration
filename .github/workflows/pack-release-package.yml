@@ -18,10 +18,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.10' 
-    - uses: jwlawson/actions-setup-cmake@v2.0.1
     
     - name: Setup ENV
       run: |
