@@ -41,16 +41,12 @@ jobs:
         docker cp moonregistration-container:"/src/MoonRegistration/archives/" .
     
     # Windows Build
-    - name: Windows Get OpenCV
+    - name: Windows Build & Package
       if: matrix.os == 'windows-latest'
       run: |
         Invoke-WebRequest https://github.com/Gavin1937/win-opencv/releases/download/4.9.0/opencv-4.9.0.zip -OutFile opencv-4.9.0.zip
         7z x opencv-4.9.0.zip -o"opencv-4.9.0"
         $env:OpenCV_DIR="$(pwd)\opencv-4.9.0"
-    
-    - name: Windows Build & Package
-      if: matrix.os == 'windows-latest'
-      run: |
         python3 Release.py ./release_config.json
         python3 Release.py ./platforms/python/release_config.json
         mkdir archives
