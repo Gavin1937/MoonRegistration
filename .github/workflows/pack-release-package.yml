@@ -45,6 +45,9 @@ jobs:
         Invoke-WebRequest https://github.com/Gavin1937/win-opencv/releases/download/4.9.0/opencv-4.9.0.zip -OutFile opencv-4.9.0.zip
         7z x opencv-4.9.0.zip -o"opencv-4.9.0"
         $env:OpenCV_DIR="$(pwd)\opencv-4.9.0"
+        python -m venv .venv
+        .\.venv\Scripts\activate
+        $env:VIRTUAL_ENV=".venv"
         pip install wheel
         mkdir build
         cmake -DCMAKE_BUILD_TYPE=Release -S . -B build -DMR_BUILD_SHARED_LIBS=OFF -DMR_ENABLE_OPENCV_NONFREE=OFF
@@ -73,14 +76,13 @@ jobs:
         cmake --build build --config=Debug
         cmake --install build --prefix build/install --config=Debug
         python Release.py ./release_config.json -s pack -m "nonfree=ON"
-        $env:NUMPY_INCLUDE_DIR=$(python -c "import numpy;print(numpy.get_include())")
         cd platforms/python
         pip install -r requirements.txt
-        python setup.py bdist_wheel --cmake-arguments="-DNUMPY_INCLUDE_DIR=$env:NUMPY_INCLUDE_DIR"
+        python setup.py bdist_wheel
         cd ../..
         python Release.py ./platforms/python/release_config.json -s pack -m "nonfree=OFF"
         cd platforms/python
-        python setup.py bdist_wheel --mr-enable-opencv-nonfree  --cmake-arguments="-DNUMPY_INCLUDE_DIR=$env:NUMPY_INCLUDE_DIR"
+        python setup.py bdist_wheel --mr-enable-opencv-nonfree
         cd ../..
         python Release.py ./platforms/python/release_config.json -s pack -m "nonfree=ON"
         mkdir archives
