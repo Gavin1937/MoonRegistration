@@ -17,12 +17,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Setup ENV
+    # Unix Build using Docker
+    - name: Unix Setup ENV
+      if: matrix.os == 'ubuntu-latest'
       run: |
         echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-        echo "VERSION_STR=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
     
-    # Unix Build using Docker
     - name: Docker Build & Package
       if: matrix.os == 'ubuntu-latest'
       run: docker build -t moonregistration -f ./dockerfiles/release_env.dockerfile .
@@ -37,6 +37,12 @@ jobs:
         docker cp moonregistration-container:"/src/MoonRegistration/archives/" .
     
     # Windows Build
+    - name: Windows Setup ENV
+      if: matrix.os == 'windows-latest'
+      run: |
+        $env:RELEASE_VERSION=${env:GITHUB_REF} -replace 'refs/tags/', ''
+        $env:GITHUB_ENV="$env:GITHUB_ENV`nRELEASE_VERSION=$env:RELEASE_VERSION"
+    
     - name: Windows Build & Package
       if: matrix.os == 'windows-latest'
       run: |
