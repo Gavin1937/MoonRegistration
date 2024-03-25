@@ -2,6 +2,24 @@
 # CHANGELOG
 
 <details open>
+<summary><strong style="font-size:140%">v0.1.10</strong></summary>
+
+* add new features to js api
+  * stack_imgs
+  * transform_layer_image
+  * transform_user_image
+  * draw_layer_image_no_compute
+* add new setter api to MoonRegistrar
+  * update_homography_matrix
+  * update_good_keypoint_matches
+* implement new release scripts
+* bug fixes
+* making repo cleaner
+
+</details>
+
+
+<details>
 <summary><strong style="font-size:140%">v0.1.9</strong></summary>
 
 * add proper javascript wrapper layer for the library
