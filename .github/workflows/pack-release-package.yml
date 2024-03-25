@@ -44,9 +44,9 @@ jobs:
     - name: Windows Get OpenCV
       if: matrix.os == 'windows-latest'
       run: |
-        docker create --name opencv gavin1937/win-opencv:4.9.0
-        docker cp opencv:"/opencv_install/" .
-        $env:OPENCV_DIR="$(pwd)/opencv_install"
+        Invoke-WebRequest https://github.com/Gavin1937/win-opencv/releases/download/4.9.0/opencv-4.9.0.zip -OutFile opencv-4.9.0.zip
+        7z x opencv-4.9.0.zip -o"opencv-4.9.0"
+        $env:OPENCV_DIR="$(pwd)\opencv-4.9.0"
     
     - name: Windows Build & Package
       if: matrix.os == 'windows-latest'
