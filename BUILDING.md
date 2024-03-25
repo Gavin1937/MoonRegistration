@@ -64,11 +64,49 @@ You can use Docker container to develope this library.
   * Remember to mount repository root into this container.
 
 
-## Build Into Library
+## Build with vcpkg
+
+[vcpkg](https://github.com/microsoft/vcpkg) is a cross-platform C++ Library Manager (Dependency Package Manager). You can use it for easy dependency setup. In following examples, we will use powershell as our shell, [checkout this doc](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started) for other shells and more detail.
+
+1. Setup vcpkg
+
+```powershell
+# get vcpkg
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg; .\bootstrap-vcpkg.bat
+# setup environment variables
+$env:VCPKG_ROOT = "C:\path\to\vcpkg"
+$env:PATH = "$env:VCPKG_ROOT;$env:PATH"
+```
+
+2. Go to MoonRegistration repository root and install dependency
+
+```powershell
+vcpkg install
+```
+
+> vcpkg will download and build opencv4 for your machine, so it will take a while.
+
+> Note: Util 03/24/2024, vcpkg only have opencv version 4.8.0. Which means you cannot use HOUGH_CIRCLE_ALT algorithm for MoonDetect module. Checkout [this manifest file](https://github.com/microsoft/vcpkg/blob/master/ports/opencv4/vcpkg.json) for the latest version.
+
+3. Now, you can use the dependency you just built to build MoonRegistration. You need to use vcpkg's cmake toolchain file with cmake.
+
+```powershell
+mkdir build
+# set cmake toolchain file using cmake flag
+cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+# or set cmake toolchain file using environment variable
+$env:CMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+cmake -S . -B build
+```
+
+
+## Build Manually from Source
 
 ### Dependencies
 
 * OpenCV
+  * [Setup using vcpkg (recommend)](#build-with-vcpkg)
   * [Install in Windows](https://opencv.org/releases/)
   * [Install in MacOS](https://www.geeksforgeeks.org/how-to-install-opencv-for-c-on-macos/)
     * `brew install opencv@4.8.0`

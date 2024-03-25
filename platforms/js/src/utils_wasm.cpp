@@ -173,7 +173,6 @@ void* mrwasm_create_homography_matrix_ptr(
         float* matrix_binary_float = reinterpret_cast<float*>(matrix_binary);
         cv::Mat* ret = new cv::Mat(
             3, 3,
-            // CV_MAKETYPE(1, CV_32F),
             CV_32F,
             matrix_binary_float
         );
