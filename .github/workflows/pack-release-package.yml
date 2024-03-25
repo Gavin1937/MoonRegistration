@@ -4,29 +4,57 @@ on:
   push:
     tags:
       - 'v*.*.*'
+      - 'test'
 
 jobs:
   release:
     
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        # os: [ubuntu-latest, windows-latest]
+        os: [windows-latest]
     
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v5
+    - uses: jwlawson/actions-setup-cmake@v2.0.1
     
     - name: Setup ENV
       run: |
         echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
         echo "VERSION_STR=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
     
-    - name: Build & Package
+    # Unix Build using Docker
+    - name: Docker Build & Package
+      if: matrix.os == 'ubuntu-latest'
       run: docker build -t moonregistration -f ./dockerfiles/release_env.dockerfile .
     
-    - name: Create Container
+    - name: Docker Create Container
+      if: matrix.os == 'ubuntu-latest'
       run: docker create --name moonregistration-container moonregistration
     
-    - name: Copy Package Out
+    - name: Docker Copy Package Out
+      if: matrix.os == 'ubuntu-latest'
       run: |
         docker cp moonregistration-container:"/src/MoonRegistration/archives/" .
+    
+    # Windows Build
+    - name: Windows Get OpenCV
+      if: matrix.os == 'windows-latest'
+      run: |
+        docker create --name opencv gavin1937/win-opencv:4.9.0
+        docker cp opencv:"/opencv_install/" .
+        $env:OPENCV_DIR="$(pwd)/opencv_install"
+    
+    - name: Windows Build & Package
+      if: matrix.os == 'windows-latest'
+      run: |
+        python3 Release.py ./release_config.json
+        python3 Release.py ./platforms/python/release_config.json
+        mkdir archives
+        mv MoonRegistration*.zip ./archives
     
     - name: Release archives
       uses: svenstaro/upload-release-action@v2

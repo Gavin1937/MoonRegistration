@@ -38,18 +38,19 @@ include_directories("include")
 set(OpenCV_STATIC ON)
 set(OpenCV_SHARED OFF)
 
-# no OpenCV path provided
-if (NOT DEFINED OPENCV_DIR AND NOT DEFINED ${OPENCV_DIR})
-    find_package(OpenCV REQUIRED)
-
 # manually provide OpenCV path
 # please manaully setting -DOPENCV_DIR cmake flag,
 # point to a path contains files like:
 # "OpenCVConfig.cmake" or "opencv-config.cmake"
-else()
+if(DEFINED OPENCV_DIR OR DEFINED ${OPENCV_DIR})
     message(STATUS "Setting OPENCV_DIR: ${OPENCV_DIR}")
     find_package(OpenCV PATHS ${OPENCV_DIR} NO_DEFAULT_PATH)
-
+elseif(DEFINED $ENV{OPENCV_DIR})
+    message(STATUS "Setting OPENCV_DIR: $ENV{OPENCV_DIR}")
+    find_package(OpenCV PATHS ${OPENCV_DIR} NO_DEFAULT_PATH)
+# no OpenCV path provided
+else()
+    find_package(OpenCV REQUIRED)
 endif()
 
 include_directories( ${OpenCV_INCLUDE_DIRS} )

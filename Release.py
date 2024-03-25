@@ -39,10 +39,11 @@ def collectMetadata():
     elif plat == 'Java': metadata['platform'] = 'java'
     else: metadata['platform'] = 'unknown'
     
+    mach = platform.machine().lower()
     arch = platform.architecture()
-    if '64' in arch[0]: metadata['architecture'] = '64'
-    elif '32' in arch[0]: metadata['architecture'] = '32'
-    else: metadata['architecture'] = 'unknown'
+    if '64' in arch[0]: metadata['architecture'] = mach+'_64'
+    elif '32' in arch[0]: metadata['architecture'] = mach+'_32'
+    else: metadata['architecture'] = mach+'_unknown'
     
     metadata['python_version'] = platform.python_version_tuple()
     
@@ -149,7 +150,7 @@ def main():
         attribute_str = '-'.join(attributes)
         if len(attribute_str) > 0:
             attribute_str = '-'+attribute_str
-        package_name = f'{config["ProjectName"]}-{metadata["app_version"]}-{metadata["platform"]}{metadata["architecture"]}{attribute_str}.zip'
+        package_name = f'{config["ProjectName"]}-{metadata["app_version"]}-{metadata["platform"]}-{metadata["architecture"]}{attribute_str}.zip'
         pack(package_name, metadata, config['Cmd']['PackRelease'], loc_build_env)
         os.environ = loc_build_env
     
