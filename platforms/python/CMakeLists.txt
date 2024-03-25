@@ -41,7 +41,7 @@ include_directories(${pybind11_INCLUDE_DIRS})
 # numpy
 set(NUMPY_INCLUDE_DIR "" CACHE FILEPATH "Path to numpy header if cmake can't find them.")
 if (NOT ${NUMPY_INCLUDE_DIR} STREQUAL "")
-    message( " *** NUMPY_INCLUDE_DIR : ${NUMPY_INCLUDE_DIR}" )
+    message(STATUS "NUMPY_INCLUDE_DIR: ${NUMPY_INCLUDE_DIR}" )
     if(NOT EXISTS ${NUMPY_INCLUDE_DIR}/numpy/ndarrayobject.h)
         message(SEND_ERROR "Can't find numpy/ndarrayobject.h in ${NUMPY_INCLUDE_DIR}")
     endif()

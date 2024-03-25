@@ -77,13 +77,14 @@ jobs:
         cmake --build build --config=Debug
         cmake --install build --prefix build/install --config=Debug
         python Release.py ./release_config.json -s pack -m "nonfree=ON"
+        $env:NUMPY_INCLUDE_DIR=$(python -c "import numpy;print(numpy.get_include())")
         cd platforms/python
         pip install -r requirements.txt
-        python setup.py bdist_wheel
+        python setup.py bdist_wheel --cmake-arguments="-DNUMPY_INCLUDE_DIR=$env:NUMPY_INCLUDE_DIR"
         cd ../..
         python Release.py ./platforms/python/release_config.json -s pack -m "nonfree=OFF"
         cd platforms/python
-        python setup.py bdist_wheel --mr-enable-opencv-nonfree
+        python setup.py bdist_wheel --mr-enable-opencv-nonfree  --cmake-arguments="-DNUMPY_INCLUDE_DIR=$env:NUMPY_INCLUDE_DIR"
         cd ../..
         python Release.py ./platforms/python/release_config.json -s pack -m "nonfree=ON"
         mkdir archives
