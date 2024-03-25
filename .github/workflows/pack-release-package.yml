@@ -49,12 +49,44 @@ jobs:
         Invoke-WebRequest https://github.com/Gavin1937/win-opencv/releases/download/4.9.0/opencv-4.9.0.zip -OutFile opencv-4.9.0.zip
         7z x opencv-4.9.0.zip -o"opencv-4.9.0"
         $env:OpenCV_DIR="$(pwd)\opencv-4.9.0"
-        $env:ComSpec="$((Get-Command powershell).Source)"
         python -m venv .venv
         .\.venv\Scripts\activate
         pip install wheel
-        python Release.py ./release_config.json
-        python Release.py ./platforms/python/release_config.json
+        mkdir build
+        cmake -DCMAKE_BUILD_TYPE=Release -S . -B build -DMR_BUILD_SHARED_LIBS=OFF -DMR_ENABLE_OPENCV_NONFREE=OFF
+        cmake --build build --config=Release
+        cmake --install build --prefix build/install --config=Release
+        cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build -DMR_BUILD_SHARED_LIBS=OFF -DMR_ENABLE_OPENCV_NONFREE=OFF
+        cmake --build build --config=Debug
+        cmake --install build --prefix build/install --config=Debug
+        cmake -DCMAKE_BUILD_TYPE=Release -S . -B build -DMR_BUILD_SHARED_LIBS=ON -DMR_ENABLE_OPENCV_NONFREE=OFF
+        cmake --build build --config=Release
+        cmake --install build --prefix build/install --config=Release
+        cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build -DMR_BUILD_SHARED_LIBS=ON -DMR_ENABLE_OPENCV_NONFREE=OFF
+        cmake --build build --config=Debug
+        cmake --install build --prefix build/install --config=Debug
+        python Release.py ./release_config.json -s pack -m "nonfree=OFF"
+        cmake -DCMAKE_BUILD_TYPE=Release -S . -B build -DMR_BUILD_SHARED_LIBS=OFF -DMR_ENABLE_OPENCV_NONFREE=ON
+        cmake --build build --config=Release
+        cmake --install build --prefix build/install --config=Release
+        cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build -DMR_BUILD_SHARED_LIBS=OFF -DMR_ENABLE_OPENCV_NONFREE=ON
+        cmake --build build --config=Debug
+        cmake --install build --prefix build/install --config=Debug
+        cmake -DCMAKE_BUILD_TYPE=Release -S . -B build -DMR_BUILD_SHARED_LIBS=ON -DMR_ENABLE_OPENCV_NONFREE=ON
+        cmake --build build --config=Release
+        cmake --install build --prefix build/install --config=Release
+        cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build -DMR_BUILD_SHARED_LIBS=ON -DMR_ENABLE_OPENCV_NONFREE=ON
+        cmake --build build --config=Debug
+        cmake --install build --prefix build/install --config=Debug
+        python Release.py ./release_config.json -s pack -m "nonfree=ON"
+        cd platforms/python
+        python setup.py bdist_wheel
+        cd ../..
+        python Release.py ./platforms/python/release_config.json -s pack -m "nonfree=OFF"
+        cd platforms/python
+        python setup.py bdist_wheel --mr-enable-opencv-nonfree
+        cd ../..
+        python Release.py ./platforms/python/release_config.json -s pack -m "nonfree=ON"
         mkdir archives
         mv MoonRegistration*.zip ./archives
     

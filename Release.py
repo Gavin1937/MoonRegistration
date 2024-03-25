@@ -1,13 +1,17 @@
 import re
-import io
 import json
 import os, sys
+import argparse
 import platform, shutil
 from pathlib import Path
 from zipfile import ZipFile
 from itertools import product
 from subprocess import Popen, PIPE, CalledProcessError
 
+
+DEFAULT_RELEASE_STEPS = [
+    'build', 'pack'
+]
 
 def execute(cmd:list, env:dict, cwd:str):
     popen = Popen(
@@ -96,20 +100,38 @@ def pack(zip_filename:str, metadata:dict, config:dict, env:dict):
     print('output to:', zip_filename)
 
 
-def main():
-    if len(sys.argv) != 2:
+def main(args:argparse.Namespace):
+    if 'release_config' not in args or args.release_config is None:
         print(f'Usage: python3 Release.py /path/to/release_config.json')
         exit(0)
     
     metadata = collectMetadata()
     
-    config_file = Path(sys.argv[1])
+    config_file = Path(args.release_config)
     config = None
     with open(config_file, 'r', encoding='utf-8') as file:
         raw = file.read()
         if metadata['platform'] == 'win':
             raw = re.sub(r'\$(\w+)', '%\g<1>%', raw)
         config = json.loads(raw)
+    
+    release_steps = None
+    if 'steps' in args and args.steps is not None:
+        release_steps = list(map(lambda i:i.lower(),args.steps.split(',')))
+        for rel in release_steps:
+            if rel not in DEFAULT_RELEASE_STEPS:
+                raise ValueError(f'Input step does not exists: {rel}')
+    if release_steps is None:
+        release_steps = DEFAULT_RELEASE_STEPS
+    
+    specified_working_matrix = None
+    if 'matrix' in args and args.matrix is not None:
+        specified_working_matrix = list(
+            map(lambda i:i.strip().split('='),filter(lambda s:len(s.strip())>0,args.matrix.split(';')))
+        )
+        for key,_ in specified_working_matrix:
+            if key not in config['Matrix'].keys():
+                raise ValueError('Input matrix key does not exists: %s' % key)
     
     build_env = {
         'REPO_ROOT': str(Path(__file__).parent.absolute())
@@ -130,7 +152,14 @@ def main():
     print('version:', version_file)
     print('metadata:', metadata)
     
-    def _build_once(loc_build_env, attributes):
+    def _matrix_proc_once(loc_build_env, attributes):
+        # filtering matrix process by specific matrix key value
+        if specified_working_matrix:
+            for k,v in specified_working_matrix:
+                if loc_build_env[k] != v:
+                    print(f'Skip specified working matrix: {k}={v}')
+                    return
+        
         os.environ = loc_build_env
         working_dir = config['Cmd']['WorkingDir']
         working_dir = os.path.expandvars(working_dir)
@@ -138,39 +167,63 @@ def main():
         build_dir_name = config['Cmd']['BuildDirName']
         loc_build_env['BuildDirName'] = build_dir_name
         build_dir_name = Path(build_dir_name)
-        if build_dir_name.exists():
-            shutil.rmtree(build_dir_name, ignore_errors=True)
-        build_dir_name.mkdir(exist_ok=True)
         print('working_dir:', working_dir)
         print('build_dir_name:', build_dir_name)
         
-        build_cmd_matrix = config['Cmd']['BuildCmdMatrix'] if 'BuildCmdMatrix' in config['Cmd'] else None
-        build(metadata, config['Cmd']['BuildCmd'], build_cmd_matrix, loc_build_env)
+        def _loc_build_step():
+            if build_dir_name.exists():
+                shutil.rmtree(build_dir_name, ignore_errors=True)
+            build_dir_name.mkdir(exist_ok=True)
+            build_cmd_matrix = config['Cmd']['BuildCmdMatrix'] if 'BuildCmdMatrix' in config['Cmd'] else None
+            build(metadata, config['Cmd']['BuildCmd'], build_cmd_matrix, loc_build_env)
         
-        attribute_str = '-'.join(attributes)
-        if len(attribute_str) > 0:
-            attribute_str = '-'+attribute_str
-        package_name = f'{config["ProjectName"]}-{metadata["app_version"]}-{metadata["platform"]}-{metadata["architecture"]}{attribute_str}.zip'
-        pack(package_name, metadata, config['Cmd']['PackRelease'], loc_build_env)
-        os.environ = loc_build_env
+        def _loc_pack_step():
+            attribute_str = '-'.join(attributes)
+            if len(attribute_str) > 0:
+                attribute_str = '-'+attribute_str
+            package_name = f'{config["ProjectName"]}-{metadata["app_version"]}-{metadata["platform"]}-{metadata["architecture"]}{attribute_str}.zip'
+            pack(package_name, metadata, config['Cmd']['PackRelease'], loc_build_env)
+            os.environ = loc_build_env
+        
+        for curr_step in release_steps:
+            print(f'Running step: {curr_step}')
+            if curr_step == 'build':
+                _loc_build_step()
+            elif curr_step == 'pack':
+                _loc_pack_step()
     
     if matrix is None:
-        _build_once(build_env, '')
+        _matrix_proc_once(build_env, '')
     else:
         tmp_build_env = build_env.copy()
         for k,v in matrix.items():
             print('build env:', k, v)
             for i in v:
                 tmp_build_env[k] = i['value']
-                _build_once(tmp_build_env, i['attributes'])
+                _matrix_proc_once(tmp_build_env, i['attributes'])
     
     os.environ = original_env
 
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-s', '--steps',
+        help='run with specified steps: "build,pack"',
+        action='store', type=str
+    )
+    parser.add_argument(
+        '-m', '--matrix',
+        help='run on specified matrix: "key1=value1; key2=value2"',
+        action='store', type=str
+    )
+    parser.add_argument('release_config', metavar='RELEASE_CONFIG', type=str, help='release config path')
+    args = parser.parse_args()
+    
+    
     try:
-        main()
+        main(args)
     except KeyboardInterrupt:
         print()
         exit(0)
