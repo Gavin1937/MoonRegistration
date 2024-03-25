@@ -11,6 +11,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # setup dependencies
 
 # python
+# handle python virtual environment
+if(DEFINED ENV{VIRTUAL_ENV})
+    # update the environment with VIRTUAL_ENV variable (mimic the activate script)
+    set ($ENV{VIRTUAL_ENV} "/path/to/venv")
+    # change the context of the search
+    set (Python3_FIND_VIRTUALENV FIRST)
+    # unset Python3_EXECUTABLE because it is also an input variable (see documentation, Artifacts Specification section)
+    unset (Python3_EXECUTABLE)
+endif()
 set(Python_USE_STATIC_LIBS ON)
 find_package(Python COMPONENTS Interpreter Development.Module NumPy)
 
