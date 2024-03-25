@@ -19,6 +19,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v5
+      with:
+        python-version: '3.10' 
     - uses: jwlawson/actions-setup-cmake@v2.0.1
     
     - name: Setup ENV
@@ -47,8 +49,9 @@ jobs:
         Invoke-WebRequest https://github.com/Gavin1937/win-opencv/releases/download/4.9.0/opencv-4.9.0.zip -OutFile opencv-4.9.0.zip
         7z x opencv-4.9.0.zip -o"opencv-4.9.0"
         $env:OpenCV_DIR="$(pwd)\opencv-4.9.0"
-        python3 Release.py ./release_config.json
-        python3 Release.py ./platforms/python/release_config.json
+        python -m pip install wheel
+        python Release.py ./release_config.json
+        python Release.py ./platforms/python/release_config.json
         mkdir archives
         mv MoonRegistration*.zip ./archives
     
