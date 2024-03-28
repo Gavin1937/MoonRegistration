@@ -35,9 +35,9 @@ jobs:
     - name: Windows Build & Package
       if: matrix.os == 'windows-latest'
       run: |
-        Invoke-WebRequest https://github.com/Gavin1937/win-opencv/releases/download/4.9.0/opencv-4.9.0.zip -OutFile opencv-4.9.0.zip
-        7z x opencv-4.9.0.zip -o"opencv-4.9.0"
-        $env:OpenCV_DIR="$(pwd)\opencv-4.9.0"
+        Invoke-WebRequest https://github.com/Gavin1937/arc-opencv/releases/download/4.9.0/opencv-490-win64-msvc.zip -OutFile opencv-490-win64-msvc.zip
+        7z x opencv-490-win64-msvc.zip -o"opencv-490-win64-msvc"
+        $env:OpenCV_DIR="$(pwd)\opencv-490-win64-msvc"
         python -m venv .venv
         .\.venv\Scripts\activate
         $env:VIRTUAL_ENV=".venv"
