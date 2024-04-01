@@ -57,8 +57,15 @@ def cut_image_from_circle(
     radius:int,
     padding:int           = 0
 ) -> tuple[Rectangle, numpy.ndarray]: ...
+@overload
 def sync_img_size(
     primary:numpy.ndarray,
+    secondary:numpy.ndarray
+) -> numpy.ndarray: ...
+@overload
+def sync_img_size(
+    primary_width:int,
+    primary_height:int,
     secondary:numpy.ndarray
 ) -> numpy.ndarray: ...
 

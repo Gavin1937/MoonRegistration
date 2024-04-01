@@ -255,6 +255,25 @@ EXPORT_SYMBOL void sync_img_size(const cv::Mat &primary, cv::Mat &secondary)
     );
 }
 
+EXPORT_SYMBOL void sync_img_size(const int primary_width, const int primary_height, cv::Mat& secondary)
+{
+    mr::ImageShape secondary_shape = mr::calc_image_shape(secondary);
+    
+    float ratio_out;
+    int param_width = -1;
+    int param_height = -1;
+    int param_longer_side = -1;
+    if (secondary_shape.longer_side == secondary_shape.width)
+        param_width = primary_width;
+    else
+        param_height = primary_height;
+    
+    mr::resize_with_aspect_ratio(
+        secondary, secondary, ratio_out,
+        param_width, param_height, param_longer_side
+    );
+}
+
 
 EXPORT_SYMBOL ImageChannels::ImageChannels(const cv::Mat& alpha)
 {

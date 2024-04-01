@@ -146,6 +146,17 @@ EXPORT_SYMBOL void cut_image_from_circle(
 //   - secondary: image to sync with primary
 EXPORT_SYMBOL void sync_img_size(const cv::Mat& primary, cv::Mat& secondary);
 
+// Sync the width & height of secondary image to primary image
+// Resize secondary image with aspect ratio base on its longer side.
+// If secondary.longer_side is width, resize to primary.width
+// If secondary.longer_side is height, resize to primary.height
+// 
+// Parameters:
+//   - primary_width: image width for sync reference
+//   - primary_height: image height for sync reference
+//   - secondary: image to sync with primary
+EXPORT_SYMBOL void sync_img_size(const int primary_width, const int primary_height, cv::Mat& secondary);
+
 EXPORT_SYMBOL typedef struct ImageChannels
 {
     std::vector<cv::Mat> channels;

@@ -98,6 +98,20 @@ cv::Mat wrap_sync_img_size(
     return secondary;
 }
 
+cv::Mat wrap_sync_img_size_hw(
+    const int primary_width,
+    const int primary_height,
+    cv::Mat& secondary
+)
+{
+    mr::sync_img_size(
+        primary_width, primary_height,
+        secondary
+    );
+    
+    return secondary;
+}
+
 mr::ImageChannels& wrap_split_img_channel(
     const cv::Mat& image_in
 )
@@ -367,7 +381,7 @@ void init_imgprocess(py::module &module)
       - rect_out: mr::Rectangle, top_left & bottom_right coordinate of output square in image_in
         )pbdoc"
     );
-    module.def("sync_img_size", &wrap_sync_img_size,
+    module.def("sync_img_size", py::overload_cast<const cv::Mat&, cv::Mat&>(&wrap_sync_img_size),
         py::arg("primary"),
         py::arg("secondary"),
         R"pbdoc(
@@ -378,6 +392,25 @@ void init_imgprocess(py::module &module)
     
     Parameters:
       - primary: image for sync reference
+      - secondary: image to sync with primary
+    
+    Returns:
+      - primary image after modification
+        )pbdoc"
+    );
+    module.def("sync_img_size", py::overload_cast<const int, const int, cv::Mat&>(&wrap_sync_img_size_hw),
+        py::arg("primary_width"),
+        py::arg("primary_height"),
+        py::arg("secondary"),
+        R"pbdoc(
+    Sync the width & height of secondary image to primary image
+    Resize secondary image with aspect ratio base on its longer side.
+    If secondary.longer_side is width, resize to primary.width
+    If secondary.longer_side is height, resize to primary.height
+    
+    Parameters:
+      - primary_width: image width for sync reference
+      - primary_height: image height for sync reference
       - secondary: image to sync with primary
     
     Returns:
