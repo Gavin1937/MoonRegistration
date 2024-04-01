@@ -19,6 +19,9 @@ EXPORT_SYMBOL ImageShape calc_image_shape(const cv::Mat& image_in)
         shape.longer_side = shape.width;
         shape.shorter_side = shape.height;
     }
+    shape.is_landscape = shape.width > shape.height;
+    shape.is_portrait = shape.width < shape.height;
+    shape.is_square = shape.width == shape.height;
     
     return shape;
 }
@@ -236,42 +239,150 @@ EXPORT_SYMBOL void cut_image_from_circle(
 
 EXPORT_SYMBOL void sync_img_size(const cv::Mat &primary, cv::Mat &secondary)
 {
-    int primary_width = primary.size[1];
-    int primary_height = primary.size[0];
+    mr::ImageShape primary_shape = mr::calc_image_shape(primary);
+    int primary_shorter = primary_shape.shorter_side;
+    int primary_longer = primary_shape.longer_side;
     mr::ImageShape secondary_shape = mr::calc_image_shape(secondary);
     
+    bool primary_is_landscape = primary_shape.is_landscape;
+    bool secondary_is_landscape = secondary_shape.is_landscape;
+    
     float ratio_out;
-    int param_width = -1;
-    int param_height = -1;
     int param_longer_side = -1;
-    if (secondary_shape.longer_side == secondary_shape.width)
-        param_width = primary_width;
+    
+    // both in landscape or portrait
+    if (primary_is_landscape == secondary_is_landscape)
+        param_longer_side = primary_longer;
+    // one in landscape and one in portrait
     else
-        param_height = primary_height;
+        param_longer_side = primary_shorter;
     
     mr::resize_with_aspect_ratio(
         secondary, secondary, ratio_out,
-        param_width, param_height, param_longer_side
+        -1, -1, param_longer_side
     );
 }
 
 EXPORT_SYMBOL void sync_img_size(const int primary_width, const int primary_height, cv::Mat& secondary)
 {
+    int primary_shorter = std::min<int>(primary_width, primary_height);
+    int primary_longer = std::max<int>(primary_width, primary_height);
     mr::ImageShape secondary_shape = mr::calc_image_shape(secondary);
     
+    bool primary_is_landscape = primary_width > primary_height;
+    bool secondary_is_landscape = secondary_shape.is_landscape;
+    
     float ratio_out;
-    int param_width = -1;
-    int param_height = -1;
     int param_longer_side = -1;
-    if (secondary_shape.longer_side == secondary_shape.width)
-        param_width = primary_width;
+    
+    // both in landscape or portrait
+    if (primary_is_landscape == secondary_is_landscape)
+        param_longer_side = primary_longer;
+    // one in landscape and one in portrait
     else
-        param_height = primary_height;
+        param_longer_side = primary_shorter;
     
     mr::resize_with_aspect_ratio(
         secondary, secondary, ratio_out,
-        param_width, param_height, param_longer_side
+        -1, -1, param_longer_side
     );
+}
+
+EXPORT_SYMBOL void sync_img_channel(const cv::Mat& primary, cv::Mat& secondary)
+{
+    // get number of channels
+    int primary_channel = primary.channels();
+    int secondary_channel = secondary.channels();
+    cv::ColorConversionCodes color_code = cv::ColorConversionCodes::COLOR_COLORCVT_MAX;
+    
+    if (primary_channel == secondary_channel)
+        return;
+    
+    // since image channel can only be 1, 3, & 4
+    // all of them are less than 4 bits.
+    // so we can merge two channel number into one int
+    // and use it in following switch statement
+    int choice = (secondary_channel << 4) | primary_channel;
+    switch (choice)
+    {
+    // primary_channel == 1
+    case 0x31: // secondary_channel == 3
+        color_code = cv::COLOR_BGR2GRAY;
+        break;
+    case 0x41: // secondary_channel == 4
+        color_code = cv::COLOR_BGRA2GRAY;
+        break;
+    
+    // primary_channel == 3
+    case 0x13: // secondary_channel == 1
+        color_code = cv::COLOR_GRAY2BGR;
+        break;
+    case 0x43: // secondary_channel == 4
+        color_code = cv::COLOR_BGRA2BGR;
+        break;
+    
+    // primary_channel == 4
+    case 0x14: // secondary_channel == 1
+        color_code = cv::COLOR_GRAY2BGRA;
+        break;
+    case 0x34: // secondary_channel == 3
+        color_code = cv::COLOR_BGR2BGRA;
+        break;
+    
+    default:
+        throw std::runtime_error("Cannot convert secondary channel with primary.");
+        break;
+    }
+    
+    cv::cvtColor(secondary, secondary, color_code);
+}
+
+EXPORT_SYMBOL void sync_img_channel(const int primary_channel, cv::Mat& secondary)
+{
+    // get number of channels
+    int secondary_channel = secondary.channels();
+    cv::ColorConversionCodes color_code = cv::ColorConversionCodes::COLOR_COLORCVT_MAX;
+    
+    if (primary_channel == secondary_channel)
+        return;
+    
+    // since image channel can only be 1, 3, & 4
+    // all of them are less than 4 bits.
+    // so we can merge two channel number into one int
+    // and use it in following switch statement
+    int choice = (secondary_channel << 4) | primary_channel;
+    switch (choice)
+    {
+    // primary_channel == 1
+    case 0x31: // secondary_channel == 3
+        color_code = cv::COLOR_BGR2GRAY;
+        break;
+    case 0x41: // secondary_channel == 4
+        color_code = cv::COLOR_BGRA2GRAY;
+        break;
+    
+    // primary_channel == 3
+    case 0x13: // secondary_channel == 1
+        color_code = cv::COLOR_GRAY2BGR;
+        break;
+    case 0x43: // secondary_channel == 4
+        color_code = cv::COLOR_BGRA2BGR;
+        break;
+    
+    // primary_channel == 4
+    case 0x14: // secondary_channel == 1
+        color_code = cv::COLOR_GRAY2BGRA;
+        break;
+    case 0x34: // secondary_channel == 3
+        color_code = cv::COLOR_BGR2BGRA;
+        break;
+    
+    default:
+        throw std::runtime_error("Cannot convert secondary channel with primary.");
+        break;
+    }
+    
+    cv::cvtColor(secondary, secondary, color_code);
 }
 
 
@@ -354,22 +465,48 @@ EXPORT_SYMBOL void stack_imgs(
 )
 {
     // setup background & foreground, sync their size if needed.
-    // copy a const reference from background, so we don't modify it
-    const cv::Mat& background_with_roi = background(background_roi);
+    cv::Rect updated_background_roi = background_roi;
     cv::Mat foreground_copy;
-    if (foreground.size().width > background_with_roi.size().width ||
-        foreground.size().height > background_with_roi.size().height)
+    if (foreground.size().width > background_roi.width ||
+        foreground.size().height > background_roi.height)
     {
         foreground_copy = foreground.clone();
-        mr::sync_img_size(background_with_roi, foreground_copy);
+        mr::sync_img_size(background_roi.width, background_roi.height, foreground_copy);
+        
+        // update background_roi so we can center foreground inside background_roi
+        int new_width = foreground_copy.size[1];
+        int new_height = foreground_copy.size[0];
+        int new_x = -1;
+        int new_y = -1;
+        
+        // background_roi and foreground have same width, center by height
+        if (new_width == background_roi.width)
+        {
+            new_x = background_roi.x;
+            new_y = (background_roi.height - new_height) / 2;
+        }
+        // background_roi and foreground have same height, center by width
+        else if (new_height == background_roi.height)
+        {
+            new_x = (background_roi.width - new_width) / 2;
+            new_y = background_roi.y;
+        }
+        
+        updated_background_roi = cv::Rect(new_x, new_y, new_width, new_height);
     }
     else
         foreground_copy = foreground;
     
     // get number of channels
-    int background_channel = background_with_roi.channels();
+    int background_channel = background.channels();
     int foreground_channel = foreground_copy.channels();
     int max_channel = std::max<int>(background_channel, foreground_channel);
+    
+    // make image_out having background's data with max_channel
+    image_out = background.clone();
+    mr::sync_img_channel(max_channel, image_out);
+    // copy a reference to image_out with updated roi so we can draw foreground on top of it
+    cv::Mat& background_with_roi = image_out(updated_background_roi);
     
     // setup a function to select specific channel value from a foreground pixel,
     // so we can use that to determine whether we should show foreground or not.
@@ -403,12 +540,10 @@ EXPORT_SYMBOL void stack_imgs(
         };
     }
     
-    // setup image_out & fill-in pixel values
+    // fill-in pixel values
     float transparency_factor = mr::clamp<float>(foreground_transparency, 0.0, 1.0);
-    image_out = cv::Mat::zeros(background_with_roi.size(), CV_MAKETYPE(CV_8U, max_channel));
-    image_out.forEach<cv::Vec4b>(
+    background_with_roi.forEach<cv::Vec4b>(
     [
-        &image_out,
         &background_with_roi, background_channel,
         &foreground_copy, foreground_channel,
         max_channel, transparency_factor,
@@ -418,9 +553,8 @@ EXPORT_SYMBOL void stack_imgs(
     {
         // accessing image pixel using uchar* to the underlying cv::Mat,
         // so we can handle images with unknown channel number easier
-        uchar* pixel = image_out.ptr<uchar>(position);
         const uchar* fore_px = foreground_copy.ptr<uchar>(position);
-        const uchar* back_px = background_with_roi.ptr<uchar>(position);
+        uchar* back_px = background_with_roi.ptr<uchar>(position);
         cv::Vec4b default_px(0, 0, 0, 255);
         
         
@@ -455,7 +589,7 @@ EXPORT_SYMBOL void stack_imgs(
             // so two pixels' color will blend together.
             // in this case, we also need to adjust background pixel's transparency.
             // it will use (1 - transparency_factor) as its transparency factor.
-            pixel[channel_idx] = static_cast<uchar>(
+            back_px[channel_idx] = static_cast<uchar>(
                 (
                     back_px_ch_val * (1.0 - (transparency_factor * show_fore))
                 ) +
@@ -476,62 +610,50 @@ EXPORT_SYMBOL void stack_imgs_in_place(
 )
 {
     // setup background & foreground, sync their size if needed.
-    // copy a reference from background, so we can modify it in place
-    cv::Mat background_with_roi = background(background_roi);
+    cv::Rect updated_background_roi = background_roi;
     cv::Mat foreground_copy;
-    if (foreground.size().width > background_with_roi.size().width ||
-        foreground.size().height > background_with_roi.size().height)
+    if (foreground.size().width > background_roi.width ||
+        foreground.size().height > background_roi.height)
     {
         foreground_copy = foreground.clone();
-        mr::sync_img_size(background_with_roi, foreground_copy);
+        mr::sync_img_size(background_roi.width, background_roi.height, foreground_copy);
+        
+        // update background_roi so we can center foreground inside background_roi
+        int new_width = foreground_copy.size[1];
+        int new_height = foreground_copy.size[0];
+        int new_x = -1;
+        int new_y = -1;
+        
+        // background_roi and foreground have same width, center by height
+        if (new_width == background_roi.width)
+        {
+            new_x = background_roi.x;
+            new_y = (background_roi.height - new_height) / 2;
+        }
+        // background_roi and foreground have same height, center by width
+        else if (new_height == background_roi.height)
+        {
+            new_x = (background_roi.width - new_width) / 2;
+            new_y = background_roi.y;
+        }
+        
+        updated_background_roi = cv::Rect(new_x, new_y, new_width, new_height);
     }
     else
         foreground_copy = foreground;
     
     // get number of channels
-    int background_channel = background_with_roi.channels();
+    int background_channel = background.channels();
     int foreground_channel = foreground_copy.channels();
+    
     // sync foreground channel with background if needed
     if (foreground_channel > background_channel)
     {
-        // since image channel can only be 1, 3, & 4
-        // all of them are less than 4 bits.
-        // so we can merge two channel number into one int
-        // and use it in following switch statement
-        int choice = (foreground_channel << 4) | background_channel;
-        switch (choice)
-        {
-        // background_channel == 1
-        case 0b00110001: // foreground_channel == 3
-            cv::cvtColor(foreground_copy, foreground_copy, cv::COLOR_BGR2GRAY);
-            break;
-        case 0b01000001: // foreground_channel == 4
-            cv::cvtColor(foreground_copy, foreground_copy, cv::COLOR_BGRA2GRAY);
-            break;
-        
-        // background_channel == 3
-        case 0b00010011: // foreground_channel == 1
-            cv::cvtColor(foreground_copy, foreground_copy, cv::COLOR_GRAY2BGR);
-            break;
-        case 0b01000011: // foreground_channel == 4
-            cv::cvtColor(foreground_copy, foreground_copy, cv::COLOR_BGRA2BGR);
-            break;
-        
-        // background_channel == 4
-        case 0b00010100: // foreground_channel == 1
-            cv::cvtColor(foreground_copy, foreground_copy, cv::COLOR_GRAY2BGRA);
-            break;
-        case 0b00110100: // foreground_channel == 3
-            cv::cvtColor(foreground_copy, foreground_copy, cv::COLOR_BGR2BGRA);
-            break;
-        
-        default:
-            throw std::runtime_error("Cannot convert foreground channel with background.");
-            break;
-        }
-        
+        mr::sync_img_channel(background_channel, foreground_copy);
         foreground_channel = background_channel;
     }
+    // copy a reference to background with updated roi so we can draw foreground on top of it
+    cv::Mat& background_with_roi = background(updated_background_roi);
     
     // setup a function to select specific channel value from a foreground pixel,
     // so we can use that to determine whether we should show foreground or not.

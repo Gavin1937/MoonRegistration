@@ -112,6 +112,31 @@ cv::Mat wrap_sync_img_size_hw(
     return secondary;
 }
 
+cv::Mat wrap_sync_img_channel(
+    const cv::Mat& primary,
+    cv::Mat& secondary
+)
+{
+    mr::sync_img_channel(
+        primary, secondary
+    );
+    
+    return secondary;
+}
+
+cv::Mat wrap_sync_img_channel_ch(
+    const int primary_channel,
+    cv::Mat& secondary
+)
+{
+    mr::sync_img_channel(
+        primary_channel,
+        secondary
+    );
+    
+    return secondary;
+}
+
 mr::ImageChannels& wrap_split_img_channel(
     const cv::Mat& image_in
 )
@@ -265,16 +290,22 @@ void init_imgprocess(py::module &module)
 {
     // imgprocess.hpp
     py::class_<mr::ImageShape>(module, "ImageShape")
-        .def(py::init<int,int,int,int>(),
+        .def(py::init<int,int,int,int,bool,bool,bool>(),
             py::arg("height"),
             py::arg("width"),
             py::arg("longer_side"),
-            py::arg("shorter_side")
+            py::arg("shorter_side"),
+            py::arg("is_portrait"),
+            py::arg("is_landscape"),
+            py::arg("is_square")
         )
         .def_readwrite("height", &mr::ImageShape::height)
         .def_readwrite("width", &mr::ImageShape::width)
         .def_readwrite("longer_side", &mr::ImageShape::longer_side)
         .def_readwrite("shorter_side", &mr::ImageShape::shorter_side)
+        .def_readwrite("is_portrait", &mr::ImageShape::is_portrait)
+        .def_readwrite("is_landscape", &mr::ImageShape::is_landscape)
+        .def_readwrite("is_square", &mr::ImageShape::is_square)
     ;
     module.def("calc_image_shape", mr::calc_image_shape,
         py::arg("image_in")
@@ -385,17 +416,19 @@ void init_imgprocess(py::module &module)
         py::arg("primary"),
         py::arg("secondary"),
         R"pbdoc(
-    Sync the width & height of secondary image to primary image
-    Resize secondary image with aspect ratio base on its longer side.
-    If secondary.longer_side is width, resize to primary.width
-    If secondary.longer_side is height, resize to primary.height
+    Sync the width & height of secondary image to primary image.
+    So secondary image can fit inside primary image.
+    If two images are in the same shape (landscape or portrait),
+    resize secondary image with primary image's longer side.
+    If two images are not in the same shape (landscape or portrait),
+    resize secondary image with primary image's shorter side.
     
     Parameters:
       - primary: image for sync reference
       - secondary: image to sync with primary
     
     Returns:
-      - primary image after modification
+      - secondary image after modification
         )pbdoc"
     );
     module.def("sync_img_size", py::overload_cast<const int, const int, cv::Mat&>(&wrap_sync_img_size_hw),
@@ -403,10 +436,12 @@ void init_imgprocess(py::module &module)
         py::arg("primary_height"),
         py::arg("secondary"),
         R"pbdoc(
-    Sync the width & height of secondary image to primary image
-    Resize secondary image with aspect ratio base on its longer side.
-    If secondary.longer_side is width, resize to primary.width
-    If secondary.longer_side is height, resize to primary.height
+    Sync the width & height of secondary image to primary image.
+    So secondary image can fit inside primary image.
+    If two images are in the same shape (landscape or portrait),
+    resize secondary image with primary image's longer side.
+    If two images are not in the same shape (landscape or portrait),
+    resize secondary image with primary image's shorter side.
     
     Parameters:
       - primary_width: image width for sync reference
@@ -414,7 +449,35 @@ void init_imgprocess(py::module &module)
       - secondary: image to sync with primary
     
     Returns:
-      - primary image after modification
+      - secondary image after modification
+        )pbdoc"
+    );
+    module.def("sync_img_channel", py::overload_cast<const cv::Mat&, cv::Mat&>(&wrap_sync_img_channel),
+        py::arg("primary"),
+        py::arg("secondary"),
+        R"pbdoc(
+    Sync the number of channels of secondary image to primary image
+    
+    Parameters:
+      - primary: image for sync reference
+      - secondary: image to sync with primary
+    
+    Returns:
+      - secondary image after modification
+        )pbdoc"
+    );
+    module.def("sync_img_channel", py::overload_cast<const int, cv::Mat&>(&wrap_sync_img_channel_ch),
+        py::arg("primary_channel"),
+        py::arg("secondary"),
+        R"pbdoc(
+    Sync the number of channels of secondary image to primary image
+    
+    Parameters:
+      - primary_channel: image channel for sync reference
+      - secondary: image to sync with primary
+    
+    Returns:
+      - secondary image after modification
         )pbdoc"
     );
     
@@ -478,9 +541,9 @@ void init_imgprocess(py::module &module)
     
     Note:
       - this function is designed to work with different number of color channels
-      - if foreground size is bigger then background size, this function will call mr::sync_img_size()
-        to sync it with background. However, if background and foreground images have different shape,
-        width/height ratio hugely different, this function would likely causing problems.
+      - if foreground size is bigger then background_roi size, this function will call mr::sync_img_size()
+        to sync it with background_roi. After sync, this function will place foreground at the center of
+        background_roi automatically.
       - image_out will follow the maximum number of channels between two input images,
         thus if one input is grayscale image and another is not, then it will become
         the blue channel of image_out, as OpenCV uses BGRA pixel order.
@@ -515,11 +578,11 @@ void init_imgprocess(py::module &module)
     
     Note:
       - this function is designed to work with different number of color channels
-      - if foreground size is bigger then background size, this function will call mr::sync_img_size()
-        to sync it with background. However, if background and foreground images have different shape,
-        width/height ratio hugely different, this function would likely causing problems.
+      - if foreground size is bigger then background_roi size, this function will call mr::sync_img_size()
+        to sync it with background_roi. After sync, this function will place foreground at the center of
+        background_roi automatically.
       - if foreground number of channel is greater then background, this function will sync
-        its number of channel with background
+        its channel number with background.
       - when using filter_px, we only read number of elements corresponding to
         number of channels in foreground. if foreground image has 3 channels, we only read
         first 3 elements of filter_px. rest of elements will be ignored.

@@ -14,6 +14,7 @@ __all__: list[str] = [
     'calc_circle_brightness_perc',
     'cut_image_from_circle',
     'sync_img_size',
+    'sync_img_channel',
     'ImageChannels',
     'split_img_channel',
     'merge_img_channel',
@@ -22,11 +23,18 @@ __all__: list[str] = [
 ]
 
 class ImageShape():
-    def __init__(self, height:int, width:int, longer_side:int, shorter_side:int) -> None:
+    def __init__(self,
+        height:int, width:int,
+        longer_side:int, shorter_side:int,
+        is_portrait:bool, is_landscape:bool, is_square:bool
+    ) -> None:
         self.height:int = height
         self.width:int = width
         self.longer_side:int = longer_side
         self.shorter_side:int = shorter_side
+        self.is_portrait:bool = is_portrait
+        self.is_landscape:bool = is_landscape
+        self.is_square:bool = is_square
 
 def calc_image_shape(image_in:numpy.ndarray) -> ImageShape: ...
 def resize_with_aspect_ratio(
@@ -66,6 +74,16 @@ def sync_img_size(
 def sync_img_size(
     primary_width:int,
     primary_height:int,
+    secondary:numpy.ndarray
+) -> numpy.ndarray: ...
+@overload
+def sync_img_channel(
+    primary:numpy.ndarray,
+    secondary:numpy.ndarray
+) -> numpy.ndarray: ...
+@overload
+def sync_img_size(
+    primary_channel:int,
     secondary:numpy.ndarray
 ) -> numpy.ndarray: ...
 
