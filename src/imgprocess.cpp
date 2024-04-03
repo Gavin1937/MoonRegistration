@@ -465,37 +465,36 @@ EXPORT_SYMBOL void stack_imgs(
 )
 {
     // setup background & foreground, sync their size if needed.
-    cv::Rect updated_background_roi = background_roi;
     cv::Mat foreground_copy;
     if (foreground.size().width > background_roi.width ||
         foreground.size().height > background_roi.height)
     {
         foreground_copy = foreground.clone();
         mr::sync_img_size(background_roi.width, background_roi.height, foreground_copy);
-        
-        // update background_roi so we can center foreground inside background_roi
-        int new_width = foreground_copy.size[1];
-        int new_height = foreground_copy.size[0];
-        int new_x = -1;
-        int new_y = -1;
-        
-        // background_roi and foreground have same width, center by height
-        if (new_width == background_roi.width)
-        {
-            new_x = background_roi.x;
-            new_y = (background_roi.height - new_height) / 2;
-        }
-        // background_roi and foreground have same height, center by width
-        else if (new_height == background_roi.height)
-        {
-            new_x = (background_roi.width - new_width) / 2;
-            new_y = background_roi.y;
-        }
-        
-        updated_background_roi = cv::Rect(new_x, new_y, new_width, new_height);
     }
     else
         foreground_copy = foreground;
+    
+    // update background_roi so we can center foreground inside background_roi
+    int new_width = foreground_copy.size[1];
+    int new_height = foreground_copy.size[0];
+    int new_x = -1;
+    int new_y = -1;
+    
+    // background_roi and foreground have same width, center by height
+    if (new_width == background_roi.width)
+    {
+        new_x = background_roi.x;
+        new_y = (background_roi.height - new_height) / 2;
+    }
+    // background_roi and foreground have same height, center by width
+    else if (new_height == background_roi.height)
+    {
+        new_x = (background_roi.width - new_width) / 2;
+        new_y = background_roi.y;
+    }
+    
+    cv::Rect updated_background_roi = cv::Rect(new_x, new_y, new_width, new_height);
     
     // get number of channels
     int background_channel = background.channels();
@@ -506,7 +505,7 @@ EXPORT_SYMBOL void stack_imgs(
     image_out = background.clone();
     mr::sync_img_channel(max_channel, image_out);
     // copy a reference to image_out with updated roi so we can draw foreground on top of it
-    cv::Mat& background_with_roi = image_out(updated_background_roi);
+    cv::Mat background_with_roi = image_out(updated_background_roi);
     
     // setup a function to select specific channel value from a foreground pixel,
     // so we can use that to determine whether we should show foreground or not.
@@ -610,37 +609,36 @@ EXPORT_SYMBOL void stack_imgs_in_place(
 )
 {
     // setup background & foreground, sync their size if needed.
-    cv::Rect updated_background_roi = background_roi;
     cv::Mat foreground_copy;
     if (foreground.size().width > background_roi.width ||
         foreground.size().height > background_roi.height)
     {
         foreground_copy = foreground.clone();
         mr::sync_img_size(background_roi.width, background_roi.height, foreground_copy);
-        
-        // update background_roi so we can center foreground inside background_roi
-        int new_width = foreground_copy.size[1];
-        int new_height = foreground_copy.size[0];
-        int new_x = -1;
-        int new_y = -1;
-        
-        // background_roi and foreground have same width, center by height
-        if (new_width == background_roi.width)
-        {
-            new_x = background_roi.x;
-            new_y = (background_roi.height - new_height) / 2;
-        }
-        // background_roi and foreground have same height, center by width
-        else if (new_height == background_roi.height)
-        {
-            new_x = (background_roi.width - new_width) / 2;
-            new_y = background_roi.y;
-        }
-        
-        updated_background_roi = cv::Rect(new_x, new_y, new_width, new_height);
     }
     else
         foreground_copy = foreground;
+    
+    // update background_roi so we can center foreground inside background_roi
+    int new_width = foreground_copy.size[1];
+    int new_height = foreground_copy.size[0];
+    int new_x = -1;
+    int new_y = -1;
+    
+    // background_roi and foreground have same width, center by height
+    if (new_width == background_roi.width)
+    {
+        new_x = background_roi.x;
+        new_y = (background_roi.height - new_height) / 2;
+    }
+    // background_roi and foreground have same height, center by width
+    else if (new_height == background_roi.height)
+    {
+        new_x = (background_roi.width - new_width) / 2;
+        new_y = background_roi.y;
+    }
+    
+    cv::Rect updated_background_roi = cv::Rect(new_x, new_y, new_width, new_height);
     
     // get number of channels
     int background_channel = background.channels();
@@ -653,7 +651,7 @@ EXPORT_SYMBOL void stack_imgs_in_place(
         foreground_channel = background_channel;
     }
     // copy a reference to background with updated roi so we can draw foreground on top of it
-    cv::Mat& background_with_roi = background(updated_background_roi);
+    cv::Mat background_with_roi = background(updated_background_roi);
     
     // setup a function to select specific channel value from a foreground pixel,
     // so we can use that to determine whether we should show foreground or not.
