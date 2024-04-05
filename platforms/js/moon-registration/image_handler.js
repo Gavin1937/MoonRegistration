@@ -1,6 +1,7 @@
 export { ImageHandler };
 
 import { instance } from './wasm_loader.js';
+import { get_cpp_exception } from './internal.js';
 
 
 /**
@@ -39,7 +40,7 @@ class ImageHandler {
           
           resolve(true);
         } catch (error) {
-          reject(error);
+          reject(await get_cpp_exception(error));
         }
       });
     });
@@ -84,7 +85,7 @@ class ImageHandler {
             
             self.image_ptr = await instance._mrwasm_create_image_ptr(self.buffer_ptr, self.img_data_length, self.img_width, self.img_height);
           } catch (error) {
-            reject(error);
+            reject(await get_cpp_exception(error));
           }
           
           resolve(true);
@@ -161,7 +162,7 @@ class ImageHandler {
           
           resolve(true);
         } catch(error) {
-          reject(error);
+          reject(await get_cpp_exception(error));
         }
       });
     });
@@ -183,7 +184,7 @@ class ImageHandler {
             self.img_data_length
           ));
         } catch (error) {
-          reject(error);
+          reject(await get_cpp_exception(error));
         }
       });
     });
@@ -205,7 +206,7 @@ class ImageHandler {
             self.img_data_length
           ));
         } catch (error) {
-          reject(error);
+          reject(await get_cpp_exception(error));
         }
       });
     });
@@ -228,7 +229,7 @@ class ImageHandler {
             self.img_height
           ));
         } catch (error) {
-          reject(error);
+          reject(await get_cpp_exception(error));
         }
       });
     });

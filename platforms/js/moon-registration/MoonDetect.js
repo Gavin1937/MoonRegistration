@@ -1,6 +1,7 @@
 export { detect_moon };
 
 import { instance } from './wasm_loader.js';
+import { get_cpp_exception } from './internal.js';
 import { Circle } from './shapes.js';
 import { ImageHandler } from './image_handler.js';
 
@@ -24,7 +25,7 @@ async function detect_moon(image_handler) {
         await ret.load_from_ptr(result_ptr);
         resolve(ret);
       } catch (error) {
-        reject(error);
+        reject(await get_cpp_exception(error));
       }
     });
   });

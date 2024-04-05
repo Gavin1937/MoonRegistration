@@ -1,5 +1,7 @@
 import { instance } from './wasm_loader.js';
+import { get_c_str, get_cpp_exception } from './internal.js';
 
+export { MAX_C_STRING_LENGTH } from './internal.js';
 export { ImageHandler } from './image_handler.js';
 export {
   Circle, Square, Rectangle,
@@ -31,21 +33,14 @@ async function version() {
     instance.ready.then(async function(){
       try {
         let ptr = await instance._mrwasm_version();
-        let peak_bytes = 40;
-        let data = new Uint8Array(instance.HEAP8.buffer, ptr, peak_bytes);
-        let output = '';
-        for (let i = 0; i < peak_bytes; i+=1) {
-          if (data[i] == 0)
-            break;
-          output += String.fromCharCode(data[i]);
-        }
+        let output = await get_c_str(ptr, 20);
         
         resolve(output);
       } catch (error) {
-        reject(error);
+        reject(await get_cpp_exception(error));
       }
     });
   });
 }
 
-export { instance, version };
+export { instance, get_c_str, get_cpp_exception, version };

@@ -5,6 +5,7 @@ export {
 };
 
 import { instance } from './wasm_loader.js';
+import { get_cpp_exception } from './internal.js';
 
 
 /**
@@ -35,7 +36,7 @@ class Circle {
           
           resolve(true);
         } catch (error) {
-          reject(error);
+          reject(await get_cpp_exception(error));
         }
       });
     });
@@ -70,7 +71,7 @@ class Square {
           
           resolve(true);
         } catch (error) {
-          reject(error);
+          reject(await get_cpp_exception(error));
         }
       });
     });
@@ -107,7 +108,7 @@ class Rectangle {
           
           resolve(true);
         } catch (error) {
-          reject(error);
+          reject(await get_cpp_exception(error));
         }
       });
     });
@@ -131,8 +132,8 @@ async function circle_to_square(circle) {
         let ret = new Square();
         await ret.load_from_ptr(result_ptr);
         resolve(ret);
-      } catch(err) {
-        reject(err);
+      } catch(error) {
+        reject(await get_cpp_exception(error));
       }
     });
   });
@@ -155,8 +156,8 @@ async function circle_to_rectangle(circle) {
         let ret = new Rectangle();
         await ret.load_from_ptr(result_ptr);
         resolve(ret);
-      } catch(err) {
-        reject(err);
+      } catch(error) {
+        reject(await get_cpp_exception(error));
       }
     });
   });

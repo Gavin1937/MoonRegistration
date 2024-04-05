@@ -4,6 +4,7 @@ export {
 };
 
 import { instance } from './wasm_loader.js';
+import { get_cpp_exception } from './internal.js';
 import { ImageHandler } from './image_handler.js';
 import { Circle, Rectangle } from './shapes.js';
 
@@ -41,7 +42,7 @@ async function cut_image_from_circle(
         
         resolve([image_out, rect_out]);
       } catch (error) {
-        reject(error);
+        reject(await get_cpp_exception(error));
       }
     });
   });
@@ -99,7 +100,7 @@ async function stack_imgs(
         
         resolve(ret);
       } catch (error) {
-        reject(error);
+        reject(await get_cpp_exception(error));
       }
     });
   });

@@ -40,6 +40,7 @@ set(MOONREGISTRATION_FUNCTION
     "_mrwasm_version"
 )
 set(UTILS_FUNCTION
+    "_mrwasm_get_last_exception_msg"
     "_mrwasm_destroy_ImageHandlerData"
     "_mrwasm_create_image_buffer"
     "_mrwasm_create_image_ptr"

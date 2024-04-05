@@ -7,6 +7,7 @@ export {
 };
 
 import { instance } from './wasm_loader.js';
+import { get_cpp_exception } from './internal.js';
 import { ImageHandler } from './image_handler.js';
 
 
@@ -60,7 +61,7 @@ async function transform_user_image(
         
         resolve(ret);
       } catch (error) {
-        reject(error);
+        reject(await get_cpp_exception(error));
       }
     });
   });
@@ -101,7 +102,7 @@ async function transform_layer_image(
         
         resolve(ret);
       } catch (error) {
-        reject(error);
+        reject(await get_cpp_exception(error));
       }
     });
   });
@@ -148,7 +149,7 @@ async function draw_layer_image(
         
         resolve(ret);
       } catch (error) {
-        reject(error);
+        reject(await get_cpp_exception(error));
       }
     });
   });
@@ -210,7 +211,7 @@ async function draw_layer_image_no_compute(
         
         resolve(ret);
       } catch (error) {
-        reject(error);
+        reject(await get_cpp_exception(error));
       }
     });
   });

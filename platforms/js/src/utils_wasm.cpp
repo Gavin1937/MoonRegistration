@@ -11,6 +11,16 @@
 extern "C"
 {
 
+// Sometimes, C++ will throw its std::exception in the form of a pointer to js,
+// so you will see it as a number print out on the console. This function will
+// try to retrieve the exception message from pointer.
+// See https://github.com/emscripten-core/emscripten/issues/6330
+// Reference: https://github.com/emscripten-core/emscripten/issues/6330#issuecomment-568239092
+const char* mrwasm_get_last_exception_msg(int exception_ptr)
+{
+    return reinterpret_cast<std::exception*>(exception_ptr)->what();
+}
+
 void* mrwasm_create_ImageHandlerData(cv::Mat* image_ptr)
 {
     try
