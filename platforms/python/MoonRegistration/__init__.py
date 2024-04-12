@@ -10,7 +10,7 @@ __path__ = extend_path(__path__, __name__)
 
 __doc__ = '''
 Python wrapper for MoonRegistration Library.
-MoonRegistration Is A Cross Platform C++ library for Moon Location Detection & Moon Image Registration.
+A Cross-Platform Multi-Language library for Moon Location Detection & Moon Image Registration.
 '''
 
 import os, sys
