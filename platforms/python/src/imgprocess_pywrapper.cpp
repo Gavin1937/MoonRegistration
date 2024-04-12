@@ -533,8 +533,9 @@ void init_imgprocess(py::module &module)
       - foreground: foreground image
       - foreground_transparency: a 0~1 float percentage changing foreground image's transparency,
         default 1.0
-      - filter_px: list[int] length of 4, pixel with pixel value to filter in the foreground image,
-        set it to None if you don't need it, default None
+      - filter_px: pointer to cv::Vec4b pixel with pixel value to filter in the foreground image.
+        A pixel will be ignore when all of its values is <= filter_px.
+        Set it to NULL if you don't need it, default NULL.
     
     Returns:
       - output image
@@ -570,8 +571,9 @@ void init_imgprocess(py::module &module)
       - foreground: foreground image
       - foreground_transparency: a 0~1 float percentage changing foreground image's transparency,
         default 1.0
-      - filter_px: list[int] length of 4, pixel with pixel value to filter in the foreground image,
-        set it to None if you don't need it, default None
+      - filter_px: pointer to cv::Vec4b pixel with pixel value to filter in the foreground image.
+        A pixel will be ignore when all of its values is <= filter_px.
+        Set it to NULL if you don't need it, default NULL.
     
     Returns:
       - output image

@@ -57,7 +57,8 @@ async function cut_image_from_circle(
  * @param {ImageHandler} foreground_image_handler foreground image handler object
  * @param {float} foreground_transparency a 0~1 float percentage changing foreground image's transparency, default 1.0
  * @param {int} filter_px a 4-bytes integer that represents BGRA value of a pixel in each of its bytes.
- * function will use it to filter the pixel in foreground image, set it to -1 if you don't need it.
+ * function will use it to filter the pixel in foreground image. A pixel will be ignore when all of
+ * its values is <= filter_px. Set it to -1 if you don't need it.
  * Note that integer are processed in little-endian, so it should looks like: (A,R,G,B)
  * 
  * Note:

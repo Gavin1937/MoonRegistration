@@ -24,7 +24,6 @@ set(MR_BUILD_SHARED_LIBS ON)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../ ${CMAKE_CURRENT_BINARY_DIR}/MoonRegistration)
 
 # setup include path for your project
-# so you can use `#include "MoonRegistration/mrapi.h"`
 include_directories(${MR_INCLUDE_DIR})
 
 

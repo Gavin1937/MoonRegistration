@@ -494,8 +494,9 @@ void init_MoonRegistrate(py::module &module)
       - layer_image_in: input layer image
       - layer_image_transparency: a 0~1 float percentage changing layer image's transparency,
         default 1.0
-      - filter_px: pointer to cv::Vec4b pixel with pixel value to filter in the layer image,
-        set it to NULL if you don't need it, default NULL
+      - filter_px: pointer to cv::Vec4b pixel with pixel value to filter in the foreground image.
+        A pixel will be ignore when all of its values is <= filter_px.
+        Set it to NULL if you don't need it, default NULL.
     
     Note:
       - this function is designed to work with different number of color channels

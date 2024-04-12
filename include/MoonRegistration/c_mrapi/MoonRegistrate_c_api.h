@@ -30,7 +30,8 @@ extern "C" {
 //     MRC_SIFT, MRC_ORB, MRC_AKAZE, MRC_BRISK, MRC_EMPTY_ALGORITHM, MRC_INVALID_ALGORITHM
 //   - layer_image_transparency: a 0~1 float percentage changing layer image's transparency
 //   - filter_px: 4 1-byte numbers representing BGRA value of a pixel, function will use it
-//     to filter the pixel in layer image, set it to NULL if you don't need it
+//     to filter the pixel in layer image. A pixel will be ignore when all of its values
+//     is <= filter_px. Set it to NULL if you don't need it
 //   - error_message: pointer to string buffer for error_message, set it to NULL if you don't need it
 // 
 // Returns:
