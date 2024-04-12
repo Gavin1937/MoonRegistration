@@ -236,6 +236,33 @@ class ImageHandler {
   }
   
   /**
+   * Convert ImageHandler to Blob object
+   * 
+   * @returns {Promise<Blob>} Blob object
+   */
+  async to_Blob() {
+    let self = this;
+    return new Promise((resolve, reject) => {
+      instance.ready.then(async function() {
+        try {
+          let canvas = document.createElement('Canvas');
+          canvas.width = self.img_width;
+          canvas.height = self.img_height;
+          let ctx = canvas.getContext('2d', {
+            'colorSpace': 'srgb'
+          });
+          ctx.putImageData(await self.to_ImageData(), 0, 0);
+          canvas.toBlob((blob_data) => {
+            resolve(blob_data);
+          })
+        } catch (error) {
+          reject(await get_cpp_exception(error));
+        }
+      });
+    });
+  }
+  
+  /**
    * Check whether ImageHandler is valid or not
    * 
    * @returns {boolean} true if valid, otherwise false
