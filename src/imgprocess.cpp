@@ -563,11 +563,14 @@ EXPORT_SYMBOL void stack_imgs(
         show_fore = mr::make_binary_num<float>(select_fore_px_val(fore_px), 0.0f, 0.0f, 1.0f);
         
         // when fore_px value <= filter_px value, don't draw foreground
-        uchar fore_px_under_filter_px = 1;
-        for (int i = 0; i < foreground_channel; ++i)
-            fore_px_under_filter_px = fore_px_under_filter_px & uchar(fore_px[i] <= filter_px->val[i]);
-        if (fore_px_under_filter_px)
-            show_fore = 0.0;
+        if (filter_px)
+        {
+            uchar fore_px_under_filter_px = 1;
+            for (int i = 0; i < foreground_channel; ++i)
+                fore_px_under_filter_px = fore_px_under_filter_px & uchar(fore_px[i] <= filter_px->val[i]);
+            if (fore_px_under_filter_px)
+                show_fore = 0.0;
+        }
         
         
         // if show_fore is 1.0, adding foreground pixel on top of background pixel,
@@ -712,11 +715,14 @@ EXPORT_SYMBOL void stack_imgs_in_place(
         show_fore = mr::make_binary_num<float>(select_fore_px_val(fore_px), 0.0f, 0.0f, 1.0f);
         
         // when fore_px value <= filter_px value, don't draw foreground
-        uchar fore_px_under_filter_px = 1;
-        for (int i = 0; i < foreground_channel; ++i)
-            fore_px_under_filter_px = fore_px_under_filter_px & uchar(fore_px[i] <= filter_px->val[i]);
-        if (fore_px_under_filter_px)
-            show_fore = 0.0;
+        if (filter_px)
+        {
+            uchar fore_px_under_filter_px = 1;
+            for (int i = 0; i < foreground_channel; ++i)
+                fore_px_under_filter_px = fore_px_under_filter_px & uchar(fore_px[i] <= filter_px->val[i]);
+            if (fore_px_under_filter_px)
+                show_fore = 0.0;
+        }
         
         
         // if show_fore is 1.0, adding foreground pixel on top of background pixel,
