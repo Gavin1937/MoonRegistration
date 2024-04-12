@@ -101,7 +101,9 @@ int main(int argc, char** argv)
             
             // draw transformed layer image on top of current frame, so we can show it
             cv::Rect roi = mr::rectangle_to_roi(rect_out);
-            mr::stack_imgs_in_place(frame, roi, transformed_layer);
+            float layer_image_transparency = 1.0f;
+            const cv::Vec4b filter_px = cv::Vec4b(0,0,0,255);
+            mr::stack_imgs_in_place(frame, roi, transformed_layer, layer_image_transparency, &filter_px);
         }
         catch(const std::exception& e)
         {

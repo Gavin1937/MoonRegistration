@@ -77,7 +77,9 @@ while True:
         
         # draw transformed layer image on top of current frame, so we can show it
         roi = mr.shapes.rectangle_to_roi(rect_out)
-        frame = mr.imgprocess.stack_imgs_in_place(frame, roi, transformed_layer, 1, (0,0,0,255))
+        layer_image_transparency = 1.0
+        filter_px = [0,0,0,255]
+        frame = mr.imgprocess.stack_imgs_in_place(frame, roi, transformed_layer, layer_image_transparency, filter_px)
     except Exception as e:
         print(e)
     

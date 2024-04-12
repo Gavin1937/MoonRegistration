@@ -168,7 +168,9 @@ int main(int argc, char** argv)
         
         cv::Mat layer_image_in = cv::imread(layer_image, cv::IMREAD_UNCHANGED);
         cv::Mat layer_image_out;
-        registrar.draw_layer_image(layer_image_in, layer_image_out);
+        float layer_image_transparency = 1.0f;
+        const cv::Vec4b filter_px = cv::Vec4b(0,0,0,255);
+        registrar.draw_layer_image(layer_image_in, layer_image_out, layer_image_transparency, &filter_px);
         cv::imwrite("./output/06_layer_image.png", layer_image_out);
     }
     catch (const std::exception& error)
