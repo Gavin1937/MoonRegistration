@@ -287,11 +287,13 @@ EXPORT_SYMBOL void MoonRegistrar::draw_red_transformed_user_image(cv::Mat& image
         throw std::runtime_error("Transformed Image size not match with original image size");
     
     cv::cvtColor(transformed_image, transformed_image, cv::COLOR_BGR2GRAY);
+    // draw image with user_image's size
+    cv::Size image_size(transformed_image.size());
     
     cv::merge(
         std::vector<cv::Mat>({
-            cv::Mat::zeros(this->image_size, CV_8UC1),  // B
-            cv::Mat::zeros(this->image_size, CV_8UC1),  // G
+            cv::Mat::zeros(image_size, CV_8UC1),        // B
+            cv::Mat::zeros(image_size, CV_8UC1),        // G
             transformed_image                           // R
         }),
         image_out
@@ -304,12 +306,14 @@ EXPORT_SYMBOL void MoonRegistrar::draw_green_model_image(cv::Mat& image_out)
     
     cv::Mat gray_model_image;
     cv::cvtColor(this->model_image, gray_model_image, cv::COLOR_BGR2GRAY);
+    // draw image with model_image's size
+    cv::Size image_size(this->model_image.size());
     
     cv::merge(
         std::vector<cv::Mat>({
-            cv::Mat::zeros(this->image_size, CV_8UC1),  // B
+            cv::Mat::zeros(image_size, CV_8UC1),        // B
             gray_model_image,                           // G
-            cv::Mat::zeros(this->image_size, CV_8UC1)   // R
+            cv::Mat::zeros(image_size, CV_8UC1)         // R
         }),
         image_out
     );
@@ -321,6 +325,8 @@ EXPORT_SYMBOL void MoonRegistrar::draw_stacked_red_green_image(cv::Mat& image_ou
     
     cv::Mat green;
     cv::cvtColor(this->model_image, green, cv::COLOR_BGR2GRAY);
+    // resize model_image to user_image's size
+    cv::resize(green, green, this->image_size);
     
     cv::Mat red;
     if (transformed_image_in.empty())
