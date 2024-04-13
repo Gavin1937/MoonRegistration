@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "author": "Gavin1937",
+  "homepage": "https://github.com/Gavin1937/MoonRegistration",
   "repository": {
     "type": "git",
     "url": "https://github.com/Gavin1937/MoonRegistration.git"
