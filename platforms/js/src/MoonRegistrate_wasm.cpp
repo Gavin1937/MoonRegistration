@@ -77,13 +77,43 @@ void* mrwasm_transform_layer_image(
     }
 }
 
+void* mrwasm_compute_registration(
+    void* user_image,
+    void* model_image,
+    const int algorithm
+)
+{
+    try
+    {
+        cv::Mat* user_image_ptr = reinterpret_cast<cv::Mat*>(user_image);
+        cv::Mat* model_image_ptr = reinterpret_cast<cv::Mat*>(model_image);
+        
+        mr::MoonRegistrar registrar(
+            *user_image_ptr, *model_image_ptr,
+            static_cast<mr::RegistrationAlgorithms>(algorithm)
+        );
+        
+        registrar.compute_registration();
+        
+        cv::Mat flatten_matrix = registrar.get_homography_matrix().reshape(1, 1);
+        double* heap_matrix = new double[9];
+        memcpy(heap_matrix, flatten_matrix.ptr<double>(0), sizeof(double)*9);
+        return reinterpret_cast<void*>(heap_matrix);
+    }
+    catch(const std::exception& error)
+    {
+        throw error;
+    }
+}
+
 void* mrwasm_draw_layer_image(
     void* user_image,
     void* model_image,
     void* layer_image,
     const int algorithm,
     const float layer_image_transparency,
-    const int filter_px
+    const int filter_px,
+    const bool enable_color_correction
 )
 {
     try
@@ -120,8 +150,11 @@ void* mrwasm_draw_layer_image(
         if (vec4b_filter_px)
             delete vec4b_filter_px;
         
-        // convert image_out from BGRA to RGBA so the color don't go wrong
-        cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
+        if (enable_color_correction)
+        {
+            // convert image_out from BGRA to RGBA so the color don't go wrong
+            cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
+        }
         
         return mrwasm_create_ImageHandlerData(image_out);
     }
@@ -137,7 +170,8 @@ void* mrwasm_draw_layer_image_no_compute(
     void* layer_image,
     void* homography_matrix,
     const float layer_image_transparency,
-    const int filter_px
+    const int filter_px,
+    const bool enable_color_correction
 )
 {
     try
@@ -173,8 +207,11 @@ void* mrwasm_draw_layer_image_no_compute(
         if (vec4b_filter_px)
             delete vec4b_filter_px;
         
-        // convert image_out from BGRA to RGBA so the color don't go wrong
-        cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
+        if (enable_color_correction)
+        {
+            // convert image_out from BGRA to RGBA so the color don't go wrong
+            cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
+        }
         
         return mrwasm_create_ImageHandlerData(image_out);
     }

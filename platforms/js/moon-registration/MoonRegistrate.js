@@ -2,6 +2,7 @@ export {
   RegistrationAlgorithms,
   transform_user_image,
   transform_layer_image,
+  compute_registration,
   draw_layer_image,
   draw_layer_image_no_compute,
 };
@@ -109,6 +110,48 @@ async function transform_layer_image(
 }
 
 /**
+ * Run mr::MoonRegistrar::compute_registration on input image
+ * 
+ * @param {ImageHandler} user_image_handler ImageHandler of user_image
+ * @param {ImageHandler} model_image_handler ImageHandler of model_image
+ * @param {int} algorithm use class RegistrationAlgorithms to select the algorithm for registration, can be:
+ * SIFT, ORB, AKAZE, BRISK, EMPTY_ALGORITHM, INVALID_ALGORITHM
+ * Default SIFT
+ * @returns {Promise<Array>} output homography matrix as 2D array
+ */
+async function compute_registration(
+  user_image_handler,
+  model_image_handler,
+  algorithm = RegistrationAlgorithms.SIFT
+)
+{
+  return new Promise((resolve, reject) => {
+    instance.ready.then(async function() {
+      try {
+        let ptr = await instance._mrwasm_compute_registration(
+          user_image_handler.image_ptr,
+          model_image_handler.image_ptr,
+          algorithm
+        );
+        
+        let data_list = new Float64Array(instance.HEAP8.buffer, ptr, 9);
+        data_list = Array.from(data_list);
+        let ret = []
+        while(data_list.length) {
+          ret.push(data_list.splice(0,3));
+        }
+        
+        await instance._mrwasm_destroy_ImageHandlerData(ptr);
+        
+        resolve(ret);
+      } catch (error) {
+        reject(await get_cpp_exception(error));
+      }
+    });
+  });
+}
+
+/**
  * Run mr::MoonRegistrar::draw_layer_image on input image
  * 
  * @param {ImageHandler} user_image_handler ImageHandler of user_image
@@ -122,6 +165,9 @@ async function transform_layer_image(
  * function will use it to filter the pixel in layer image. A pixel will be ignore when all of its values
  * is <= filter_px. Set it to -1 if you don't need it.
  * Note that integer are processed in little-endian, so it should looks like: (A,R,G,B)
+ * @param {boolean} enable_color_correction a boolean flag to enable/disable RGBA <--> BGRA color correction.
+ * Default true. Any ImageHandler created from JS side need color correction. ImageHandler created from C++
+ * side don't (e.g. return value of this function). Use this flag to avoid bad color on output image.
  * @returns {Promise<ImageHandler>} output ImageHandler object
  */
 async function draw_layer_image(
@@ -130,7 +176,8 @@ async function draw_layer_image(
   layer_image_handler,
   algorithm = RegistrationAlgorithms.SIFT,
   layer_image_transparency = 1.0,
-  filter_px = -1
+  filter_px = -1,
+  enable_color_correction = true
 )
 {
   return new Promise((resolve, reject) => {
@@ -142,7 +189,8 @@ async function draw_layer_image(
           layer_image_handler.image_ptr,
           algorithm,
           layer_image_transparency,
-          filter_px
+          filter_px,
+          enable_color_correction
         );
         let ret = new ImageHandler();
         await ret.load_from_ImageHandlerData(ptr);
@@ -170,6 +218,9 @@ async function draw_layer_image(
  * function will use it to filter the pixel in layer image. A pixel will be ignore when all of its values
  * is <= filter_px. Set it to -1 if you don't need it.
  * Note that integer are processed in little-endian, so it should looks like: (A,R,G,B)
+ * @param {boolean} enable_color_correction a boolean flag to enable/disable RGBA <--> BGRA color correction.
+ * Default true. Any ImageHandler created from JS side need color correction. ImageHandler created from C++
+ * side don't (e.g. return value of this function). Use this flag to avoid bad color on output image.
  * @returns {Promise<ImageHandler>} output ImageHandler object
  */
 async function draw_layer_image_no_compute(
@@ -178,7 +229,8 @@ async function draw_layer_image_no_compute(
   layer_image_handler,
   homography_matrix,
   layer_image_transparency = 1.0,
-  filter_px = -1
+  filter_px = -1,
+  enable_color_correction = true
 )
 {
   return new Promise((resolve, reject) => {
@@ -201,7 +253,8 @@ async function draw_layer_image_no_compute(
           layer_image_handler.image_ptr,
           homography_matrix_ptr,
           layer_image_transparency,
-          filter_px
+          filter_px,
+          enable_color_correction
         );
         
         let ret = new ImageHandler();
