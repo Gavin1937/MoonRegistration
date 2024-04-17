@@ -165,9 +165,6 @@ async function compute_registration(
  * function will use it to filter the pixel in layer image. A pixel will be ignore when all of its values
  * is <= filter_px. Set it to -1 if you don't need it.
  * Note that integer are processed in little-endian, so it should looks like: (A,R,G,B)
- * @param {boolean} enable_color_correction a boolean flag to enable/disable RGBA <--> BGRA color correction.
- * Default true. Any ImageHandler created from JS side need color correction. ImageHandler created from C++
- * side don't (e.g. return value of this function). Use this flag to avoid bad color on output image.
  * @returns {Promise<ImageHandler>} output ImageHandler object
  */
 async function draw_layer_image(
@@ -176,8 +173,7 @@ async function draw_layer_image(
   layer_image_handler,
   algorithm = RegistrationAlgorithms.SIFT,
   layer_image_transparency = 1.0,
-  filter_px = -1,
-  enable_color_correction = true
+  filter_px = -1
 )
 {
   return new Promise((resolve, reject) => {
@@ -189,8 +185,7 @@ async function draw_layer_image(
           layer_image_handler.image_ptr,
           algorithm,
           layer_image_transparency,
-          filter_px,
-          enable_color_correction
+          filter_px
         );
         let ret = new ImageHandler();
         await ret.load_from_ImageHandlerData(ptr);
@@ -218,9 +213,6 @@ async function draw_layer_image(
  * function will use it to filter the pixel in layer image. A pixel will be ignore when all of its values
  * is <= filter_px. Set it to -1 if you don't need it.
  * Note that integer are processed in little-endian, so it should looks like: (A,R,G,B)
- * @param {boolean} enable_color_correction a boolean flag to enable/disable RGBA <--> BGRA color correction.
- * Default true. Any ImageHandler created from JS side need color correction. ImageHandler created from C++
- * side don't (e.g. return value of this function). Use this flag to avoid bad color on output image.
  * @returns {Promise<ImageHandler>} output ImageHandler object
  */
 async function draw_layer_image_no_compute(
@@ -229,8 +221,7 @@ async function draw_layer_image_no_compute(
   layer_image_handler,
   homography_matrix,
   layer_image_transparency = 1.0,
-  filter_px = -1,
-  enable_color_correction = true
+  filter_px = -1
 )
 {
   return new Promise((resolve, reject) => {
@@ -253,8 +244,7 @@ async function draw_layer_image_no_compute(
           layer_image_handler.image_ptr,
           homography_matrix_ptr,
           layer_image_transparency,
-          filter_px,
-          enable_color_correction
+          filter_px
         );
         
         let ret = new ImageHandler();

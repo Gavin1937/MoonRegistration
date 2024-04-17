@@ -83,9 +83,6 @@ void* mrwasm_stack_imgs(
         if (vec4b_filter_px)
             delete vec4b_filter_px;
         
-        // convert image_out from BGRA to RGBA so the color don't go wrong
-        cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
-        
         return mrwasm_create_ImageHandlerData(image_out);
     }
     catch(const std::exception& error)

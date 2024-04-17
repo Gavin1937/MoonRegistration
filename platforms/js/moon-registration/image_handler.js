@@ -6,6 +6,10 @@ import { get_cpp_exception } from './internal.js';
 
 /**
  * A simple class that handles image loading & reading between JS & C++
+ * 
+ * About color format:
+ *   - All the images load into this handler class will have color format BGRA for OpenCV under the hood
+ *   - When we export image into JavaScript via get_... or to_... function, image will have color format RGBA for ease of use
  */
 class ImageHandler {
   constructor() {
@@ -178,11 +182,14 @@ class ImageHandler {
     return new Promise((resolve, reject) => {
       instance.ready.then(async function() {
         try {
-          resolve(new Uint8Array(
+          let ptr = await instance._mrwasm_get_rgba_image_ptr(self.image_ptr);
+          let ret = new Uint8Array(
             instance.HEAP8.buffer,
-            self.buffer_ptr,
+            ptr,
             self.img_data_length
-          ));
+          );
+          await instance._mrwasm_destroy_image(ptr, 0);
+          resolve(ret);
         } catch (error) {
           reject(await get_cpp_exception(error));
         }
@@ -200,11 +207,14 @@ class ImageHandler {
     return new Promise((resolve, reject) => {
       instance.ready.then(async function() {
         try {
-          resolve(new Uint8ClampedArray(
+          let ptr = await instance._mrwasm_get_rgba_image_ptr(self.image_ptr);
+          let ret = new Uint8ClampedArray(
             instance.HEAP8.buffer,
-            self.buffer_ptr,
+            ptr,
             self.img_data_length
-          ));
+          );
+          await instance._mrwasm_destroy_image(ptr, 0);
+          resolve(ret);
         } catch (error) {
           reject(await get_cpp_exception(error));
         }

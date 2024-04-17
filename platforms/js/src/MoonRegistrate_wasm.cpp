@@ -32,9 +32,6 @@ void* mrwasm_transform_user_image(
         cv::Mat* image_out = new cv::Mat();
         registrar.transform_user_image(*image_out);
         
-        // convert image_out from BGRA to RGBA so the color don't go wrong
-        cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
-        
         return mrwasm_create_ImageHandlerData(image_out);
     }
     catch(const std::exception& error)
@@ -65,9 +62,6 @@ void* mrwasm_transform_layer_image(
         
         cv::Mat* image_out = new cv::Mat();
         registrar.transform_layer_image(*layer_image_ptr, *image_out);
-        
-        // convert image_out from BGRA to RGBA so the color don't go wrong
-        cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
         
         return mrwasm_create_ImageHandlerData(image_out);
     }
@@ -112,8 +106,7 @@ void* mrwasm_draw_layer_image(
     void* layer_image,
     const int algorithm,
     const float layer_image_transparency,
-    const int filter_px,
-    const bool enable_color_correction
+    const int filter_px
 )
 {
     try
@@ -150,12 +143,6 @@ void* mrwasm_draw_layer_image(
         if (vec4b_filter_px)
             delete vec4b_filter_px;
         
-        if (enable_color_correction)
-        {
-            // convert image_out from BGRA to RGBA so the color don't go wrong
-            cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
-        }
-        
         return mrwasm_create_ImageHandlerData(image_out);
     }
     catch(const std::exception& error)
@@ -170,8 +157,7 @@ void* mrwasm_draw_layer_image_no_compute(
     void* layer_image,
     void* homography_matrix,
     const float layer_image_transparency,
-    const int filter_px,
-    const bool enable_color_correction
+    const int filter_px
 )
 {
     try
@@ -206,12 +192,6 @@ void* mrwasm_draw_layer_image_no_compute(
         );
         if (vec4b_filter_px)
             delete vec4b_filter_px;
-        
-        if (enable_color_correction)
-        {
-            // convert image_out from BGRA to RGBA so the color don't go wrong
-            cv::cvtColor(*image_out, *image_out, cv::COLOR_BGRA2RGBA);
-        }
         
         return mrwasm_create_ImageHandlerData(image_out);
     }

@@ -45,6 +45,7 @@ set(UTILS_FUNCTION
     "_mrwasm_create_image_buffer"
     "_mrwasm_create_image_ptr"
     "_mrwasm_destroy_image"
+    "_mrwasm_get_rgba_image_ptr"
     "_mrwasm_destroy_RectangleAndImageHandlerData"
     "_mrwasm_create_homography_matrix_ptr"
     "_mrwasm_destroy_homography_matrix_ptr"

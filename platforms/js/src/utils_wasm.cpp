@@ -117,6 +117,10 @@ uint8_t* mrwasm_create_image_buffer(const int img_binary_length)
     }
 }
 
+// About image color format:
+//   - All the cv::Mat* image_ptr and uchar* buffer_ptr are formatted in BGRA for opencv
+//   - We do the initial conversion in mrwasm_create_image_ptr()
+//   - If we need image formatted in RGBA, we call mrwasm_get_rgba_image_ptr() to convert it
 void* mrwasm_create_image_ptr(
     uint8_t* img_binary,
     const int img_binary_length,
@@ -149,6 +153,9 @@ void* mrwasm_create_image_ptr(
             CV_MAKETYPE(CV_8U, num_of_channels),
             img_binary
         );
+        
+        // convert color format from RGBA to BGRA
+        // so its ready for opencv
         cv::cvtColor(image, *output, cv::COLOR_RGBA2BGRA);
         
         return reinterpret_cast<void*>(output);
@@ -172,6 +179,21 @@ void mrwasm_destroy_image(uint8_t* img_binary, void* img_ptr)
     {
         throw error;
     }
+}
+
+void* mrwasm_get_rgba_image_ptr(void* image_ptr)
+{
+    cv::Mat* mat_image_ptr = reinterpret_cast<cv::Mat*>(image_ptr);
+    cv::Mat buffer;
+    
+    // convert color from BGRA to RGBA
+    // so its ready for JS
+    cv::cvtColor(*mat_image_ptr, buffer, cv::COLOR_BGRA2RGBA);
+    
+    size_t size = buffer.total() * buffer.elemSize();
+    uchar* output = new uchar[size];
+    memcpy(output, buffer.data, size);
+    return reinterpret_cast<void*>(output);
 }
 
 void* mrwasm_create_homography_matrix_ptr(
