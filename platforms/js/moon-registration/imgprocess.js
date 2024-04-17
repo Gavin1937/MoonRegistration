@@ -60,6 +60,8 @@ async function cut_image_from_circle(
  * function will use it to filter the pixel in foreground image. A pixel will be ignore when all of
  * its values is <= filter_px. Set it to -1 if you don't need it.
  * Note that integer are processed in little-endian, so it should looks like: (A,R,G,B)
+ * @param {bool} auto_resize bool flag, whether to automatically resize foreground respecting to background.
+ * default false
  * 
  * Note:
  *   - this function is designed to work with different number of color channels
@@ -80,7 +82,8 @@ async function stack_imgs(
   background_roi,
   foreground_image_handler,
   foreground_transparency = 1.0,
-  filter_px = -1
+  filter_px = -1,
+  auto_resize = false
 )
 {
   return new Promise((resolve, reject) => {
@@ -92,7 +95,8 @@ async function stack_imgs(
           background_roi[2], background_roi[3],
           foreground_image_handler.image_ptr,
           foreground_transparency,
-          filter_px
+          filter_px,
+          auto_resize
         );
         
         let ret = new ImageHandler();

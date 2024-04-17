@@ -141,10 +141,8 @@ EXPORT_SYMBOL void cut_image_from_circle(
 
 // Sync the width & height of secondary image to primary image.
 // So secondary image can fit inside primary image.
-// If two images are in the same shape (landscape or portrait),
-// resize secondary image with primary image's longer side.
-// If two images are not in the same shape (landscape or portrait),
-// resize secondary image with primary image's shorter side.
+// This function will try to sync both images by their width or height.
+// And make sure secondary image won't go out of bound of primary image after sync.
 // 
 // Parameters:
 //   - primary: image for sync reference
@@ -153,10 +151,8 @@ EXPORT_SYMBOL void sync_img_size(const cv::Mat& primary, cv::Mat& secondary);
 
 // Sync the width & height of secondary image to primary image.
 // So secondary image can fit inside primary image.
-// If two images are in the same shape (landscape or portrait),
-// resize secondary image with primary image's longer side.
-// If two images are not in the same shape (landscape or portrait),
-// resize secondary image with primary image's shorter side.
+// This function will try to sync both images by their width or height.
+// And make sure secondary image won't go out of bound of primary image after sync.
 // 
 // Parameters:
 //   - primary_width: image width for sync reference
@@ -212,6 +208,8 @@ EXPORT_SYMBOL void merge_img_channel(const mr::ImageChannels& channels, cv::Mat&
 //   - filter_px: pointer to cv::Vec4b pixel with pixel value to filter in the foreground image.
 //     A pixel will be ignore when all of its values is <= filter_px.
 //     Set it to NULL if you don't need it, default NULL.
+//   - auto_resize: bool flag, whether to automatically resize foreground respecting to background.
+//     default false
 // 
 // Note:
 //   - this function is designed to work with different number of color channels
@@ -230,7 +228,8 @@ EXPORT_SYMBOL void stack_imgs(
     const cv::Mat& foreground,
     cv::Mat& image_out,
     const float foreground_transparency = 1.0f,
-    const cv::Vec4b* filter_px = NULL
+    const cv::Vec4b* filter_px = NULL,
+    const bool auto_resize = false
 );
 
 // Stack two images together respecting transparency,
@@ -247,6 +246,8 @@ EXPORT_SYMBOL void stack_imgs(
 //   - filter_px: pointer to cv::Vec4b pixel with pixel value to filter in the foreground image.
 //     A pixel will be ignore when all of its values is <= filter_px.
 //     Set it to NULL if you don't need it, default NULL.
+//   - auto_resize: bool flag, whether to automatically resize foreground respecting to background.
+//     default false
 // 
 // Note:
 //   - this function is designed to work with different number of color channels
@@ -263,7 +264,8 @@ EXPORT_SYMBOL void stack_imgs_in_place(
     const cv::Rect background_roi,
     const cv::Mat& foreground,
     const float foreground_transparency = 1.0f,
-    const cv::Vec4b* filter_px = NULL
+    const cv::Vec4b* filter_px = NULL,
+    const bool auto_resize = false
 );
 
 }

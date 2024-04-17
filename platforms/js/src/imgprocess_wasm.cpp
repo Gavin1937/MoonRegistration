@@ -48,7 +48,8 @@ void* mrwasm_stack_imgs(
     const int roi_width, const int roi_height,
     void* foreground,
     const float foreground_transparency,
-    const int filter_px
+    const int filter_px,
+    const bool auto_resize
 )
 {
     try
@@ -75,7 +76,8 @@ void* mrwasm_stack_imgs(
             *background_ptr, background_roi,
             *foreground_ptr, *image_out,
             foreground_transparency,
-            vec4b_filter_px
+            vec4b_filter_px,
+            auto_resize
         );
         
         if (vec4b_filter_px)

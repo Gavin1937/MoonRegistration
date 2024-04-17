@@ -240,51 +240,59 @@ EXPORT_SYMBOL void cut_image_from_circle(
 EXPORT_SYMBOL void sync_img_size(const cv::Mat &primary, cv::Mat &secondary)
 {
     mr::ImageShape primary_shape = mr::calc_image_shape(primary);
-    int primary_shorter = primary_shape.shorter_side;
-    int primary_longer = primary_shape.longer_side;
     mr::ImageShape secondary_shape = mr::calc_image_shape(secondary);
-    
-    bool primary_is_landscape = primary_shape.is_landscape;
-    bool secondary_is_landscape = secondary_shape.is_landscape;
+    double width_ratio = (
+        static_cast<double>(primary_shape.width) /
+        static_cast<double>(secondary_shape.width)
+    );
+    double height_ratio = (
+        static_cast<double>(primary_shape.height) /
+        static_cast<double>(secondary_shape.height)
+    );
     
     float ratio_out;
-    int param_longer_side = -1;
+    int param_width = -1;
+    int param_height = -1;
     
-    // both in landscape or portrait
-    if (primary_is_landscape == secondary_is_landscape)
-        param_longer_side = primary_longer;
-    // one in landscape and one in portrait
-    else
-        param_longer_side = primary_shorter;
+    // sync size by width won't make height be out of bound
+    if ((width_ratio * secondary_shape.height) <= primary_shape.height)
+        param_width = primary_shape.width;
+    // sync size by height won't make width be out of bound
+    else if ((height_ratio * secondary_shape.width) <= primary_shape.width)
+        param_height = primary_shape.height;
     
     mr::resize_with_aspect_ratio(
         secondary, secondary, ratio_out,
-        -1, -1, param_longer_side
+        param_width, param_height, -1
     );
 }
 
 EXPORT_SYMBOL void sync_img_size(const int primary_width, const int primary_height, cv::Mat& secondary)
 {
-    int primary_shorter = std::min<int>(primary_width, primary_height);
-    int primary_longer = std::max<int>(primary_width, primary_height);
     mr::ImageShape secondary_shape = mr::calc_image_shape(secondary);
-    
-    bool primary_is_landscape = primary_width > primary_height;
-    bool secondary_is_landscape = secondary_shape.is_landscape;
+    double width_ratio = (
+        static_cast<double>(primary_width) /
+        static_cast<double>(secondary_shape.width)
+    );
+    double height_ratio = (
+        static_cast<double>(primary_height) /
+        static_cast<double>(secondary_shape.height)
+    );
     
     float ratio_out;
-    int param_longer_side = -1;
+    int param_width = -1;
+    int param_height = -1;
     
-    // both in landscape or portrait
-    if (primary_is_landscape == secondary_is_landscape)
-        param_longer_side = primary_longer;
-    // one in landscape and one in portrait
-    else
-        param_longer_side = primary_shorter;
+    // sync size by width won't make height be out of bound
+    if ((width_ratio * secondary_shape.height) <= primary_height)
+        param_width = primary_width;
+    // sync size by height won't make width be out of bound
+    else if ((height_ratio * secondary_shape.width) <= primary_width)
+        param_height = primary_height;
     
     mr::resize_with_aspect_ratio(
         secondary, secondary, ratio_out,
-        -1, -1, param_longer_side
+        param_width, param_height, -1
     );
 }
 
@@ -461,19 +469,23 @@ EXPORT_SYMBOL void stack_imgs(
     const cv::Mat& foreground,
     cv::Mat& image_out,
     const float foreground_transparency,
-    const cv::Vec4b* filter_px
+    const cv::Vec4b* filter_px,
+    const bool auto_resize
 )
 {
     // setup background & foreground, sync their size if needed.
-    cv::Mat foreground_copy;
-    if (foreground.size().width > background_roi.width ||
-        foreground.size().height > background_roi.height)
+    cv::Mat foreground_copy = foreground;
+    bool foreground_out_of_bound = (
+        foreground_copy.size().width > background_roi.width ||
+        foreground_copy.size().height > background_roi.height
+    );
+    if (!auto_resize && foreground_out_of_bound)
+        throw std::runtime_error("foreground size excess background_roi.");
+    else if (auto_resize)
     {
         foreground_copy = foreground.clone();
         mr::sync_img_size(background_roi.width, background_roi.height, foreground_copy);
     }
-    else
-        foreground_copy = foreground;
     
     // update background_roi so we can center foreground inside background_roi
     int new_width = foreground_copy.size[1];
@@ -611,19 +623,23 @@ EXPORT_SYMBOL void stack_imgs_in_place(
     const cv::Rect background_roi,
     const cv::Mat& foreground,
     const float foreground_transparency,
-    const cv::Vec4b* filter_px
+    const cv::Vec4b* filter_px,
+    const bool auto_resize
 )
 {
     // setup background & foreground, sync their size if needed.
-    cv::Mat foreground_copy;
-    if (foreground.size().width > background_roi.width ||
-        foreground.size().height > background_roi.height)
+    cv::Mat foreground_copy = foreground;
+    bool foreground_out_of_bound = (
+        foreground_copy.size().width > background_roi.width ||
+        foreground_copy.size().height > background_roi.height
+    );
+    if (!auto_resize && foreground_out_of_bound)
+        throw std::runtime_error("foreground size excess background_roi.");
+    else if (auto_resize)
     {
         foreground_copy = foreground.clone();
         mr::sync_img_size(background_roi.width, background_roi.height, foreground_copy);
     }
-    else
-        foreground_copy = foreground;
     
     // update background_roi so we can center foreground inside background_roi
     int new_width = foreground_copy.size[1];

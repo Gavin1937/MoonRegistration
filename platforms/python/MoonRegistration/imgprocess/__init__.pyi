@@ -114,12 +114,14 @@ def stack_imgs(
     background_roi:Iterable[int],
     foreground:numpy.ndarray,
     foreground_transparency:float = 1.0,
-    filter_px:Iterable[int] = None
+    filter_px:Iterable[int] = None,
+    auto_resize:bool = False
 ) -> numpy.ndarray: ...
 def stack_imgs_in_place(
     background:numpy.ndarray,
     background_roi:Iterable[int],
     foreground:numpy.ndarray,
     foreground_transparency:float = 1.0,
-    filter_px:Iterable[int] = None
+    filter_px:Iterable[int] = None,
+    auto_resize:bool = False
 ) -> numpy.ndarray: ...
