@@ -81,7 +81,10 @@ void* mrwasm_stack_imgs(
         );
         
         if (vec4b_filter_px)
+        {
+            vec4b_filter_px->~Vec();
             delete vec4b_filter_px;
+        }
         
         return mrwasm_create_ImageHandlerData(image_out);
     }

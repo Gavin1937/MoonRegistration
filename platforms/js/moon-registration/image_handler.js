@@ -17,7 +17,6 @@ class ImageHandler {
     this.img_height = null;
     this.data_url = null;
     this.img_data_length = null;
-    this.buffer_ptr = null;
     this.image_ptr = null;
   }
   
@@ -37,8 +36,7 @@ class ImageHandler {
           self.img_width = data_list[0];
           self.img_height = data_list[1];
           self.img_data_length = data_list[2];
-          self.buffer_ptr = data_list[3];
-          self.image_ptr = data_list[4];
+          self.image_ptr = data_list[3];
           
           await instance._mrwasm_destroy_ImageHandlerData(ptr);
           
@@ -84,10 +82,10 @@ class ImageHandler {
             const canvas_image = ctx.getImageData(0, 0, self.img_width, self.img_height);
             self.img_data_length = canvas_image.data.length;
             
-            self.buffer_ptr = await instance._mrwasm_create_image_buffer(self.img_data_length);
-            await instance.HEAP8.set(canvas_image.data, self.buffer_ptr);
+            let buffer_ptr = await instance._mrwasm_create_image_buffer(self.img_data_length);
+            await instance.HEAP8.set(canvas_image.data, buffer_ptr);
             
-            self.image_ptr = await instance._mrwasm_create_image_ptr(self.buffer_ptr, self.img_data_length, self.img_width, self.img_height);
+            self.image_ptr = await instance._mrwasm_create_image_ptr(buffer_ptr, self.img_data_length, self.img_width, self.img_height);
           } catch (error) {
             reject(await get_cpp_exception(error));
           }
@@ -154,14 +152,13 @@ class ImageHandler {
             if (self.data_url) {
               await URL.revokeObjectURL(self.data_url);
             }
-            await instance._mrwasm_destroy_image(self.buffer_ptr, self.image_ptr);
+            await instance._mrwasm_destroy_image(self.image_ptr);
           }
           
           self.img_width = null;
           self.img_height = null;
           self.data_url = null;
           self.img_data_length = null;
-          self.buffer_ptr = null;
           self.image_ptr = null;
           
           resolve(true);
@@ -188,7 +185,7 @@ class ImageHandler {
             ptr,
             self.img_data_length
           );
-          await instance._mrwasm_destroy_image(ptr, 0);
+          await instance._mrwasm_destroy_image_buffer(ptr);
           resolve(ret);
         } catch (error) {
           reject(await get_cpp_exception(error));
@@ -213,7 +210,7 @@ class ImageHandler {
             ptr,
             self.img_data_length
           );
-          await instance._mrwasm_destroy_image(ptr, 0);
+          await instance._mrwasm_destroy_image_buffer(ptr);
           resolve(ret);
         } catch (error) {
           reject(await get_cpp_exception(error));
@@ -282,7 +279,6 @@ class ImageHandler {
       this.img_width &&
       this.img_height &&
       this.img_data_length &&
-      this.buffer_ptr &&
       this.image_ptr
     );
   }

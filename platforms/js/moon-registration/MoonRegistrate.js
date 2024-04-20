@@ -252,7 +252,6 @@ async function draw_layer_image_no_compute(
         
         await instance._mrwasm_destroy_ImageHandlerData(ptr);
         await instance._mrwasm_destroy_homography_matrix_ptr(homography_matrix_ptr);
-        await instance._mrwasm_destroy_image(homography_matrix_buffer_ptr);
         
         resolve(ret);
       } catch (error) {

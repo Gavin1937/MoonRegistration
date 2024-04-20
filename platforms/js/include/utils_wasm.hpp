@@ -9,7 +9,6 @@ typedef struct ImageHandlerData
     int img_width = -1;
     int img_height = -1;
     int img_data_length = -1;
-    int buffer_ptr = -1;
     int image_ptr = -1;
 } ImageHandlerData;
 

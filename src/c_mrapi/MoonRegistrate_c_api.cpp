@@ -46,8 +46,12 @@ EXPORT_SYMBOL mat_ptr mrc_registrar_draw_layer_image(
             layer_image_transparency,
             vec4b_filter_px
         );
+        
         if (vec4b_filter_px)
+        {
+            vec4b_filter_px->~Vec();
             delete vec4b_filter_px;
+        }
         
         return mrc_matptr_to_ptr(image_out);
     }

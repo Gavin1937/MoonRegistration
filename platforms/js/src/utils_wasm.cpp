@@ -29,7 +29,6 @@ void* mrwasm_create_ImageHandlerData(cv::Mat* image_ptr)
         ret->img_width = static_cast<int>(image_ptr->size[1]);
         ret->img_height = static_cast<int>(image_ptr->size[0]);
         ret->img_data_length = static_cast<int>(image_ptr->total() * image_ptr->elemSize());
-        ret->buffer_ptr = reinterpret_cast<int>(image_ptr->data);
         ret->image_ptr = reinterpret_cast<int>(image_ptr);
         
         return reinterpret_cast<void*>(ret);
@@ -109,7 +108,21 @@ uint8_t* mrwasm_create_image_buffer(const int img_binary_length)
 {
     try
     {
-        return (new uint8_t[img_binary_length * sizeof(uint8_t)]);
+        uint8_t* output = new uint8_t[img_binary_length * sizeof(uint8_t)];
+        return output;
+    }
+    catch(const std::exception& error)
+    {
+        throw error;
+    }
+}
+
+void mrwasm_destroy_image_buffer(void* ptr)
+{
+    try
+    {
+        uint8_t* buffer_ptr = reinterpret_cast<uint8_t*>(ptr);
+        delete[] buffer_ptr;
     }
     catch(const std::exception& error)
     {
@@ -118,7 +131,7 @@ uint8_t* mrwasm_create_image_buffer(const int img_binary_length)
 }
 
 // About image color format:
-//   - All the cv::Mat* image_ptr and uchar* buffer_ptr are formatted in BGRA for opencv
+//   - All the cv::Mat* image_ptr and uint8_t* buffer_ptr are formatted in BGRA for opencv
 //   - We do the initial conversion in mrwasm_create_image_ptr()
 //   - If we need image formatted in RGBA, we call mrwasm_get_rgba_image_ptr() to convert it
 void* mrwasm_create_image_ptr(
@@ -158,6 +171,9 @@ void* mrwasm_create_image_ptr(
         // so its ready for opencv
         cv::cvtColor(image, *output, cv::COLOR_RGBA2BGRA);
         
+        if (img_binary)
+            delete[] img_binary;
+        
         return reinterpret_cast<void*>(output);
     }
     catch(const std::exception& error)
@@ -166,14 +182,16 @@ void* mrwasm_create_image_ptr(
     }
 }
 
-void mrwasm_destroy_image(uint8_t* img_binary, void* img_ptr)
+void mrwasm_destroy_image(void* img_ptr)
 {
     try
     {
-        if (img_binary)
-            delete[] img_binary;
         if (img_ptr)
-            delete reinterpret_cast<cv::Mat*>(img_ptr);
+        {
+            cv::Mat* mat_img_ptr = reinterpret_cast<cv::Mat*>(img_ptr);
+            mat_img_ptr->~Mat();
+            delete mat_img_ptr;
+        }
     }
     catch(const std::exception& error)
     {
@@ -209,6 +227,9 @@ void* mrwasm_create_homography_matrix_ptr(
             matrix_binary_float
         );
         
+        if (matrix_binary)
+            delete[] matrix_binary;
+        
         return reinterpret_cast<void*>(ret);
     }
     catch(const std::exception& error)
@@ -223,8 +244,9 @@ void mrwasm_destroy_homography_matrix_ptr(void* ptr)
     {
         if (ptr)
         {
-            cv::Mat* tmp = reinterpret_cast<cv::Mat*>(ptr);
-            delete tmp;
+            cv::Mat* mat_ptr = reinterpret_cast<cv::Mat*>(ptr);
+            mat_ptr->~Mat();
+            delete mat_ptr;
         }
     }
     catch(const std::exception& error)

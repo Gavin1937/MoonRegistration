@@ -44,6 +44,7 @@ set(UTILS_FUNCTION
     "_mrwasm_destroy_ImageHandlerData"
     "_mrwasm_create_image_buffer"
     "_mrwasm_create_image_ptr"
+    "_mrwasm_destroy_image_buffer"
     "_mrwasm_destroy_image"
     "_mrwasm_get_rgba_image_ptr"
     "_mrwasm_destroy_RectangleAndImageHandlerData"

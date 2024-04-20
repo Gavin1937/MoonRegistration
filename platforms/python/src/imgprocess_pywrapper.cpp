@@ -222,7 +222,12 @@ cv::Mat wrap_stack_imgs(
         auto_resize
     );
     
-    delete vec4b_filter_px;
+    if (vec4b_filter_px)
+    {
+        vec4b_filter_px->~Vec();
+        delete vec4b_filter_px;
+    }
+    
     return image_out;
 }
 
@@ -284,7 +289,12 @@ cv::Mat wrap_stack_imgs_in_place(
         auto_resize
     );
     
-    delete vec4b_filter_px;
+    if (vec4b_filter_px)
+    {
+        vec4b_filter_px->~Vec();
+        delete vec4b_filter_px;
+    }
+    
     return background;
 }
 
