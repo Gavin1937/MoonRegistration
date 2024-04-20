@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "MoonRegistration/shapes.hpp"
 
 
@@ -70,6 +72,41 @@ EXPORT_SYMBOL bool is_valid_circle(int x, int y, int radius)
     return (x >= 0 && y >= 0 && radius >= 0);
 }
 
+EXPORT_SYMBOL std::string circle_to_string(const Circle& circle)
+{
+    std::stringstream out;
+    out << "(x=" << circle.x
+        << ", y=" << circle.y
+        << ", radius=" << circle.radius
+        << ")"
+    ;
+    return out.str();
+}
+
+EXPORT_SYMBOL std::string square_to_string(const Square& square)
+{
+    std::stringstream out;
+    out << "(x=" << square.x
+        << ", y=" << square.y
+        << ", width=" << square.width
+        << ")"
+    ;
+    return out.str();
+}
+
+EXPORT_SYMBOL std::string rectangle_to_string(const Rectangle& rectangle)
+{
+    std::stringstream out;
+    out << "(top_left_x=" << rectangle.top_left_x
+        << ", top_left_y=" << rectangle.top_left_y
+        << ", bottom_right_x=" << rectangle.bottom_right_x
+        << ", bottom_right_y=" << rectangle.bottom_right_y
+        << ")"
+    ;
+    return out.str();
+}
+
+
 EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle)
 {
     return cv::Vec3f(
@@ -109,32 +146,19 @@ EXPORT_SYMBOL Rectangle roi_to_rectangle(const cv::Rect& roi)
 
 EXPORT_SYMBOL std::ostream& operator<<(std::ostream& out, const mr::Circle& in)
 {
-    out << "(x=" << in.x
-        << ", y=" << in.y
-        << ", radius=" << in.radius
-        << ")"
-    ;
+    out << mr::circle_to_string(in);
     return out;
 }
 
 EXPORT_SYMBOL std::ostream& operator<<(std::ostream& out, const mr::Square& in)
 {
-    out << "(x=" << in.x
-        << ", y=" << in.y
-        << ", width=" << in.width
-        << ")"
-    ;
+    out << mr::square_to_string(in);
     return out;
 }
 
 EXPORT_SYMBOL std::ostream& operator<<(std::ostream& out, const mr::Rectangle& in)
 {
-    out << "(top_left_x=" << in.top_left_x
-        << ", top_left_y=" << in.top_left_y
-        << ", bottom_right_x=" << in.bottom_right_x
-        << ", bottom_right_y=" << in.bottom_right_y
-        << ")"
-    ;
+    out << mr::rectangle_to_string(in);
     return out;
 }
 

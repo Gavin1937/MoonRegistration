@@ -3,6 +3,7 @@
 #include <opencv2/core/mat.hpp>
 
 #include <iostream>
+#include <string>
 
 #include "MoonRegistration/macros.h"
 #include "MoonRegistration/mrconfig.h"
@@ -43,6 +44,12 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle(int x, int y, int radius);
 EXPORT_SYMBOL bool is_valid_circle(const Circle& circle);
 
 EXPORT_SYMBOL bool is_valid_circle(int x, int y, int radius);
+
+EXPORT_SYMBOL std::string circle_to_string(const Circle& circle);
+
+EXPORT_SYMBOL std::string square_to_string(const Square& square);
+
+EXPORT_SYMBOL std::string rectangle_to_string(const Rectangle& rectangle);
 
 
 EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle);

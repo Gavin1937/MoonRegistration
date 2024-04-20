@@ -22,8 +22,8 @@ void init_shapes(py::module &module)
         .def_readwrite("x", &mr::Circle::x)
         .def_readwrite("y", &mr::Circle::y)
         .def_readwrite("radius", &mr::Circle::radius)
-        .def("__str__", str_StreamOptOverload<mr::Circle>)
-        .def("__repr__", str_StreamOptOverload<mr::Circle>)
+        .def("__str__", mr::circle_to_string)
+        .def("__repr__", mr::circle_to_string)
     ;
     
     py::class_<mr::Square>(module, "Square")
@@ -35,8 +35,8 @@ void init_shapes(py::module &module)
         .def_readwrite("x", &mr::Square::x)
         .def_readwrite("y", &mr::Square::y)
         .def_readwrite("width", &mr::Square::width)
-        .def("__str__", str_StreamOptOverload<mr::Square>)
-        .def("__repr__", str_StreamOptOverload<mr::Square>)
+        .def("__str__", mr::square_to_string)
+        .def("__repr__", mr::square_to_string)
     ;
     
     py::class_<mr::Rectangle>(module, "Rectangle")
@@ -50,8 +50,8 @@ void init_shapes(py::module &module)
         .def_readwrite("top_left_y", &mr::Rectangle::top_left_y)
         .def_readwrite("bottom_right_x", &mr::Rectangle::bottom_right_x)
         .def_readwrite("bottom_right_y", &mr::Rectangle::bottom_right_y)
-        .def("__str__", str_StreamOptOverload<mr::Rectangle>)
-        .def("__repr__", str_StreamOptOverload<mr::Rectangle>)
+        .def("__str__", mr::rectangle_to_string)
+        .def("__repr__", mr::rectangle_to_string)
     ;
     
     module.def("circle_to_square",
@@ -83,6 +83,15 @@ void init_shapes(py::module &module)
         py::arg("x"),
         py::arg("y"),
         py::arg("radius")
+    );
+    module.def("circle_to_string", mr::circle_to_string,
+        py::arg("circle")
+    );
+    module.def("square_to_string", mr::square_to_string,
+        py::arg("square")
+    );
+    module.def("rectangle_to_string", mr::rectangle_to_string,
+        py::arg("rectangle")
     );
     module.def("rectangle_to_roi", mr::rectangle_to_roi,
         py::arg("rectangle")
