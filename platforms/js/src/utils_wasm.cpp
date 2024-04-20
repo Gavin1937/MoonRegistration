@@ -163,9 +163,10 @@ void* mrwasm_create_image_ptr(
         cv::Mat* output = new cv::Mat();
         cv::Mat image = cv::Mat(
             img_height, img_width,
-            CV_MAKETYPE(CV_8U, num_of_channels),
-            img_binary
+            CV_MAKETYPE(CV_8U, num_of_channels)
         );
+        // memcpy img_binary to ensure it will be hold by Mat
+        memcpy(image.data, img_binary, img_binary_length);
         
         // convert color format from RGBA to BGRA
         // so its ready for opencv
@@ -223,9 +224,10 @@ void* mrwasm_create_homography_matrix_ptr(
         float* matrix_binary_float = reinterpret_cast<float*>(matrix_binary);
         cv::Mat* ret = new cv::Mat(
             3, 3,
-            CV_32F,
-            matrix_binary_float
+            CV_32F
         );
+        // memcpy matrix to ensure it will be hold by Mat
+        memcpy(ret->data, matrix_binary_float, 9*sizeof(float));
         
         if (matrix_binary)
             delete[] matrix_binary;

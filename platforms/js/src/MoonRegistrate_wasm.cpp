@@ -90,8 +90,8 @@ void* mrwasm_compute_registration(
         registrar.compute_registration();
         
         cv::Mat flatten_matrix = registrar.get_homography_matrix().reshape(1, 1);
-        double* heap_matrix = new double[9];
-        memcpy(heap_matrix, flatten_matrix.ptr<double>(0), sizeof(double)*9);
+        float* heap_matrix = new float[9];
+        memcpy(heap_matrix, flatten_matrix.ptr<float>(0), 9*sizeof(float));
         return reinterpret_cast<void*>(heap_matrix);
     }
     catch(const std::exception& error)

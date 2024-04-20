@@ -10,17 +10,17 @@ extern "C"
 
 EXPORT_SYMBOL mat_ptr mrc_read_image_from_filepath(const char* filepath)
 {
-    cv::Mat* ptr = new cv::Mat(
-        cv::imread(std::string(filepath), cv::IMREAD_UNCHANGED)
-    );
+    cv::Mat* ptr = new cv::Mat();
+    cv::Mat tmp = cv::imread(std::string(filepath), cv::IMREAD_UNCHANGED);
+    tmp.copyTo(*ptr);
     return mrc_mat_to_ptr(*ptr);
 }
 
 EXPORT_SYMBOL mat_ptr mrc_read_image_from_bytes(const unsigned char* bytes, const size_t byte_length)
 {
-    cv::Mat* ptr = new cv::Mat(
-        cv::imdecode(std::vector<unsigned char>(bytes, bytes+byte_length), cv::IMREAD_UNCHANGED)
-    );
+    cv::Mat* ptr = new cv::Mat();
+    cv::Mat tmp = cv::imdecode(std::vector<unsigned char>(bytes, bytes+byte_length), cv::IMREAD_UNCHANGED);
+    tmp.copyTo(*ptr);
     return mrc_mat_to_ptr(*ptr);
 }
 
