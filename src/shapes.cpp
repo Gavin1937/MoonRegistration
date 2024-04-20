@@ -4,7 +4,7 @@
 namespace mr
 {
 
-EXPORT_SYMBOL Square circle_to_square_s(const Circle& circle)
+EXPORT_SYMBOL Square circle_to_square(const Circle& circle)
 {
     int top_left_y = circle.y - circle.radius;
     if (top_left_y < 0) top_left_y = 0;
@@ -17,7 +17,7 @@ EXPORT_SYMBOL Square circle_to_square_s(const Circle& circle)
     return {top_left_x, top_left_y, square_width};
 }
 
-EXPORT_SYMBOL Square circle_to_square_p(int x, int y, int radius)
+EXPORT_SYMBOL Square circle_to_square(int x, int y, int radius)
 {
     int top_left_y = y - radius;
     if (top_left_y < 0) top_left_y = 0;
@@ -30,7 +30,7 @@ EXPORT_SYMBOL Square circle_to_square_p(int x, int y, int radius)
     return {top_left_x, top_left_y, square_width};
 }
 
-EXPORT_SYMBOL Rectangle circle_to_rectangle_s(const Circle& circle)
+EXPORT_SYMBOL Rectangle circle_to_rectangle(const Circle& circle)
 {
     int top_left_y = circle.y - circle.radius;
     if (top_left_y < 0) top_left_y = 0;
@@ -45,7 +45,7 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle_s(const Circle& circle)
     return {top_left_x, top_left_y, bottom_right_x, bottom_right_y};
 }
 
-EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius)
+EXPORT_SYMBOL Rectangle circle_to_rectangle(int x, int y, int radius)
 {
     int top_left_y = y - radius;
     if (top_left_y < 0) top_left_y = 0;
@@ -60,12 +60,12 @@ EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius)
     return {top_left_x, top_left_y, bottom_right_x, bottom_right_y};
 }
 
-EXPORT_SYMBOL bool is_valid_circle_s(const Circle& circle)
+EXPORT_SYMBOL bool is_valid_circle(const Circle& circle)
 {
     return (circle.x >= 0 && circle.y >= 0 && circle.radius >= 0);
 }
 
-EXPORT_SYMBOL bool is_valid_circle_p(int x, int y, int radius)
+EXPORT_SYMBOL bool is_valid_circle(int x, int y, int radius)
 {
     return (x >= 0 && y >= 0 && radius >= 0);
 }

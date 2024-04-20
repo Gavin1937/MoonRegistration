@@ -32,17 +32,17 @@ EXPORT_SYMBOL typedef struct Rectangle {
 } Rectangle;
 
 
-EXPORT_SYMBOL Square circle_to_square_s(const Circle& circle);
+EXPORT_SYMBOL Square circle_to_square(const Circle& circle);
 
-EXPORT_SYMBOL Square circle_to_square_p(int x, int y, int radius);
+EXPORT_SYMBOL Square circle_to_square(int x, int y, int radius);
 
-EXPORT_SYMBOL Rectangle circle_to_rectangle_s(const Circle& circle);
+EXPORT_SYMBOL Rectangle circle_to_rectangle(const Circle& circle);
 
-EXPORT_SYMBOL Rectangle circle_to_rectangle_p(int x, int y, int radius);
+EXPORT_SYMBOL Rectangle circle_to_rectangle(int x, int y, int radius);
 
-EXPORT_SYMBOL bool is_valid_circle_s(const Circle& circle);
+EXPORT_SYMBOL bool is_valid_circle(const Circle& circle);
 
-EXPORT_SYMBOL bool is_valid_circle_p(int x, int y, int radius);
+EXPORT_SYMBOL bool is_valid_circle(int x, int y, int radius);
 
 
 EXPORT_SYMBOL cv::Vec3f circle_to_vec3(const Circle& circle);

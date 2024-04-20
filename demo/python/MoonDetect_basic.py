@@ -45,8 +45,8 @@ for dirEntry in folder.rglob('*'):
         print('\n\n\n', end='')
         print(f'file: \'{dirEntry}\'')
         print(f'Circle: {final_circle}')
-        print(f'Square: {mr.shapes.circle_to_square_s(final_circle)}')
-        print(f'Rectangle: {mr.shapes.circle_to_rectangle_s(final_circle)}')
+        print(f'Square: {mr.shapes.circle_to_square(final_circle)}')
+        print(f'Rectangle: {mr.shapes.circle_to_rectangle(final_circle)}')
         
     except Exception as err:
         print(f'Exception: {err}')

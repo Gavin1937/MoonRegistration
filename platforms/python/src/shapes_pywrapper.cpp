@@ -54,26 +54,32 @@ void init_shapes(py::module &module)
         .def("__repr__", str_StreamOptOverload<mr::Rectangle>)
     ;
     
-    module.def("circle_to_square_s", mr::circle_to_square_s,
+    module.def("circle_to_square",
+        py::overload_cast<const mr::Circle&>(mr::circle_to_square),
         py::arg("circle")
     );
-    module.def("circle_to_square_p", mr::circle_to_square_p,
+    module.def("circle_to_square",
+        py::overload_cast<int, int, int>(mr::circle_to_square),
         py::arg("x"),
         py::arg("y"),
         py::arg("radius")
     );
-    module.def("circle_to_rectangle_s", mr::circle_to_rectangle_s,
+    module.def("circle_to_rectangle",
+        py::overload_cast<const mr::Circle&>(mr::circle_to_rectangle),
         py::arg("circle")
     );
-    module.def("circle_to_rectangle_p", mr::circle_to_rectangle_p,
+    module.def("circle_to_rectangle",
+        py::overload_cast<int, int, int>(mr::circle_to_rectangle),
         py::arg("x"),
         py::arg("y"),
         py::arg("radius")
     );
-    module.def("is_valid_circle_s", mr::is_valid_circle_s,
+    module.def("is_valid_circle",
+        py::overload_cast<const mr::Circle&>(mr::is_valid_circle),
         py::arg("circle")
     );
-    module.def("is_valid_circle_p", mr::is_valid_circle_p,
+    module.def("is_valid_circle",
+        py::overload_cast<int, int, int>(mr::is_valid_circle),
         py::arg("x"),
         py::arg("y"),
         py::arg("radius")

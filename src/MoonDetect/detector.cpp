@@ -382,10 +382,10 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         // cannot select circle, (select circle function failed)
         // maybe we didn't find any circle
         // in iteration 0, which means input image doesn't contain any circle, return {-1, -1, -1}
-        if (iteration == 0 && !mr::is_valid_circle_s(circle_found))
+        if (iteration == 0 && !mr::is_valid_circle(circle_found))
             return circle_found;
         // use the center of image as the new circle
-        else if (!mr::is_valid_circle_s(circle_found))
+        else if (!mr::is_valid_circle(circle_found))
             circle_found = {image_shape.width/2, image_shape.height/2, (image_shape.width/2)+3};
         
         // cut out part of img from circle

@@ -10,7 +10,7 @@ int* mrwasm_circle_to_square(int x, int y, int radius)
 {
     try
     {
-        mr::Square square = mr::circle_to_square_p(x, y, radius);
+        mr::Square square = mr::circle_to_square(x, y, radius);
         
         // we must re-interpret mr::Square into an int array
         // in order for js to understand it
@@ -30,7 +30,7 @@ int* mrwasm_circle_to_rectangle(int x, int y, int radius)
 {
     try
     {
-        mr::Rectangle rectangle = mr::circle_to_rectangle_p(x, y, radius);
+        mr::Rectangle rectangle = mr::circle_to_rectangle(x, y, radius);
         
         // we must re-interpret mr::Rectangle into an int array
         // in order for js to understand it

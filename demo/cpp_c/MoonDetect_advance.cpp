@@ -167,8 +167,8 @@ int main(int argc, char** argv)
             std::cout << "\n\n\n";
             std::cout << "file: \'" << dirEntry.path().string() << "\'" << "\n";
             std::cout << "Circle: " << final_circle << "\n";
-            std::cout << "Square: " << mr::circle_to_square_s(final_circle) << "\n";
-            std::cout << "Rectangle: " << mr::circle_to_rectangle_s(final_circle) << "\n";
+            std::cout << "Square: " << mr::circle_to_square(final_circle) << "\n";
+            std::cout << "Rectangle: " << mr::circle_to_rectangle(final_circle) << "\n";
         }
         catch (const std::exception& error)
         {
