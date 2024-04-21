@@ -134,7 +134,7 @@ async function compute_registration(
           algorithm
         );
         
-        let data_list = new Float64Array(instance.HEAP8.buffer, ptr, 9);
+        let data_list = new Float64Array(instance.HEAPF64.buffer, ptr, 9);
         data_list = Array.from(data_list);
         let ret = []
         while(data_list.length) {
@@ -227,12 +227,13 @@ async function draw_layer_image_no_compute(
   return new Promise((resolve, reject) => {
     instance.ready.then(async function() {
       try {
-        homography_matrix = new Float32Array(homography_matrix.flat());
+        homography_matrix = new Float64Array(homography_matrix.flat());
+        let total_length = homography_matrix.length * homography_matrix.BYTES_PER_ELEMENT;
         let homography_matrix_buffer_ptr = await instance._mrwasm_create_image_buffer(
-          homography_matrix.length * homography_matrix.BYTES_PER_ELEMENT
+          total_length
         );
         
-        await instance.HEAPF32.set(homography_matrix, homography_matrix_buffer_ptr/4);
+        await instance.HEAPF64.set(homography_matrix, homography_matrix_buffer_ptr/8);
         
         let homography_matrix_ptr = await instance._mrwasm_create_homography_matrix_ptr(
           homography_matrix_buffer_ptr

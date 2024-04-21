@@ -121,8 +121,11 @@ void mrwasm_destroy_image_buffer(void* ptr)
 {
     try
     {
-        uint8_t* buffer_ptr = reinterpret_cast<uint8_t*>(ptr);
-        delete[] buffer_ptr;
+        if (ptr)
+        {
+            uint8_t* buffer_ptr = reinterpret_cast<uint8_t*>(ptr);
+            delete[] buffer_ptr;
+        }
     }
     catch(const std::exception& error)
     {
@@ -165,8 +168,10 @@ void* mrwasm_create_image_ptr(
             img_height, img_width,
             CV_MAKETYPE(CV_8U, num_of_channels)
         );
-        // memcpy img_binary to ensure it will be hold by Mat
-        memcpy(image.data, img_binary, img_binary_length);
+        // assign img_binary by for-loop to avoid messing up with cv::Mat data structure
+        // and source pointer ownership problem
+        for (int i = 0; i < img_binary_length; ++i)
+            image.at<uint8_t>(i) = img_binary[i];
         
         // convert color format from RGBA to BGRA
         // so its ready for opencv
@@ -216,18 +221,19 @@ void* mrwasm_get_rgba_image_ptr(void* image_ptr)
 }
 
 void* mrwasm_create_homography_matrix_ptr(
-    uint8_t* matrix_binary
+    double* matrix_binary
 )
 {
     try
     {
-        float* matrix_binary_float = reinterpret_cast<float*>(matrix_binary);
         cv::Mat* ret = new cv::Mat(
             3, 3,
-            CV_32F
+            CV_64F
         );
-        // memcpy matrix to ensure it will be hold by Mat
-        memcpy(ret->data, matrix_binary_float, 9*sizeof(float));
+        // assign matrix by for-loop to avoid messing up with cv::Mat data structure
+        // and source pointer ownership problem
+        for (int i = 0; i < 9; ++i)
+            ret->at<double>(i) = matrix_binary[i];
         
         if (matrix_binary)
             delete[] matrix_binary;
