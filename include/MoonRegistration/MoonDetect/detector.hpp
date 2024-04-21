@@ -123,13 +123,11 @@ public:
     std::function<mr::Circle(const int, const cv::Mat&, const std::vector<cv::Vec3f>&)> iteration_circle_select = nullptr;
     std::function<mr::Circle(const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>&, const float)> coordinate_remap = nullptr;
     
-public:
-    mr::HoughCirclesAlgorithm hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT;
-    
 private:
     float resize_ratio;
     cv::Mat original_image;
     cv::Mat process_image;
+    mr::HoughCirclesAlgorithm hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT;
     
 } MoonDetector;
 

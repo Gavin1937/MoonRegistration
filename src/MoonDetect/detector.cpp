@@ -51,49 +51,49 @@ EXPORT_SYMBOL void find_circles_in_img(
 
 EXPORT_SYMBOL MoonDetector::MoonDetector()
     : resize_ratio(0.0),
-    // default functions
-    preprocess_steps(HG_default_preprocess_steps),
-    param_init(HG_default_param_init),
-    iteration_param_update(HG_default_iteration_param_update),
-    iteration_circle_select(HG_default_iteration_circle_select),
-    coordinate_remap(HG_default_coordinate_remap)
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
+#else
+    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
+#endif
 {
+    this->update_hough_circles_algorithm(this->hough_circles_algorithm);
 }
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const std::string& image_filepath)
     : resize_ratio(0.0),
-    // default functions
-    preprocess_steps(HG_default_preprocess_steps),
-    param_init(HG_default_param_init),
-    iteration_param_update(HG_default_iteration_param_update),
-    iteration_circle_select(HG_default_iteration_circle_select),
-    coordinate_remap(HG_default_coordinate_remap)
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
+#else
+    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
+#endif
 {
     this->init_by_path(image_filepath);
+    this->update_hough_circles_algorithm(this->hough_circles_algorithm);
 }
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const std::vector<unsigned char>& image_binary)
     : resize_ratio(0.0),
-    // default functions
-    preprocess_steps(HG_default_preprocess_steps),
-    param_init(HG_default_param_init),
-    iteration_param_update(HG_default_iteration_param_update),
-    iteration_circle_select(HG_default_iteration_circle_select),
-    coordinate_remap(HG_default_coordinate_remap)
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
+#else
+    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
+#endif
 {
     this->init_by_byte(image_binary);
+    this->update_hough_circles_algorithm(this->hough_circles_algorithm);
 }
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const cv::Mat& cv_image)
     : resize_ratio(0.0),
-    // default functions
-    preprocess_steps(HG_default_preprocess_steps),
-    param_init(HG_default_param_init),
-    iteration_param_update(HG_default_iteration_param_update),
-    iteration_circle_select(HG_default_iteration_circle_select),
-    coordinate_remap(HG_default_coordinate_remap)
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
+#else
+    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
+#endif
 {
     this->init_by_mat(cv_image);
+    this->update_hough_circles_algorithm(this->hough_circles_algorithm);
 }
 
 EXPORT_SYMBOL bool MoonDetector::is_empty()
