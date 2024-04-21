@@ -25,6 +25,7 @@ EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithm
 // This enum will be enabled if OpenCV version >= 4.8.1
 #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
     HOUGH_GRADIENT_ALT    = 0x102,
+    HOUGH_GRADIENT_MIX    = 0x103,
 #endif
     EMPTY_ALGORITHM       = 0x001,
     INVALID_ALGORITHM     = 0x000
@@ -67,53 +68,6 @@ EXPORT_SYMBOL void find_circles_in_img(
     const double param1,
     const double param2,
     const mr::HoughCirclesAlgorithm& algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT
-);
-
-EXPORT_SYMBOL void default_preprocess_steps(
-    const cv::Mat& image_in,
-    cv::Mat& image_out,
-    float& resize_ratio_out
-);
-
-EXPORT_SYMBOL void default_param_init(
-    const ImageShape& image_shape,
-    int& max_iteration,
-    int& circle_threshold,
-    double& dp,
-    double& minDist,
-    double& minRadiusRate,
-    int& minRadius,
-    double& maxRadiusRate,
-    int& maxRadius,
-    double& param1,
-    double& param2
-);
-
-EXPORT_SYMBOL void default_iteration_param_update(
-    const int iteration,
-    const float image_brightness_perc,
-    const ImageShape& image_shape,
-    int& max_iteration,
-    int& circle_threshold,
-    double& dp,
-    double& minDist,
-    double& minRadiusRate,
-    int& minRadius,
-    double& maxRadiusRate,
-    int& maxRadius,
-    double& param1,
-    double& param2
-);
-
-EXPORT_SYMBOL mr::Circle default_iteration_circle_select(
-    const int iteration,
-    const cv::Mat& image_in,
-    const std::vector<cv::Vec3f>& detected_circles
-);
-
-EXPORT_SYMBOL mr::Circle default_coordinate_remap(
-    const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>& result_list,
-    const float resize_ratio
 );
 
 

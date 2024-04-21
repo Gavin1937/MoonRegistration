@@ -11,4 +11,5 @@
 #include "MoonRegistration/version.hpp"
 
 #include "MoonRegistration/MoonDetect/selector.hpp"
+#include "MoonRegistration/MoonDetect/default_steps.hpp"
 #include "MoonRegistration/MoonDetect/detector.hpp"
