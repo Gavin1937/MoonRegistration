@@ -190,6 +190,34 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
     );
 }
 
+EXPORT_SYMBOL void binarize_image(
+    const cv::Mat& image_in,
+    cv::Mat& image_out,
+    double thresh,
+    double maxval
+)
+{
+    cv::Mat buff = image_in;
+    
+    // gray scale image if it haven't
+    if (image_in.channels() != 1)
+        cv::cvtColor(buff, buff, cv::COLOR_BGR2GRAY);
+    
+    // set img to maximum contrast
+    // only leave black & white pixels
+    // usually, moon will be white after this conversion
+    mr::apply_brightness_contrast(buff, buff, 0, 127);
+    
+    // set gray image to black & white only image by setting its threshold
+    // opencv impl of threshold
+    // dst[j] = src[j] > thresh ? maxval : 0;
+    // using threshold to binarize img will rm all the branching when calculating img_brightness_perc
+    // which make calculation much faster
+    cv::threshold(buff, buff, thresh, maxval, cv::THRESH_BINARY);
+    
+    buff.copyTo(image_out);
+}
+
 EXPORT_SYMBOL void cut_ref_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,

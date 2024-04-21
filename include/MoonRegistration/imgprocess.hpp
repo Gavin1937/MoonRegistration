@@ -99,6 +99,20 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
     int radius
 );
 
+// Binarize input image, make it black & white only
+// 
+// Parameters:
+//   - image_in: input image
+//   - image_out: output image
+//   - thresh: double threshold for cv::threshold, threshold to separate black & white
+//   - maxval: double max value for cv::threshold, "white" pixel maximum value
+EXPORT_SYMBOL void binarize_image(
+    const cv::Mat& image_in,
+    cv::Mat& image_out,
+    double thresh = 0.0,
+    double maxval = 255.0
+);
+
 // Cut a square image using input circle and output a cv::Mat reference to input
 // 
 // Parameters:
