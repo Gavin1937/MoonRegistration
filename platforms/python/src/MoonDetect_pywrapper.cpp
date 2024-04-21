@@ -326,20 +326,6 @@ void init_MoonDetect(py::module &module)
         .value("INVALID_ALGORITHM", mr::HoughCirclesAlgorithm::INVALID_ALGORITHM)
     ;
     
-    module.def("convertHoughCirclesAlgorithm", mr::convertHoughCirclesAlgorithm,
-    py::arg("algorithm"),
-    R"pbdoc(
-    A simple conversion function to convert between mr::HoughCirclesAlgorithm to OpenCV algorithm representation
-    
-    Parameters:
-      - algorithm: an enum of mr::HoughCirclesAlgorithm
-    
-    Return:
-      - If success, return int that can be use in cv::HoughCircles()
-      - If failed, throw runtime_error
-    )pbdoc"
-    );
-    
     module.def("find_circles_in_img", wrap_find_circles_in_img,
     py::arg("image_in"),
     py::arg("circle_threshold"),

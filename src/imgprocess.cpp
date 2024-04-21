@@ -56,14 +56,14 @@ EXPORT_SYMBOL void resize_with_aspect_ratio(
         else // w & h are too short
         {
             ratio_out = r;
-            image_in.copyTo(image_out);
+            image_out = image_in.clone();
             return;
         }
     }
     if (width <= 0 && height <= 0)
     {
         ratio_out = r;
-        image_in.copyTo(image_out);
+        image_out = image_in.clone();
         return;
     }
     if (width <= 0)
@@ -114,7 +114,7 @@ EXPORT_SYMBOL void apply_brightness_contrast(
         cv::addWeighted(image_in, alpha_b, image_in, 0, gamma_b, image_out);
     }
     else
-        image_in.copyTo(image_out);
+        image_out = image_in.clone();
     
     if (contrast != 0)
     {
@@ -215,7 +215,7 @@ EXPORT_SYMBOL void binarize_image(
     // which make calculation much faster
     cv::threshold(buff, buff, thresh, maxval, cv::THRESH_BINARY);
     
-    buff.copyTo(image_out);
+    image_out = buff.clone();
 }
 
 EXPORT_SYMBOL void cut_ref_image_from_circle(

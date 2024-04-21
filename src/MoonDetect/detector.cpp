@@ -13,31 +13,6 @@
 namespace mr
 {
 
-EXPORT_SYMBOL int convertHoughCirclesAlgorithm(const mr::HoughCirclesAlgorithm& algorith)
-{
-    switch (algorith)
-    {
-    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT:
-        return cv::HOUGH_GRADIENT;
-        break;
-// Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
-// This enum will be enabled if OpenCV version >= 4.8.1
-#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_ALT:
-        return cv::HOUGH_GRADIENT_ALT;
-        break;
-#endif
-    case mr::HoughCirclesAlgorithm::EMPTY_ALGORITHM:
-    case mr::HoughCirclesAlgorithm::INVALID_ALGORITHM:
-        throw std::runtime_error("Cannot parse empty or invalid HoughCirclesAlgorithm");
-        break;
-    
-    default:
-        throw std::runtime_error("Cannot parse empty or invalid HoughCirclesAlgorithm");
-        break;
-    }
-}
-
 EXPORT_SYMBOL void find_circles_in_img(
     const cv::Mat& image_in,
     std::vector<cv::Vec3f>& detected_circles,
@@ -48,14 +23,14 @@ EXPORT_SYMBOL void find_circles_in_img(
     const int maxRadius,
     const double param1,
     const double param2,
-    const mr::HoughCirclesAlgorithm& algorithm
+    const int algorithm
 )
 {
     detected_circles.clear();
     
     cv::HoughCircles(
         image_in, detected_circles,
-        mr::convertHoughCirclesAlgorithm(algorithm),
+        algorithm,
         dp, minDist, param1, param2, minRadius, maxRadius
     );
     
@@ -149,6 +124,43 @@ EXPORT_SYMBOL void MoonDetector::init_by_mat(const cv::Mat& image_in)
         throw std::runtime_error("Empty Input Image");
 }
 
+EXPORT_SYMBOL void MoonDetector::update_hough_circles_algorithm(const mr::HoughCirclesAlgorithm& algorithm)
+{
+    switch (algorithm)
+    {
+    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT:
+        this->preprocess_steps = mr::HG_default_preprocess_steps;
+        this->param_init = mr::HG_default_param_init;
+        this->iteration_param_update = mr::HG_default_iteration_param_update;
+        this->iteration_circle_select = mr::HG_default_iteration_circle_select;
+        this->coordinate_remap = mr::HG_default_coordinate_remap;
+        break;
+    
+// Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
+// This enum will be enabled if OpenCV version >= 4.8.1
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_ALT:
+        this->preprocess_steps = mr::HGA_default_preprocess_steps;
+        this->param_init = mr::HGA_default_param_init;
+        this->iteration_param_update = mr::HGA_default_iteration_param_update;
+        this->iteration_circle_select = mr::HGA_default_iteration_circle_select;
+        this->coordinate_remap = mr::HGA_default_coordinate_remap;
+        break;
+    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX:
+        // this->preprocess_steps = mr::HGM_default_preprocess_steps;
+        // this->param_init = mr::HGM_default_param_init;
+        // this->iteration_param_update = mr::HGM_default_iteration_param_update;
+        // this->iteration_circle_select = mr::HGM_default_iteration_circle_select;
+        // this->coordinate_remap = mr::HGM_default_coordinate_remap;
+        break;
+#endif
+    default:
+        throw std::runtime_error("Invalid or empty HoughCirclesAlgorithm.");
+        break;
+    }
+}
+
+
 EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
 {
     if (this->is_empty())
@@ -164,6 +176,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
     
     int max_iteration;
     int circle_threshold;
+    int hough_circles_algorithm;
     double dp;
     double minDist;
     double minRadiusRate;
@@ -177,6 +190,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         image_shape,
         max_iteration,
         circle_threshold,
+        hough_circles_algorithm,
         dp,
         minDist,
         minRadiusRate, minRadius,
@@ -198,6 +212,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
             image_shape,
             max_iteration,
             circle_threshold,
+            hough_circles_algorithm,
             dp, minDist,
             minRadiusRate, minRadius,
             maxRadiusRate, maxRadius,

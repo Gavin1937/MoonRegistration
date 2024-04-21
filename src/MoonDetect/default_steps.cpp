@@ -1,4 +1,5 @@
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
 #include <opencv2/core/mat.hpp>
 
 #include <cmath>
@@ -10,39 +11,56 @@
 namespace mr
 {
 
+// HOUGH_GRADIENT (HG)
+
 EXPORT_SYMBOL void HG_default_preprocess_steps(
     const cv::Mat& image_in,
     cv::Mat& image_out,
     float& resize_ratio_out
 )
 {
-    // we need to keep the aspect ratio
-    // so we can rescale the output x/y coordinate back to match original image
-    mr::resize_with_aspect_ratio(image_in, image_out, resize_ratio_out, -1, -1, 500);
     cv::Mat buff;
     
+    // we need to keep the aspect ratio
+    // so we can rescale the output x/y coordinate back to match original image
+    mr::resize_with_aspect_ratio(image_in, buff, resize_ratio_out, -1, -1, 500);
+    
     // creating gray scale version of image needed for HoughCircles
-    cv::cvtColor(image_out, buff, cv::COLOR_BGR2GRAY);
+    cv::cvtColor(buff, buff, cv::COLOR_BGR2GRAY);
     
-    // set img to maximum contrast
-    // only leave black & white pixels
-    // usually, moon will be white after this conversion
-    mr::apply_brightness_contrast(buff, image_out, 0, 127);
+    // rm detail texture
+    cv::bilateralFilter(buff, buff, 10, 50, 50);
     
-    // set gray image to black & white only image by setting its threshold
-    // opencv impl of threshold
-    // dst[j] = src[j] > thresh ? maxval : 0;
-    // using threshold to binarize img will rm all the branching when calculating img_brightness_perc
-    // which make calculation much faster
-    cv::threshold(image_out, buff, 0, 255, cv::THRESH_BINARY);
+    // add erosion to blur/remove small noices
+    // https://docs.opencv.org/3.4/db/df6/tutorial_erosion_dilatation.html
+    int erosion_size = 1;
+    cv::MorphShapes erosion_shape = cv::MorphShapes::MORPH_CROSS;
+    cv::Mat element = cv::getStructuringElement(
+        erosion_shape,
+        cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
+        cv::Point(erosion_size, erosion_size)
+    );
+    cv::erode(buff, buff, element);
     
-    image_out = buff;
+    // further blur color blocks w/ gaussian blur
+    cv::Size gaussian_ksize(9,9);
+    double gaussian_sigmaX = 2.0;
+    double gaussian_sigmaY = 2.0;
+    cv::GaussianBlur(buff, buff, gaussian_ksize, gaussian_sigmaX, gaussian_sigmaY);
+    // turn 0-3% white pixel to black
+    cv::threshold(buff, buff, static_cast<int>(255*0.03), 255, cv::THRESH_TOZERO);
+    // turn 80-100% white pixel to 80% white
+    cv::threshold(buff, buff, static_cast<int>(255*0.8), 255, cv::THRESH_TRUNC);
+    
+    // make image black & white only
+    mr::binarize_image(buff, image_out);
 }
 
 EXPORT_SYMBOL void HG_default_param_init(
     const ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
+    int& hough_circles_algorithm,
     double& dp,
     double& minDist,
     double& minRadiusRate,
@@ -55,6 +73,7 @@ EXPORT_SYMBOL void HG_default_param_init(
 {
     max_iteration = 3;
     circle_threshold = 100;
+    hough_circles_algorithm = cv::HOUGH_GRADIENT;
     
     dp = std::pow(2, 4);
     minDist = 50;
@@ -74,6 +93,7 @@ EXPORT_SYMBOL void HG_default_iteration_param_update(
     const ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
+    int& hough_circles_algorithm,
     double& dp,
     double& minDist,
     double& minRadiusRate,
@@ -166,6 +186,101 @@ EXPORT_SYMBOL mr::Circle HG_default_coordinate_remap(
     final_circle.y = static_cast<int>(static_cast<float>(final_circle.y) / resize_ratio);
     final_circle.radius = static_cast<int>(static_cast<float>(final_circle.radius) / resize_ratio);
     return final_circle;
+}
+
+
+// HOUGH_GRADIENT_ALT (HGA)
+
+EXPORT_SYMBOL void HGA_default_preprocess_steps(
+    const cv::Mat& image_in,
+    cv::Mat& image_out,
+    float& resize_ratio_out
+)
+{
+    return mr::HG_default_preprocess_steps(
+        image_in, image_out, resize_ratio_out
+    );
+}
+
+EXPORT_SYMBOL void HGA_default_param_init(
+    const ImageShape& image_shape,
+    int& max_iteration,
+    int& circle_threshold,
+    int& hough_circles_algorithm,
+    double& dp,
+    double& minDist,
+    double& minRadiusRate,
+    int& minRadius,
+    double& maxRadiusRate,
+    int& maxRadius,
+    double& param1,
+    double& param2
+)
+{
+    max_iteration = 1;
+    circle_threshold = 100;
+    hough_circles_algorithm = cv::HOUGH_GRADIENT_ALT;
+    
+    dp = 1.5;
+    minDist = 50;
+    if (minDist > (image_shape.shorter_side/2))
+        minDist = (image_shape.shorter_side/2);
+    minRadiusRate = 0.1;
+    minRadius = static_cast<int>(image_shape.shorter_side * minRadiusRate);
+    maxRadiusRate = 4;
+    maxRadius = static_cast<int>(image_shape.shorter_side * maxRadiusRate);
+    param1 = 300;
+    param2 = 0.9;
+}
+
+EXPORT_SYMBOL void HGA_default_iteration_param_update(
+    const int iteration,
+    const float image_brightness_perc,
+    const ImageShape& image_shape,
+    int& max_iteration,
+    int& circle_threshold,
+    int& hough_circles_algorithm,
+    double& dp,
+    double& minDist,
+    double& minRadiusRate,
+    int& minRadius,
+    double& maxRadiusRate,
+    int& maxRadius,
+    double& param1,
+    double& param2
+)
+{
+    dp = 1.5;
+    minDist = 50;
+    if (minDist > (image_shape.shorter_side/2))
+        minDist = (image_shape.shorter_side/2);
+    minRadiusRate = 0.1;
+    minRadius = static_cast<int>(image_shape.shorter_side * minRadiusRate);
+    maxRadiusRate = 4;
+    maxRadius = static_cast<int>(image_shape.shorter_side * maxRadiusRate);
+    param1 = 300;
+    param2 = 0.9;
+}
+
+EXPORT_SYMBOL mr::Circle HGA_default_iteration_circle_select(
+    const int iteration,
+    const cv::Mat& image_in,
+    const std::vector<cv::Vec3f>& detected_circles
+)
+{
+    return mr::HG_default_iteration_circle_select(
+        iteration, image_in, detected_circles
+    );
+}
+
+EXPORT_SYMBOL mr::Circle HGA_default_coordinate_remap(
+    const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>& result_list,
+    const float resize_ratio
+)
+{
+    return mr::HG_default_coordinate_remap(
+        result_list, resize_ratio
+    );
 }
 
 }

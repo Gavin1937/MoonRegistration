@@ -20,26 +20,21 @@ namespace mr
 
 EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithm
 {
+    // use cv::HOUGH_GRADIENT with basic optimization
     HOUGH_GRADIENT        = 0x101,
+    
 // Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
 // This enum will be enabled if OpenCV version >= 4.8.1
 #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    // use cv::HOUGH_GRADIENT_ALT with basic optimization
     HOUGH_GRADIENT_ALT    = 0x102,
+    
+    // use cv::HOUGH_GRADIENT and cv::HOUGH_GRADIENT_ALT together for the best result
     HOUGH_GRADIENT_MIX    = 0x103,
 #endif
     EMPTY_ALGORITHM       = 0x001,
     INVALID_ALGORITHM     = 0x000
 } HoughCirclesAlgorithm;
-
-// A simple conversion function to convert between mr::HoughCirclesAlgorithm to OpenCV algorithm representation
-// 
-// Parameters:
-//   - algorithm: an enum of mr::HoughCirclesAlgorithm
-// 
-// Return:
-//   - If success, return int that can be use in cv::HoughCircles()
-//   - If failed, throw runtime_error
-EXPORT_SYMBOL int convertHoughCirclesAlgorithm(const mr::HoughCirclesAlgorithm& algorith);
 
 // A wrapper function around cv::HoughCircles
 // 
@@ -103,6 +98,11 @@ public:
     // (re)init mr::MoonDetector by image_in
     EXPORT_SYMBOL void init_by_mat(const cv::Mat& image_in);
     
+    // update hough circle detection algorithm and default functions
+    // this function will also update the step function pointer base on the input algorithm
+    EXPORT_SYMBOL void update_hough_circles_algorithm(const mr::HoughCirclesAlgorithm& algorithm);
+    
+    
     // trying to find a circle from input image
     // thats most likely contains the moon.
     // 
@@ -118,8 +118,8 @@ public:
     // All the function pointers are default to default_... functions defined in "detector.hpp"
     
     std::function<void(const cv::Mat&, cv::Mat&, float&)> preprocess_steps = nullptr;
-    std::function<void(const ImageShape&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> param_init = nullptr;
-    std::function<void(const int, const float, const ImageShape&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> iteration_param_update = nullptr;
+    std::function<void(const ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> param_init = nullptr;
+    std::function<void(const int, const float, const ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> iteration_param_update = nullptr;
     std::function<mr::Circle(const int, const cv::Mat&, const std::vector<cv::Vec3f>&)> iteration_circle_select = nullptr;
     std::function<mr::Circle(const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>&, const float)> coordinate_remap = nullptr;
     

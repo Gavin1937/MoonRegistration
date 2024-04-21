@@ -13,7 +13,6 @@ __all__: list[str] = [
     'select_n_circles_by_largest_radius',
     'select_circle_by_shape',
     'HoughCirclesAlgorithm',
-    'convertHoughCirclesAlgorithm',
     'find_circles_in_img',
     'default_preprocess_steps',
     'default_param_init',
@@ -55,8 +54,6 @@ class HoughCirclesAlgorithm(IntEnum):
 #endif
     EMPTY_ALGORITHM       = 0x001,
     INVALID_ALGORITHM     = 0x000
-
-def convertHoughCirclesAlgorithm(algorithm:HoughCirclesAlgorithm) -> int: ...
 
 def find_circles_in_img(
     image_in:numpy.ndarray,
