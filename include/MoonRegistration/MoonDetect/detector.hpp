@@ -120,7 +120,7 @@ public:
     std::function<void(const cv::Mat&, cv::Mat&, float&)> preprocess_steps = nullptr;
     std::function<void(const ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> param_init = nullptr;
     std::function<void(const int, const float, const ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> iteration_param_update = nullptr;
-    std::function<mr::Circle(const int, const cv::Mat&, const std::vector<cv::Vec3f>&)> iteration_circle_select = nullptr;
+    std::function<mr::Circle(const int, const int, const cv::Mat&, const std::vector<cv::Vec3f>&)> iteration_circle_select = nullptr;
     std::function<mr::Circle(const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>&, const float)> coordinate_remap = nullptr;
     
 private:

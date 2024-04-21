@@ -147,11 +147,11 @@ EXPORT_SYMBOL void MoonDetector::update_hough_circles_algorithm(const mr::HoughC
         this->coordinate_remap = mr::HGA_default_coordinate_remap;
         break;
     case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX:
-        // this->preprocess_steps = mr::HGM_default_preprocess_steps;
-        // this->param_init = mr::HGM_default_param_init;
-        // this->iteration_param_update = mr::HGM_default_iteration_param_update;
-        // this->iteration_circle_select = mr::HGM_default_iteration_circle_select;
-        // this->coordinate_remap = mr::HGM_default_coordinate_remap;
+        this->preprocess_steps = mr::HGM_default_preprocess_steps;
+        this->param_init = mr::HGM_default_param_init;
+        this->iteration_param_update = mr::HGM_default_iteration_param_update;
+        this->iteration_circle_select = mr::HGM_default_iteration_circle_select;
+        this->coordinate_remap = mr::HGM_default_coordinate_remap;
         break;
 #endif
     default:
@@ -232,6 +232,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         
         mr::Circle circle_found = this->iteration_circle_select(
             iteration,
+            max_iteration,
             this->process_image,
             detected_circles
         );

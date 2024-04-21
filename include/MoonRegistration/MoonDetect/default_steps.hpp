@@ -66,6 +66,7 @@ EXPORT_SYMBOL void HG_default_iteration_param_update(
 
 EXPORT_SYMBOL mr::Circle HG_default_iteration_circle_select(
     const int iteration,
+    const int max_iteration,
     const cv::Mat& image_in,
     const std::vector<cv::Vec3f>& detected_circles
 );
@@ -118,11 +119,65 @@ EXPORT_SYMBOL void HGA_default_iteration_param_update(
 
 EXPORT_SYMBOL mr::Circle HGA_default_iteration_circle_select(
     const int iteration,
+    const int max_iteration,
     const cv::Mat& image_in,
     const std::vector<cv::Vec3f>& detected_circles
 );
 
 EXPORT_SYMBOL mr::Circle HGA_default_coordinate_remap(
+    const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>& result_list,
+    const float resize_ratio
+);
+
+
+// HOUGH_GRADIENT_MIX (HGM)
+
+EXPORT_SYMBOL void HGM_default_preprocess_steps(
+    const cv::Mat& image_in,
+    cv::Mat& image_out,
+    float& resize_ratio_out
+);
+
+EXPORT_SYMBOL void HGM_default_param_init(
+    const ImageShape& image_shape,
+    int& max_iteration,
+    int& circle_threshold,
+    int& hough_circles_algorithm,
+    double& dp,
+    double& minDist,
+    double& minRadiusRate,
+    int& minRadius,
+    double& maxRadiusRate,
+    int& maxRadius,
+    double& param1,
+    double& param2
+);
+
+EXPORT_SYMBOL void HGM_default_iteration_param_update(
+    const int iteration,
+    const float image_brightness_perc,
+    const ImageShape& image_shape,
+    int& max_iteration,
+    int& circle_threshold,
+    int& hough_circles_algorithm,
+    double& dp,
+    double& minDist,
+    double& minRadiusRate,
+    int& minRadius,
+    double& maxRadiusRate,
+    int& maxRadius,
+    double& param1,
+    double& param2
+);
+
+EXPORT_SYMBOL mr::Circle HGM_default_iteration_circle_select(
+    const int iteration,
+    const int max_iteration,
+    const cv::Mat& image_in,
+    const std::vector<cv::Vec3f>& detected_circles
+);
+
+EXPORT_SYMBOL mr::Circle HGM_default_coordinate_remap(
     const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>& result_list,
     const float resize_ratio
 );

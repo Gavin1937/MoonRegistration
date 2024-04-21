@@ -122,6 +122,7 @@ EXPORT_SYMBOL void HG_default_iteration_param_update(
 
 EXPORT_SYMBOL mr::Circle HG_default_iteration_circle_select(
     const int iteration,
+    const int max_iteration,
     const cv::Mat& image_in,
     const std::vector<cv::Vec3f>& detected_circles
 )
@@ -264,16 +265,179 @@ EXPORT_SYMBOL void HGA_default_iteration_param_update(
 
 EXPORT_SYMBOL mr::Circle HGA_default_iteration_circle_select(
     const int iteration,
+    const int max_iteration,
     const cv::Mat& image_in,
     const std::vector<cv::Vec3f>& detected_circles
 )
 {
     return mr::HG_default_iteration_circle_select(
-        iteration, image_in, detected_circles
+        iteration, max_iteration, image_in, detected_circles
     );
 }
 
 EXPORT_SYMBOL mr::Circle HGA_default_coordinate_remap(
+    const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>& result_list,
+    const float resize_ratio
+)
+{
+    return mr::HG_default_coordinate_remap(
+        result_list, resize_ratio
+    );
+}
+
+
+// HOUGH_GRADIENT_MIX (HGM)
+
+EXPORT_SYMBOL void HGM_default_preprocess_steps(
+    const cv::Mat& image_in,
+    cv::Mat& image_out,
+    float& resize_ratio_out
+)
+{
+    cv::Mat buff;
+    
+    // we need to keep the aspect ratio
+    // so we can rescale the output x/y coordinate back to match original image
+    mr::resize_with_aspect_ratio(image_in, buff, resize_ratio_out, -1, -1, 500);
+    
+    // creating gray scale version of image needed for HoughCircles
+    cv::cvtColor(buff, buff, cv::COLOR_BGR2GRAY);
+    
+    // rm detail texture
+    cv::bilateralFilter(buff, buff, 10, 50, 50);
+    
+    // add erosion to blur/remove small noices
+    // https://docs.opencv.org/3.4/db/df6/tutorial_erosion_dilatation.html
+    int erosion_size = 1;
+    cv::MorphShapes erosion_shape = cv::MorphShapes::MORPH_CROSS;
+    cv::Mat element = cv::getStructuringElement(
+        erosion_shape,
+        cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
+        cv::Point(erosion_size, erosion_size)
+    );
+    cv::erode(buff, buff, element);
+    
+    // further blur color blocks w/ gaussian blur
+    cv::Size gaussian_ksize(9,9);
+    double gaussian_sigmaX = 2.0;
+    double gaussian_sigmaY = 2.0;
+    cv::GaussianBlur(buff, buff, gaussian_ksize, gaussian_sigmaX, gaussian_sigmaY);
+    // turn 0-3% white pixel to black
+    cv::threshold(buff, buff, static_cast<int>(255*0.03), 255, cv::THRESH_TOZERO);
+    // turn 80-100% white pixel to 80% white
+    cv::threshold(buff, image_out, static_cast<int>(255*0.8), 255, cv::THRESH_TRUNC);
+}
+
+EXPORT_SYMBOL void HGM_default_param_init(
+    const ImageShape& image_shape,
+    int& max_iteration,
+    int& circle_threshold,
+    int& hough_circles_algorithm,
+    double& dp,
+    double& minDist,
+    double& minRadiusRate,
+    int& minRadius,
+    double& maxRadiusRate,
+    int& maxRadius,
+    double& param1,
+    double& param2
+)
+{
+    max_iteration = 2;
+    circle_threshold = 100;
+    hough_circles_algorithm = cv::HOUGH_GRADIENT;
+    
+    dp = std::pow(2, 4);
+    minDist = 50;
+    if (minDist > (image_shape.shorter_side/2))
+        minDist = (image_shape.shorter_side/2);
+    minRadiusRate = 0.4;
+    minRadius = static_cast<int>(image_shape.longer_side * minRadiusRate);
+    maxRadiusRate = 0.6;
+    maxRadius = static_cast<int>(image_shape.longer_side * maxRadiusRate);
+    param1 = 20 * 2;
+    param2 = 3 * param1;
+}
+
+EXPORT_SYMBOL void HGM_default_iteration_param_update(
+    const int iteration,
+    const float image_brightness_perc,
+    const ImageShape& image_shape,
+    int& max_iteration,
+    int& circle_threshold,
+    int& hough_circles_algorithm,
+    double& dp,
+    double& minDist,
+    double& minRadiusRate,
+    int& minRadius,
+    double& maxRadiusRate,
+    int& maxRadius,
+    double& param1,
+    double& param2
+)
+{
+    if (iteration < (max_iteration - 1))
+    {
+        hough_circles_algorithm = cv::HOUGH_GRADIENT;
+        
+        dp = std::pow(2, 4);
+        minDist = 50;
+        if (minDist > (image_shape.shorter_side/2))
+            minDist = (image_shape.shorter_side/2);
+        minRadiusRate = 0.4;
+        minRadius = static_cast<int>(image_shape.longer_side * minRadiusRate);
+        maxRadiusRate = 0.6;
+        maxRadius = static_cast<int>(image_shape.longer_side * maxRadiusRate);
+        param1 = 20 * 2;
+        param2 = 3 * param1;
+    }
+    else if (iteration == (max_iteration - 1))
+    {
+        hough_circles_algorithm = cv::HOUGH_GRADIENT_ALT;
+        
+        dp = 1.5;
+        minDist = static_cast<int>(image_shape.shorter_side * 0.05);
+        minRadius = static_cast<int>(image_shape.shorter_side * 0.1);
+        maxRadius = static_cast<int>(image_shape.shorter_side * 4);
+        param1 = 350;
+        param2 = 0.85;
+    }
+}
+
+EXPORT_SYMBOL mr::Circle HGM_default_iteration_circle_select(
+    const int iteration,
+    const int max_iteration,
+    const cv::Mat& image_in,
+    const std::vector<cv::Vec3f>& detected_circles
+)
+{
+    mr::Circle output;
+    if (iteration < (max_iteration - 1))
+    {
+        cv::Mat image_bin;
+        mr::binarize_image(image_in, image_bin);
+        
+        // find 5 circles by brightness perc
+        // and then find the one with largest radius
+        std::vector<cv::Vec3f> candidate_circles = mr::select_n_circles_by_brightness_perc(
+            image_bin, detected_circles, 5
+        );
+        output = mr::select_circle_by_largest_radius(
+            image_bin, candidate_circles
+        );
+    }
+    else if (iteration == (max_iteration - 1))
+    {
+        // find circle by highest brightness perc
+        output = mr::select_circle_by_brightness_perc(
+            image_in, detected_circles
+        );
+    }
+    
+    return output;
+}
+
+EXPORT_SYMBOL mr::Circle HGM_default_coordinate_remap(
     const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>& result_list,
     const float resize_ratio
 )
