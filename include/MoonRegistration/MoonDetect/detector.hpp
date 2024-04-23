@@ -118,16 +118,20 @@ public:
     // All the function pointers are default to default_... functions defined in "detector.hpp"
     
     std::function<void(const cv::Mat&, cv::Mat&, float&)> preprocess_steps = nullptr;
-    std::function<void(const ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> param_init = nullptr;
-    std::function<void(const int, const float, const ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&)> iteration_param_update = nullptr;
+    std::function<void(const ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&, int&)> param_init = nullptr;
+    std::function<void(const int, const float, const cv::Size&, const ImageShape&, const mr::Circle&, const int, int&, int&, cv::Mat&, double&, double&, double&, int&, double&, int&, double&, double&, int&)> iteration_param_update = nullptr;
     std::function<mr::Circle(const int, const int, const cv::Mat&, const std::vector<cv::Vec3f>&)> iteration_circle_select = nullptr;
     std::function<mr::Circle(const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>&, const float)> coordinate_remap = nullptr;
     
 private:
-    float resize_ratio;
+    float resize_ratio = 0.0;
     cv::Mat original_image;
     cv::Mat process_image;
+#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    mr::HoughCirclesAlgorithm hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX;
+#else
     mr::HoughCirclesAlgorithm hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT;
+#endif
     
 } MoonDetector;
 

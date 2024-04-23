@@ -34,63 +34,29 @@ EXPORT_SYMBOL void find_circles_in_img(
         dp, minDist, param1, param2, minRadius, maxRadius
     );
     
-    if (detected_circles.empty())
-    {
-        detected_circles.push_back(cv::Vec3f(
-            static_cast<float>((image_in.size[1] / 2)),   // x
-            static_cast<float>((image_in.size[0] / 2)),   // y
-            static_cast<float>((image_in.size[1] / 2)+3)  // radius
-        ));
-        return;
-    }
-    
     if (detected_circles.size() >= circle_threshold)
         throw std::runtime_error("Found Too Many Circles.");
 }
 
 
 EXPORT_SYMBOL MoonDetector::MoonDetector()
-    : resize_ratio(0.0),
-#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
-#else
-    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
-#endif
 {
     this->update_hough_circles_algorithm(this->hough_circles_algorithm);
 }
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const std::string& image_filepath)
-    : resize_ratio(0.0),
-#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
-#else
-    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
-#endif
 {
     this->init_by_path(image_filepath);
     this->update_hough_circles_algorithm(this->hough_circles_algorithm);
 }
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const std::vector<unsigned char>& image_binary)
-    : resize_ratio(0.0),
-#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
-#else
-    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
-#endif
 {
     this->init_by_byte(image_binary);
     this->update_hough_circles_algorithm(this->hough_circles_algorithm);
 }
 
 EXPORT_SYMBOL MoonDetector::MoonDetector(const cv::Mat& cv_image)
-    : resize_ratio(0.0),
-#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
-#else
-    hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
-#endif
 {
     this->init_by_mat(cv_image);
     this->update_hough_circles_algorithm(this->hough_circles_algorithm);
@@ -172,6 +138,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         this->resize_ratio
     );
     
+    cv::Size initial_image_size = this->process_image.size();
     mr::ImageShape image_shape = mr::calc_image_shape(this->process_image);
     
     int max_iteration;
@@ -185,6 +152,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
     int maxRadius;
     double param1;
     double param2;
+    int cut_circle_padding;
     
     this->param_init(
         image_shape,
@@ -195,33 +163,40 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         minDist,
         minRadiusRate, minRadius,
         maxRadiusRate, maxRadius,
-        param1, param2
+        param1, param2,
+        cut_circle_padding
     );
     
     std::vector<std::tuple<int, mr::Circle, mr::Rectangle>> result_list(max_iteration);
+    mr::Circle circle_found = {-1, -1, -1};
     
     for (int iteration = 0; iteration < max_iteration; ++iteration)
     {
+        cv::Mat curr_process_image = this->process_image.clone();
         float image_brightness_perc = mr::calc_img_brightness_perc(
-            this->process_image
+            curr_process_image
         );
         
         this->iteration_param_update(
             iteration,
             image_brightness_perc,
+            initial_image_size,
             image_shape,
+            circle_found,
             max_iteration,
             circle_threshold,
             hough_circles_algorithm,
+            curr_process_image,
             dp, minDist,
             minRadiusRate, minRadius,
             maxRadiusRate, maxRadius,
-            param1, param2
+            param1, param2,
+            cut_circle_padding
         );
         
         std::vector<cv::Vec3f> detected_circles;
         mr::find_circles_in_img(
-            this->process_image,
+            curr_process_image,
             detected_circles,
             circle_threshold,
             dp, minDist,
@@ -230,10 +205,10 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
             hough_circles_algorithm
         );
         
-        mr::Circle circle_found = this->iteration_circle_select(
+        circle_found = this->iteration_circle_select(
             iteration,
             max_iteration,
-            this->process_image,
+            curr_process_image,
             detected_circles
         );
         

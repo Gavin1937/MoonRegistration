@@ -44,16 +44,20 @@ EXPORT_SYMBOL void HG_default_param_init(
     double& maxRadiusRate,
     int& maxRadius,
     double& param1,
-    double& param2
+    double& param2,
+    int& cut_circle_padding
 );
 
 EXPORT_SYMBOL void HG_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
+    const cv::Size& inital_image_size,
     const ImageShape& image_shape,
-    int& max_iteration,
+    const mr::Circle& curr_circle_found,
+    const int max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
+    cv::Mat& process_image,
     double& dp,
     double& minDist,
     double& minRadiusRate,
@@ -61,7 +65,8 @@ EXPORT_SYMBOL void HG_default_iteration_param_update(
     double& maxRadiusRate,
     int& maxRadius,
     double& param1,
-    double& param2
+    double& param2,
+    int& cut_circle_padding
 );
 
 EXPORT_SYMBOL mr::Circle HG_default_iteration_circle_select(
@@ -97,16 +102,20 @@ EXPORT_SYMBOL void HGA_default_param_init(
     double& maxRadiusRate,
     int& maxRadius,
     double& param1,
-    double& param2
+    double& param2,
+    int& cut_circle_padding
 );
 
 EXPORT_SYMBOL void HGA_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
+    const cv::Size& inital_image_size,
     const ImageShape& image_shape,
-    int& max_iteration,
+    const mr::Circle& curr_circle_found,
+    const int max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
+    cv::Mat& process_image,
     double& dp,
     double& minDist,
     double& minRadiusRate,
@@ -114,7 +123,8 @@ EXPORT_SYMBOL void HGA_default_iteration_param_update(
     double& maxRadiusRate,
     int& maxRadius,
     double& param1,
-    double& param2
+    double& param2,
+    int& cut_circle_padding
 );
 
 EXPORT_SYMBOL mr::Circle HGA_default_iteration_circle_select(
@@ -150,16 +160,20 @@ EXPORT_SYMBOL void HGM_default_param_init(
     double& maxRadiusRate,
     int& maxRadius,
     double& param1,
-    double& param2
+    double& param2,
+    int& cut_circle_padding
 );
 
 EXPORT_SYMBOL void HGM_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
+    const cv::Size& inital_image_size,
     const ImageShape& image_shape,
-    int& max_iteration,
+    const mr::Circle& curr_circle_found,
+    const int max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
+    cv::Mat& process_image,
     double& dp,
     double& minDist,
     double& minRadiusRate,
@@ -167,7 +181,8 @@ EXPORT_SYMBOL void HGM_default_iteration_param_update(
     double& maxRadiusRate,
     int& maxRadius,
     double& param1,
-    double& param2
+    double& param2,
+    int& cut_circle_padding
 );
 
 EXPORT_SYMBOL mr::Circle HGM_default_iteration_circle_select(
