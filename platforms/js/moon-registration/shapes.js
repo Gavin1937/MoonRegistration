@@ -29,7 +29,7 @@ class Circle {
     return new Promise((resolve, reject) => {
       instance.ready.then(async function() {
         try {
-          const data_list = new Uint32Array(instance.HEAP32.buffer, ptr, 3)
+          const data_list = new Int32Array(instance.HEAP32.buffer, ptr, 3)
           self.x = data_list[0];
           self.y = data_list[1];
           self.radius = data_list[2];
@@ -68,7 +68,7 @@ class Square {
     return new Promise((resolve, reject) => {
       instance.ready.then(async function() {
         try {
-          const data_list = new Uint32Array(instance.HEAP32.buffer, ptr, 3);
+          const data_list = new Int32Array(instance.HEAP32.buffer, ptr, 3);
           self.x = data_list[0];
           self.y = data_list[1];
           self.width = data_list[2];
@@ -108,7 +108,7 @@ class Rectangle {
     return new Promise((resolve, reject) => {
       instance.ready.then(async function() {
         try {
-          const data_list = new Uint32Array(instance.HEAP32.buffer, ptr, 4);
+          const data_list = new Int32Array(instance.HEAP32.buffer, ptr, 4);
           self.top_left_x = data_list[0];
           self.top_left_y = data_list[1];
           self.bottom_right_x = data_list[2];
