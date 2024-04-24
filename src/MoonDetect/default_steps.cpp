@@ -394,7 +394,7 @@ EXPORT_SYMBOL void HGM_default_param_init(
 )
 {
     max_iteration = 2;
-    circle_threshold = -1;
+    circle_threshold = 1000;
     hough_circles_algorithm = cv::HOUGH_GRADIENT;
     cut_circle_padding = 30;
     
@@ -436,7 +436,7 @@ EXPORT_SYMBOL void HGM_default_iteration_param_update(
         hough_circles_algorithm = cv::HOUGH_GRADIENT;
         // binarize image first before running HOUGH_GRADIENT
         mr::binarize_image(process_image, process_image, static_cast<int>(255 * 0.05));
-        circle_threshold = -1;
+        circle_threshold = 1000;
         
         dp = std::pow(2, 4);
         minDist = 50;
@@ -473,6 +473,7 @@ EXPORT_SYMBOL mr::Circle HGM_default_iteration_circle_select(
 )
 {
     mr::Circle output = {-1, -1, -1};
+    // not at last iteration and circle found
     if (iteration < (max_iteration - 1) && !detected_circles.empty())
     {
         cv::Mat image_bin;
@@ -488,6 +489,7 @@ EXPORT_SYMBOL mr::Circle HGM_default_iteration_circle_select(
             image_bin, candidate_circles
         );
     }
+    // last iteration but circle found
     else if (iteration == (max_iteration - 1) && !detected_circles.empty())
     {
         // find circle by highest brightness perc
@@ -495,12 +497,22 @@ EXPORT_SYMBOL mr::Circle HGM_default_iteration_circle_select(
             image_in, detected_circles
         );
     }
+    // last iteration but no circle found
     else if (iteration == (max_iteration - 1) && detected_circles.empty())
     {
-        // is last iteration and no circle detected,
         // return {0, 0, 0} so we can change result_list
         // for default_coordinate_remap() accordingly
         output = {0, 0, 0};
+    }
+    // not at last iteration but not circle found
+    else
+    {
+        // no circle detected, create one
+        output = {
+            static_cast<int>((image_in.size[1] / 2.0)),     // x
+            static_cast<int>((image_in.size[0] / 2.0)),     // y
+            static_cast<int>((image_in.size[1] / 2.0)+3.0)  // radius
+        };
     }
     
     return output;
