@@ -119,18 +119,14 @@ EXPORT_SYMBOL void binarize_image(
 //   - image_in: input image
 //   - image_out: output image, reference of input image
 //   - rect_out: mr::Rectangle, top_left & bottom_right coordinate of output square in image_in
-//   - x: circle center x
-//   - y: circle center y
-//   - radius: circle radius
+//   - circle_in: mr::Circle input
 //   - padding: padding pixels to the radius (default 15)
 EXPORT_SYMBOL void cut_ref_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,
     mr::Rectangle& rect_out,
-    int x,
-    int y,
-    int radius,
-    int padding         = 15
+    const mr::Circle& circle_in,
+    const int padding             = 15
 );
 
 // Cut a square image using input circle and output it as a cv::Mat copy of input
@@ -139,18 +135,14 @@ EXPORT_SYMBOL void cut_ref_image_from_circle(
 //   - image_in: input image
 //   - image_out: output image, copy of input image
 //   - rect_out: mr::Rectangle, top_left & bottom_right coordinate of output square in image_in
-//   - x: circle center x
-//   - y: circle center y
-//   - radius: circle radius
+//   - circle_in: mr::Circle input
 //   - padding: padding pixels to the radius (default 15)
 EXPORT_SYMBOL void cut_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,
-    Rectangle& rect_out,
-    int x,
-    int y,
-    int radius,
-    int padding         = 15
+    mr::Rectangle& rect_out,
+    const mr::Circle& circle_in,
+    const int padding             = 15
 );
 
 // Sync the width & height of secondary image to primary image.

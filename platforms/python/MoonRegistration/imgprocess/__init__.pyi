@@ -3,7 +3,7 @@ from typing import Iterable, overload
 import numpy
 import cv2
 
-from ..shapes import Rectangle
+from ..shapes import Circle, Rectangle
 
 __all__: list[str] = [
     'ImageShape',
@@ -66,9 +66,7 @@ def binarize_image(
 ) -> numpy.ndarray: ...
 def cut_image_from_circle(
     image_in:numpy.ndarray,
-    x:int,
-    y:int,
-    radius:int,
+    circle:Circle,
     padding:int           = 0
 ) -> tuple[Rectangle, numpy.ndarray]: ...
 @overload

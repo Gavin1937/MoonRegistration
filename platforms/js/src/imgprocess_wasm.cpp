@@ -20,11 +20,12 @@ void* mrwasm_cut_image_from_circle(
         cv::Mat* image_in_ptr = reinterpret_cast<cv::Mat*>(image_in);
         cv::Mat* image_out = new cv::Mat();
         mr::Rectangle rect_out;
+        mr::Circle circle_in = {x, y, radius};
         
         mr::cut_image_from_circle(
             *image_in_ptr,
             *image_out, rect_out,
-            x, y, radius,
+            circle_in,
             padding
         );
         

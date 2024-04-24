@@ -144,9 +144,10 @@ EXPORT_SYMBOL mr::Circle select_circle_by_shape(
             veci = mr::round_vec3f(vec);
             cv::Mat circle;
             mr::Rectangle rect_out;
+            mr::Circle vec_circle = {veci[0], veci[1], veci[2]};
             cut_ref_image_from_circle(
                 image_in, circle, rect_out,
-                veci[0], veci[1], veci[2]
+                vec_circle
             );
             
             std::vector<std::vector<cv::Point>> contours;

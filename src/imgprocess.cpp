@@ -222,25 +222,23 @@ EXPORT_SYMBOL void cut_ref_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,
     mr::Rectangle& rect_out,
-    int x,
-    int y,
-    int radius,
-    int padding
+    const mr::Circle& circle_in,
+    const int padding
 )
 {
     int height = image_in.size[0];
     int width = image_in.size[1];
     
-    int yStart = y - radius - padding;
+    int yStart = circle_in.y - circle_in.radius - padding;
     if (yStart < 0) yStart = 0;
     
-    int yEnd = y + radius + padding;
+    int yEnd = circle_in.y + circle_in.radius + padding;
     if (yEnd > height) yEnd = height;
     
-    int xStart = x - radius - padding;
+    int xStart = circle_in.x - circle_in.radius - padding;
     if (xStart < 0) xStart = 0;
     
-    int xEnd = x + radius + padding;
+    int xEnd = circle_in.x + circle_in.radius + padding;
     if (xEnd > width) xEnd = width;
     
     // use cv::Mat::operator() to extract a sub-matrix as reference
@@ -253,13 +251,11 @@ EXPORT_SYMBOL void cut_image_from_circle(
     const cv::Mat& image_in,
     cv::Mat& image_out,
     mr::Rectangle& rect_out,
-    int x,
-    int y,
-    int radius,
-    int padding
+    const mr::Circle& circle_in,
+    const int padding
 )
 {
-    cut_ref_image_from_circle(image_in, image_out, rect_out, x, y, radius, padding);
+    cut_ref_image_from_circle(image_in, image_out, rect_out, circle_in, padding);
     // copy content of image_out to a new cv::Mat
     image_out = image_out.clone();
 }

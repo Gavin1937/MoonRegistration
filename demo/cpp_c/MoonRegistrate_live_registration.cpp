@@ -87,7 +87,7 @@ int main(int argc, char** argv)
         // cut an image from the circle as our user image
         cv::Mat user_img;
         mr::Rectangle rect_out;
-        mr::cut_image_from_circle(frame, user_img, rect_out, circle.x, circle.y, circle.radius);
+        mr::cut_image_from_circle(frame, user_img, rect_out, circle);
         registrar.update_images(user_img, model_img);
         
         try

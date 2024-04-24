@@ -80,9 +80,7 @@ cv::Mat wrap_binarize_image(
 
 py::tuple wrap_cut_image_from_circle(
     const cv::Mat& image_in,
-    int x,
-    int y,
-    int radius,
+    const mr::Circle& circle_in,
     int padding
 )
 {
@@ -92,7 +90,7 @@ py::tuple wrap_cut_image_from_circle(
     mr::cut_image_from_circle(
         image_in, image_out,
         rect_out,
-        x, y, radius,
+        circle_in,
         padding
     );
     
@@ -434,18 +432,14 @@ void init_imgprocess(py::module &module)
     // cv::Mat referring another cv::Mat to numpy.ndarray
     module.def("cut_image_from_circle", &wrap_cut_image_from_circle,
         py::arg("image_in"),
-        py::arg("x"),
-        py::arg("y"),
-        py::arg("radius"),
+        py::arg("circle"),
         py::arg("padding")         = 15,
         R"pbdoc(
     Cut a square image using input circle and output it as a cv2.MatLike|numpy.ndarray copy of input
     
     Parameters:
       - image_in: input image
-      - x: circle center x
-      - y: circle center y
-      - radius: circle radius
+      - circle_in: mr::Circle input
       - padding: padding pixels to the radius (default 15)
     
     Returns (tuple):

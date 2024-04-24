@@ -228,7 +228,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
             this->process_image,
             buff,
             rect_out,
-            circle_found.x, circle_found.y, circle_found.radius,
+            circle_found,
             30
         );
         this->process_image = buff;

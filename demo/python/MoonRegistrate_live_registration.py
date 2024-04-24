@@ -61,10 +61,7 @@ while True:
     
     # cut an image from the circle as our user image
     rect_out, user_img = mr.imgprocess.cut_image_from_circle(
-        frame,
-        circle.x,
-        circle.y,
-        circle.radius
+        frame, circle
     )
     registrar.update_images(user_img, model_img)
     
