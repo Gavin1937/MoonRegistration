@@ -12,6 +12,7 @@ __all__: list[str] = [
     'apply_brightness_contrast',
     'calc_img_brightness_perc',
     'calc_circle_brightness_perc',
+    'binarize_image',
     'cut_image_from_circle',
     'sync_img_size',
     'sync_img_channel',
@@ -58,6 +59,11 @@ def calc_circle_brightness_perc(
     center_y:int,
     radius:int
 ) -> float: ...
+def binarize_image(
+    image_in:numpy.ndarray,
+    thresh:float          = 0.0,
+    maxval:float          = 255.0
+) -> numpy.ndarray: ...
 def cut_image_from_circle(
     image_in:numpy.ndarray,
     x:int,

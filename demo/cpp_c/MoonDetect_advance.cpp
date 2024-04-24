@@ -26,11 +26,12 @@ namespace fs = boost::filesystem;
 
 // MoonRegistration library api MoonDetect module
 #include "MoonRegistration/MoonDetect.hpp"
+#include "MoonRegistration/imgprocess.hpp"
 
 
 // Following functions are different steps in function mr::MoonDetector::moon_detect()
 // You can modify their behavior by rewriting them and setting them to mr::MoonDetector object.
-// Checkout "detector.cpp" for detailed implementation of these step functions
+// Checkout "default_steps.cpp" for detailed implementation of these step functions
 // ==================================================
 
 void preprocess_steps(
@@ -39,13 +40,14 @@ void preprocess_steps(
     float& resize_ratio_out
 )
 {
-    mr::default_preprocess_steps(image_in, image_out, resize_ratio_out);
+    mr::HG_default_preprocess_steps(image_in, image_out, resize_ratio_out);
 }
 
 void param_init(
     const mr::ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
+    int& hough_circles_algorithm,
     double& dp,
     double& minDist,
     double& minRadiusRate,
@@ -53,22 +55,27 @@ void param_init(
     double& maxRadiusRate,
     int& maxRadius,
     double& param1,
-    double& param2
+    double& param2,
+    int& cut_circle_padding
 )
 {
-    mr::default_param_init(
-        image_shape, max_iteration, circle_threshold,
+    mr::HG_default_param_init(
+        image_shape, max_iteration, circle_threshold, hough_circles_algorithm,
         dp, minDist, minRadiusRate, minRadius, maxRadiusRate, maxRadius,
-        param1, param2
+        param1, param2, cut_circle_padding
     );
 }
 
 void iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
+    const cv::Size& initial_image_size,
     const mr::ImageShape& image_shape,
-    int& max_iteration,
+    const mr::Circle& curr_circle_found,
+    const int max_iteration,
     int& circle_threshold,
+    int& hough_circles_algorithm,
+    cv::Mat& process_image,
     double& dp,
     double& minDist,
     double& minRadiusRate,
@@ -76,23 +83,29 @@ void iteration_param_update(
     double& maxRadiusRate,
     int& maxRadius,
     double& param1,
-    double& param2
-)
+    double& param2,
+    int& cut_circle_padding)
 {
-    mr::default_iteration_param_update(
-        iteration, image_brightness_perc, image_shape, max_iteration, circle_threshold,
-        dp, minDist, minRadiusRate, minRadius, maxRadiusRate, maxRadius,
-        param1, param2
+    mr::HG_default_iteration_param_update(
+        iteration, image_brightness_perc, initial_image_size,
+        image_shape, curr_circle_found, max_iteration, circle_threshold,
+        hough_circles_algorithm, process_image, dp, minDist,
+        minRadiusRate, minRadius, maxRadiusRate, maxRadius,
+        param1, param2, cut_circle_padding
     );
 }
 
 mr::Circle iteration_circle_select(
     const int iteration,
+    const int max_iteration,
     const cv::Mat& image_in,
     const std::vector<cv::Vec3f>& detected_circles
 )
 {
-    return mr::default_iteration_circle_select(iteration, image_in, detected_circles);
+    return mr::HG_default_iteration_circle_select(
+        iteration, max_iteration,
+        image_in, detected_circles
+    );
 }
 
 mr::Circle coordinate_remap(
@@ -100,7 +113,7 @@ mr::Circle coordinate_remap(
     const float resize_ratio
 )
 {
-    return mr::default_coordinate_remap(result_list, resize_ratio);
+    return mr::HG_default_coordinate_remap(result_list, resize_ratio);
 }
 
 // ==================================================
@@ -144,20 +157,23 @@ int main(int argc, char** argv)
             // mr::MoonDetector detector(cv_image);
             
             
+            // Update hough circles algorithms and default step functions used
+            // You can change the underlying algorithm used in cv::HoughCircles()
+            // This function will overwrite all the step functions
+            // HOUGH_GRADIENT_ALT and HOUGH_GRADIENT_MIX algorithm only available with OpenCV >= 4.8.1
+            // If the library is compiled with OpenCV < 4.8.1, default algorithm is HOUGH_GRADIENT
+            // If the library is compiled with OpenCV >= 4.8.1, default algorithm is HOUGH_GRADIENT_MIX
+            detector.update_hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT);
+            
             // Following public members of mr::MoonDetector are function pointers
             // They are functions to handle different steps in mr::MoonDetector::detect_moon()
             // You can modify them to further customize how mr::MoonDetector::detect_moon() works
-            // All the function pointers are set to default_*** functions defined in "detector.hpp" by default
+            // All the function pointers are set to ***_default_*** functions defined in "default_steps.hpp" by default
             detector.preprocess_steps = preprocess_steps;
             detector.param_init = param_init;
             detector.iteration_param_update = iteration_param_update;
             detector.iteration_circle_select = iteration_circle_select;
             detector.coordinate_remap = coordinate_remap;
-            
-            // // You can change the underlying algorithm used in cv::HoughCircles()
-            // detector.hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT;
-            // // HOUGH_GRADIENT_ALT algorithm only available with OpenCV >= 4.8.1
-            // detector.hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_ALT;
             
             // calculate moon position
             mr::Circle final_circle = detector.detect_moon();

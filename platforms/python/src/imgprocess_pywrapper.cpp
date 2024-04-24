@@ -65,6 +65,19 @@ float wrap_calc_circle_brightness_perc(
     return mr::calc_circle_brightness_perc(image_in, center_x, center_y, radius);
 }
 
+cv::Mat wrap_binarize_image(
+    const cv::Mat& image_in,
+    int thresh,
+    int maxval
+)
+{
+    cv::Mat image_out;
+    
+    mr::binarize_image(image_in, image_out, thresh, maxval);
+    
+    return image_out;
+}
+
 py::tuple wrap_cut_image_from_circle(
     const cv::Mat& image_in,
     int x,
@@ -401,6 +414,20 @@ void init_imgprocess(py::module &module)
     
     Returns:
       - float between 0 to 1
+        )pbdoc"
+    );
+    module.def("binarize_image", &wrap_binarize_image,
+        py::arg("image_in"),
+        py::arg("thresh") = 0.0,
+        py::arg("maxval") = 255.0,
+        R"pbdoc(
+    Binarize input image, make it black & white only
+    
+    Parameters:
+      - image_in: input image
+      - image_out: output image
+      - thresh: double threshold for cv::threshold, threshold to separate black & white. default 0.0
+      - maxval: double max value for cv::threshold, "white" pixel maximum value. default 255.0
         )pbdoc"
     );
     // cut_ref_image_from_circle won't be supported because we cannot properly convert

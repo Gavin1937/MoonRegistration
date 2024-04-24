@@ -4,9 +4,9 @@
 namespace mr
 {
 
-EXPORT_SYMBOL ImageShape calc_image_shape(const cv::Mat& image_in)
+EXPORT_SYMBOL mr::ImageShape calc_image_shape(const cv::Mat& image_in)
 {
-    ImageShape shape;
+    mr::ImageShape shape;
     shape.height = image_in.size[0];
     shape.width = image_in.size[1];
     if (shape.height >= shape.width)

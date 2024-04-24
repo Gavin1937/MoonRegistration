@@ -57,7 +57,7 @@ EXPORT_SYMBOL void HG_default_preprocess_steps(
 }
 
 EXPORT_SYMBOL void HG_default_param_init(
-    const ImageShape& image_shape,
+    const mr::ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
@@ -73,7 +73,7 @@ EXPORT_SYMBOL void HG_default_param_init(
 )
 {
     max_iteration = 3;
-    circle_threshold = 100;
+    circle_threshold = 200;
     hough_circles_algorithm = cv::HOUGH_GRADIENT;
     cut_circle_padding = 30;
     
@@ -92,8 +92,8 @@ EXPORT_SYMBOL void HG_default_param_init(
 EXPORT_SYMBOL void HG_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
-    const cv::Size& inital_image_size,
-    const ImageShape& image_shape,
+    const cv::Size& initial_image_size,
+    const mr::ImageShape& image_shape,
     const mr::Circle& curr_circle_found,
     const int max_iteration,
     int& circle_threshold,
@@ -245,7 +245,7 @@ EXPORT_SYMBOL void HGA_default_preprocess_steps(
 }
 
 EXPORT_SYMBOL void HGA_default_param_init(
-    const ImageShape& image_shape,
+    const mr::ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
@@ -261,7 +261,7 @@ EXPORT_SYMBOL void HGA_default_param_init(
 )
 {
     max_iteration = 1;
-    circle_threshold = 100;
+    circle_threshold = 200;
     hough_circles_algorithm = cv::HOUGH_GRADIENT_ALT;
     cut_circle_padding = 30;
     
@@ -278,8 +278,8 @@ EXPORT_SYMBOL void HGA_default_param_init(
 EXPORT_SYMBOL void HGA_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
-    const cv::Size& inital_image_size,
-    const ImageShape& image_shape,
+    const cv::Size& initial_image_size,
+    const mr::ImageShape& image_shape,
     const mr::Circle& curr_circle_found,
     const int max_iteration,
     int& circle_threshold,
@@ -378,7 +378,7 @@ EXPORT_SYMBOL void HGM_default_preprocess_steps(
 }
 
 EXPORT_SYMBOL void HGM_default_param_init(
-    const ImageShape& image_shape,
+    const mr::ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
@@ -394,7 +394,7 @@ EXPORT_SYMBOL void HGM_default_param_init(
 )
 {
     max_iteration = 2;
-    circle_threshold = 500;
+    circle_threshold = -1;
     hough_circles_algorithm = cv::HOUGH_GRADIENT;
     cut_circle_padding = 30;
     
@@ -413,8 +413,8 @@ EXPORT_SYMBOL void HGM_default_param_init(
 EXPORT_SYMBOL void HGM_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
-    const cv::Size& inital_image_size,
-    const ImageShape& image_shape,
+    const cv::Size& initial_image_size,
+    const mr::ImageShape& image_shape,
     const mr::Circle& curr_circle_found,
     const int max_iteration,
     int& circle_threshold,
@@ -436,6 +436,7 @@ EXPORT_SYMBOL void HGM_default_iteration_param_update(
         hough_circles_algorithm = cv::HOUGH_GRADIENT;
         // binarize image first before running HOUGH_GRADIENT
         mr::binarize_image(process_image, process_image, static_cast<int>(255 * 0.05));
+        circle_threshold = -1;
         
         dp = std::pow(2, 4);
         minDist = 50;
@@ -452,7 +453,8 @@ EXPORT_SYMBOL void HGM_default_iteration_param_update(
     {
         hough_circles_algorithm = cv::HOUGH_GRADIENT_ALT;
         cut_circle_padding = static_cast<int>(curr_circle_found.radius * 1.15);
-        int shorter_side = static_cast<int>(std::min(inital_image_size.width, inital_image_size.height));
+        circle_threshold = 100;
+        int shorter_side = static_cast<int>(std::min(initial_image_size.width, initial_image_size.height));
         
         dp = 1.5;
         minDist = static_cast<int>(shorter_side * 0.05);

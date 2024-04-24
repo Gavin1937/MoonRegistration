@@ -104,8 +104,8 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
 // Parameters:
 //   - image_in: input image
 //   - image_out: output image
-//   - thresh: double threshold for cv::threshold, threshold to separate black & white
-//   - maxval: double max value for cv::threshold, "white" pixel maximum value
+//   - thresh: double threshold for cv::threshold, threshold to separate black & white. default 0.0
+//   - maxval: double max value for cv::threshold, "white" pixel maximum value. default 255.0
 EXPORT_SYMBOL void binarize_image(
     const cv::Mat& image_in,
     cv::Mat& image_out,

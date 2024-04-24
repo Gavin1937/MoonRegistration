@@ -41,7 +41,7 @@ EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithm
 // Parameters:
 //   - image_in: gray scaled input image
 //   - detected_circles: output detected circles vector
-//   - circle_threshold: threshold on number of circles to search
+//   - circle_threshold: threshold on number of circles to search, set to negative number to disable threshold
 //     if detected_circles > circle_threshold, function will throw runtime_error
 //   - dp: OpenCV parameter, inverse ratio of the accumulator resolution to the image resolution
 //   - minDist: OpenCV parameter, minimum distance between the centers of the detected circles
@@ -49,9 +49,8 @@ EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithm
 //   - maxRadius: OpenCV parameter, maximum circle radius
 //   - param1: OpenCV parameter, first method-specific parameter
 //   - param2: OpenCV parameter, second method-specific parameter
-//   - algorithm: mr::HoughCirclesAlgorithm to select the algorithm used in cv::HoughCircles.
-//     starting from OpenCV 4.8.1, you can choose between HOUGH_GRADIENT and HOUGH_GRADIENT_ALT.
-//     default to mr::HoughCirclesAlgorithm::HOUGH_GRADIENT
+//   - algorithm: int hough circle algorithm for cv::HoughCircles().
+//     default algorithm is cv::HOUGH_GRADIENT.
 EXPORT_SYMBOL void find_circles_in_img(
     const cv::Mat& image_in,
     std::vector<cv::Vec3f>& detected_circles,
@@ -62,7 +61,7 @@ EXPORT_SYMBOL void find_circles_in_img(
     const int maxRadius,
     const double param1,
     const double param2,
-    const mr::HoughCirclesAlgorithm& algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT
+    const int algorithm = cv::HOUGH_GRADIENT
 );
 
 
@@ -99,7 +98,9 @@ public:
     EXPORT_SYMBOL void init_by_mat(const cv::Mat& image_in);
     
     // update hough circle detection algorithm and default functions
-    // this function will also update the step function pointer base on the input algorithm
+    // this function will overwrite the step function pointer base on the input algorithm
+    // If the library is compiled with OpenCV < 4.8.1, default we will use HOUGH_GRADIENT algorithm by default
+    // If the library is compiled with OpenCV >= 4.8.1, default we will use HOUGH_GRADIENT_ALT algorithm by default
     EXPORT_SYMBOL void update_hough_circles_algorithm(const mr::HoughCirclesAlgorithm& algorithm);
     
     
@@ -115,11 +116,11 @@ public:
     // Following public members of mr::MoonDetector are function pointers
     // They are functions handling different steps in mr::MoonDetector::detect_moon()
     // You can modify them to further customize how mr::MoonDetector::detect_moon() works
-    // All the function pointers are default to default_... functions defined in "detector.hpp"
+    // All the function pointers are default to default_... functions defined in "default_steps.hpp"
     
     std::function<void(const cv::Mat&, cv::Mat&, float&)> preprocess_steps = nullptr;
-    std::function<void(const ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&, int&)> param_init = nullptr;
-    std::function<void(const int, const float, const cv::Size&, const ImageShape&, const mr::Circle&, const int, int&, int&, cv::Mat&, double&, double&, double&, int&, double&, int&, double&, double&, int&)> iteration_param_update = nullptr;
+    std::function<void(const mr::ImageShape&, int&, int&, int&, double&, double&, double&, int&, double&, int&, double&, double&, int&)> param_init = nullptr;
+    std::function<void(const int, const float, const cv::Size&, const mr::ImageShape&, const mr::Circle&, const int, int&, int&, cv::Mat&, double&, double&, double&, int&, double&, int&, double&, double&, int&)> iteration_param_update = nullptr;
     std::function<mr::Circle(const int, const int, const cv::Mat&, const std::vector<cv::Vec3f>&)> iteration_circle_select = nullptr;
     std::function<mr::Circle(const std::vector<std::tuple<int, mr::Circle, mr::Rectangle>>&, const float)> coordinate_remap = nullptr;
     

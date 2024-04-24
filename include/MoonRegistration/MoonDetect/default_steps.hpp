@@ -33,7 +33,7 @@ EXPORT_SYMBOL void HG_default_preprocess_steps(
 );
 
 EXPORT_SYMBOL void HG_default_param_init(
-    const ImageShape& image_shape,
+    const mr::ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
@@ -51,8 +51,8 @@ EXPORT_SYMBOL void HG_default_param_init(
 EXPORT_SYMBOL void HG_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
-    const cv::Size& inital_image_size,
-    const ImageShape& image_shape,
+    const cv::Size& initial_image_size,
+    const mr::ImageShape& image_shape,
     const mr::Circle& curr_circle_found,
     const int max_iteration,
     int& circle_threshold,
@@ -91,7 +91,7 @@ EXPORT_SYMBOL void HGA_default_preprocess_steps(
 );
 
 EXPORT_SYMBOL void HGA_default_param_init(
-    const ImageShape& image_shape,
+    const mr::ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
@@ -109,8 +109,8 @@ EXPORT_SYMBOL void HGA_default_param_init(
 EXPORT_SYMBOL void HGA_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
-    const cv::Size& inital_image_size,
-    const ImageShape& image_shape,
+    const cv::Size& initial_image_size,
+    const mr::ImageShape& image_shape,
     const mr::Circle& curr_circle_found,
     const int max_iteration,
     int& circle_threshold,
@@ -149,7 +149,7 @@ EXPORT_SYMBOL void HGM_default_preprocess_steps(
 );
 
 EXPORT_SYMBOL void HGM_default_param_init(
-    const ImageShape& image_shape,
+    const mr::ImageShape& image_shape,
     int& max_iteration,
     int& circle_threshold,
     int& hough_circles_algorithm,
@@ -167,8 +167,8 @@ EXPORT_SYMBOL void HGM_default_param_init(
 EXPORT_SYMBOL void HGM_default_iteration_param_update(
     const int iteration,
     const float image_brightness_perc,
-    const cv::Size& inital_image_size,
-    const ImageShape& image_shape,
+    const cv::Size& initial_image_size,
+    const mr::ImageShape& image_shape,
     const mr::Circle& curr_circle_found,
     const int max_iteration,
     int& circle_threshold,

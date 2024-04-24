@@ -5,6 +5,7 @@
 #include "typecvt/cvdmatch_dmatch.hpp"
 #include "typecvt/cvkeypoint_keypoint.hpp"
 #include "typecvt/cvrect_tuple.hpp"
+#include "typecvt/iterable_size.hpp"
 
 // add stl container support for above conversion types
 #include <pybind11/stl.h>

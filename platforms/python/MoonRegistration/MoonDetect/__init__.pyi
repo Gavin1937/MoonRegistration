@@ -2,6 +2,7 @@ from __future__ import annotations
 from enum import IntEnum
 from typing import Callable, overload
 import numpy
+import cv2
 
 from ..shapes import Circle, Rectangle
 from ..imgprocess import ImageShape
@@ -50,7 +51,11 @@ class HoughCirclesAlgorithm(IntEnum):
 # Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
 # This enum will be enabled if OpenCV version >= 4.8.1
 #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+    # use cv::HOUGH_GRADIENT_ALT with basic optimization
     HOUGH_GRADIENT_ALT    = 0x102,
+    
+    # use cv::HOUGH_GRADIENT and cv::HOUGH_GRADIENT_ALT together for the best result
+    HOUGH_GRADIENT_MIX    = 0x103,
 #endif
     EMPTY_ALGORITHM       = 0x001,
     INVALID_ALGORITHM     = 0x000
@@ -64,16 +69,27 @@ def find_circles_in_img(
     maxRadius:int,
     param1:float,
     param2:float,
-    algorithm:HoughCirclesAlgorithm = HoughCirclesAlgorithm.HOUGH_GRADIENT
+    algorithm:int = cv2.HOUGH_GRADIENT
 ) -> numpy.ndarray: ...
 
-def default_preprocess_steps(
+
+# default stage functions
+# for class MoonDetector differ by the
+# HoughCirclesAlgorithms they use.
+# Algorithm name to function prefix translation:
+# HOUGH_GRADIENT        => HG
+# HOUGH_GRADIENT_ALT    => HGA
+# HOUGH_GRADIENT_MIX    => HGM
+
+# HOUGH_GRADIENT (HG)
+def HG_default_preprocess_steps(
     image_in:numpy.ndarray
 ) -> tuple[numpy.ndarray, float]: ...
-def default_param_init(
+def HG_default_param_init(
     image_shape:ImageShape,
     max_iteration:int,
     circle_threshold:int,
+    hough_circles_algorithm:int,
     dp:float,
     minDist:float,
     minRadiusRate:float,
@@ -81,14 +97,19 @@ def default_param_init(
     maxRadiusRate:float,
     maxRadius:int,
     param1:float,
-    param2:float
-) -> tuple[int,int,float,float,float,int,float,int,float,float]: ...
-def default_iteration_param_update(
+    param2:float,
+    cut_circle_padding:int
+) -> tuple[int,int,int,float,float,float,int,float,int,float,float,int]: ...
+def HG_default_iteration_param_update(
     iteration:int,
     image_brightness_perc:float,
+    initial_image_size:tuple,
     image_shape:ImageShape,
+    curr_circle_found:Circle,
     max_iteration:int,
     circle_threshold:int,
+    hough_circles_algorithm:int,
+    process_image:numpy.ndarray,
     dp:float,
     minDist:float,
     minRadiusRate:float,
@@ -96,35 +117,135 @@ def default_iteration_param_update(
     maxRadiusRate:float,
     maxRadius:int,
     param1:float,
-    param2:float
-) -> tuple[int,int,float,float,float,int,float,int,float,float]: ...
-def default_iteration_circle_select(
+    param2:float,
+    cut_circle_padding:int
+) -> tuple[int,int,numpy.ndarray,float,float,float,int,float,int,float,float,int]: ...
+def HG_default_iteration_circle_select(
     iteration:int,
+    max_iteration:int,
     image_in:numpy.ndarray,
     detected_circles:numpy.ndarray
 ) -> Circle: ...
-def default_coordinate_remap(
+def HG_default_coordinate_remap(
     result_list:list[tuple[int, Circle, Rectangle]],
     resize_ratio:float
 ) -> Circle: ...
 
+# HOUGH_GRADIENT (HGA)
+def HGA_default_preprocess_steps(
+    image_in:numpy.ndarray
+) -> tuple[numpy.ndarray, float]: ...
+def HGA_default_param_init(
+    image_shape:ImageShape,
+    max_iteration:int,
+    circle_threshold:int,
+    hough_circles_algorithm:int,
+    dp:float,
+    minDist:float,
+    minRadiusRate:float,
+    minRadius:int,
+    maxRadiusRate:float,
+    maxRadius:int,
+    param1:float,
+    param2:float,
+    cut_circle_padding:int
+) -> tuple[int,int,int,float,float,float,int,float,int,float,float,int]: ...
+def HGA_default_iteration_param_update(
+    iteration:int,
+    image_brightness_perc:float,
+    initial_image_size:tuple,
+    image_shape:ImageShape,
+    curr_circle_found:Circle,
+    max_iteration:int,
+    circle_threshold:int,
+    hough_circles_algorithm:int,
+    process_image:numpy.ndarray,
+    dp:float,
+    minDist:float,
+    minRadiusRate:float,
+    minRadius:int,
+    maxRadiusRate:float,
+    maxRadius:int,
+    param1:float,
+    param2:float,
+    cut_circle_padding:int
+) -> tuple[int,int,numpy.ndarray,float,float,float,int,float,int,float,float,int]: ...
+def HGA_default_iteration_circle_select(
+    iteration:int,
+    max_iteration:int,
+    image_in:numpy.ndarray,
+    detected_circles:numpy.ndarray
+) -> Circle: ...
+def HGA_default_coordinate_remap(
+    result_list:list[tuple[int, Circle, Rectangle]],
+    resize_ratio:float
+) -> Circle: ...
+
+# HOUGH_GRADIENT (HGM)
+def HGM_default_preprocess_steps(
+    image_in:numpy.ndarray
+) -> tuple[numpy.ndarray, float]: ...
+def HGM_default_param_init(
+    image_shape:ImageShape,
+    max_iteration:int,
+    circle_threshold:int,
+    hough_circles_algorithm:int,
+    dp:float,
+    minDist:float,
+    minRadiusRate:float,
+    minRadius:int,
+    maxRadiusRate:float,
+    maxRadius:int,
+    param1:float,
+    param2:float,
+    cut_circle_padding:int
+) -> tuple[int,int,int,float,float,float,int,float,int,float,float,int]: ...
+def HGM_default_iteration_param_update(
+    iteration:int,
+    image_brightness_perc:float,
+    initial_image_size:tuple,
+    image_shape:ImageShape,
+    curr_circle_found:Circle,
+    max_iteration:int,
+    circle_threshold:int,
+    hough_circles_algorithm:int,
+    process_image:numpy.ndarray,
+    dp:float,
+    minDist:float,
+    minRadiusRate:float,
+    minRadius:int,
+    maxRadiusRate:float,
+    maxRadius:int,
+    param1:float,
+    param2:float,
+    cut_circle_padding:int
+) -> tuple[int,int,numpy.ndarray,float,float,float,int,float,int,float,float,int]: ...
+def HGM_default_iteration_circle_select(
+    iteration:int,
+    max_iteration:int,
+    image_in:numpy.ndarray,
+    detected_circles:numpy.ndarray
+) -> Circle: ...
+def HGM_default_coordinate_remap(
+    result_list:list[tuple[int, Circle, Rectangle]],
+    resize_ratio:float
+) -> Circle: ...
+
+
 class MoonDetector():
     @overload
-    def __init__(self) -> None:
-        self.hough_circles_algorithm:HoughCirclesAlgorithm
+    def __init__(self) -> None: ...
     @overload
-    def __init__(self, filepath:str) -> None:
-        self.hough_circles_algorithm:HoughCirclesAlgorithm
+    def __init__(self, filepath:str) -> None: ...
     @overload
-    def __init__(self, binary:bytes) -> None:
-        self.hough_circles_algorithm:HoughCirclesAlgorithm
+    def __init__(self, binary:bytes) -> None: ...
     @overload
-    def __init__(self, image:numpy.ndarray) -> None:
-        self.hough_circles_algorithm:HoughCirclesAlgorithm
+    def __init__(self, image:numpy.ndarray) -> None: ...
     def is_empty(self) -> bool: ...
     def init_by_path(self, image_filepath:str) -> None: ...
     def init_by_byte(self, image_binary:bytes) -> None: ...
     def init_by_mat(self, image_in:numpy.ndarray) -> None: ...
+    def update_hough_circles_algorithm(algorithm:HoughCirclesAlgorithm) -> None: ...
     def detect_moon(self) -> Circle: ...
     def set_preprocess_steps(self, func:Callable) -> None: ...
     def set_param_init(self, func:Callable) -> None: ...
