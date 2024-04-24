@@ -57,12 +57,10 @@ float wrap_calc_img_brightness_perc(
 
 float wrap_calc_circle_brightness_perc(
     const cv::Mat& image_in,
-    int center_x,
-    int center_y,
-    int radius
+    const mr::Circle& circle_in
 )
 {
-    return mr::calc_circle_brightness_perc(image_in, center_x, center_y, radius);
+    return mr::calc_circle_brightness_perc(image_in, circle_in);
 }
 
 cv::Mat wrap_binarize_image(
@@ -392,9 +390,7 @@ void init_imgprocess(py::module &module)
     );
     module.def("calc_circle_brightness_perc", &wrap_calc_circle_brightness_perc,
         py::arg("image_in"),
-        py::arg("center_x"),
-        py::arg("center_y"),
-        py::arg("radius"),
+        py::arg("circle_in"),
         R"pbdoc(
     Assuming all pixel values in image_in are black(0) / white(255)
     sum up all the pixels in given circle, and then
@@ -406,9 +402,7 @@ void init_imgprocess(py::module &module)
     
     Parameters:
       - image_in: input image
-      - center_x: circle center x
-      - center_y: circle center y
-      - radius: circle radius
+      - circle_in: input circle
     
     Returns:
       - float between 0 to 1

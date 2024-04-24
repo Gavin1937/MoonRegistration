@@ -148,23 +148,21 @@ EXPORT_SYMBOL float calc_img_brightness_perc(
 
 EXPORT_SYMBOL float calc_circle_brightness_perc(
     const cv::Mat& image_in,
-    int center_x,
-    int center_y,
-    int radius
+    const mr::Circle& circle_in
 )
 {
     int height = image_in.size[0];
     int width = image_in.size[1];
     
-    int xmin = center_x - radius;
+    int xmin = circle_in.x - circle_in.radius;
     if (xmin <= 0) xmin = 0;
-    int xmax = center_x + radius;
+    int xmax = circle_in.x + circle_in.radius;
     if (xmax >= width) xmax = width;
-    int ymin = center_y - radius;
+    int ymin = circle_in.y - circle_in.radius;
     if (ymin <= 0) ymin = 0;
-    int ymax = center_y + radius;
+    int ymax = circle_in.y + circle_in.radius;
     if (ymax >= height) ymax = height;
-    int radiusSquared = radius * radius;
+    int radius_squared = circle_in.radius * circle_in.radius;
     
     int pixel_sum = 0;
     int pixel_count = 0;
@@ -172,12 +170,12 @@ EXPORT_SYMBOL float calc_circle_brightness_perc(
     {
         for (int y = ymin; y < ymax; ++y)
         {
-            int dx = x - center_x;
-            int dy = y - center_y;
-            int distanceSquared = dx * dx + dy * dy;
+            int dx = x - circle_in.x;
+            int dy = y - circle_in.y;
+            int distance_squared = dx * dx + dy * dy;
             
             // inside circle
-            if (distanceSquared <= radiusSquared)
+            if (distance_squared <= radius_squared)
             {
                 pixel_sum += static_cast<int>(image_in.at<uchar>(y, x));
                 pixel_count += 1;

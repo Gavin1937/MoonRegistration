@@ -25,7 +25,7 @@ EXPORT_SYMBOL mr::Circle select_circle_by_brightness_perc(
             // calc circle brightness percentage (pixel mean)
             float mean = calc_circle_brightness_perc(
                 image_in,
-                veci[0], veci[1], veci[2]
+                {veci[0], veci[1], veci[2]}
             );
             // find the maximum mean thats below 0.98
             if (mean < 0.98 && mean > max_mean)
@@ -63,7 +63,7 @@ EXPORT_SYMBOL std::vector<cv::Vec3f> select_n_circles_by_brightness_perc(
             // calc circle brightness percentage (pixel mean)
             return calc_circle_brightness_perc(
                 image_in,
-                veci[0], veci[1], veci[2]
+                {veci[0], veci[1], veci[2]}
             );
         },
         // filter circles with maximum mean(value) thats below 0.98
@@ -144,10 +144,9 @@ EXPORT_SYMBOL mr::Circle select_circle_by_shape(
             veci = mr::round_vec3f(vec);
             cv::Mat circle;
             mr::Rectangle rect_out;
-            mr::Circle vec_circle = {veci[0], veci[1], veci[2]};
             cut_ref_image_from_circle(
                 image_in, circle, rect_out,
-                vec_circle
+                {veci[0], veci[1], veci[2]}
             );
             
             std::vector<std::vector<cv::Point>> contours;

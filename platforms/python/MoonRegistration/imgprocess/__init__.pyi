@@ -55,9 +55,7 @@ def calc_img_brightness_perc(
 ) -> float: ...
 def calc_circle_brightness_perc(
     image_in:numpy.ndarray,
-    center_x:int,
-    center_y:int,
-    radius:int
+    circle_in:Circle
 ) -> float: ...
 def binarize_image(
     image_in:numpy.ndarray,

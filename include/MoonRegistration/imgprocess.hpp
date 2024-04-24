@@ -86,17 +86,13 @@ EXPORT_SYMBOL float calc_img_brightness_perc(
 // 
 // Parameters:
 //   - image_in: input image
-//   - center_x: circle center x
-//   - center_y: circle center y
-//   - radius: circle radius
+//   - circle_in: input circle
 // 
 // Returns:
 //   - float between 0 to 1
 EXPORT_SYMBOL float calc_circle_brightness_perc(
     const cv::Mat& image_in,
-    int center_x,
-    int center_y,
-    int radius
+    const mr::Circle& circle_in
 );
 
 // Binarize input image, make it black & white only
