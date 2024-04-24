@@ -436,7 +436,7 @@ EXPORT_SYMBOL void HGM_default_iteration_param_update(
         hough_circles_algorithm = cv::HOUGH_GRADIENT;
         // binarize image first before running HOUGH_GRADIENT
         mr::binarize_image(process_image, process_image, static_cast<int>(255 * 0.05));
-        circle_threshold = 1000;
+        circle_threshold = 700;
         
         dp = std::pow(2, 4);
         minDist = 50;
