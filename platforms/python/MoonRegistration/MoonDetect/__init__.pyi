@@ -4,6 +4,7 @@ from typing import Callable, overload
 import numpy
 import cv2
 
+from .. import MR_HAVE_HOUGH_GRADIENT_ALT
 from ..shapes import Circle, Rectangle
 from ..imgprocess import ImageShape
 
@@ -46,19 +47,26 @@ def select_circle_by_shape(
     detected_circles:numpy.ndarray
 ) -> Circle: ...
 
-class HoughCirclesAlgorithm(IntEnum):
-    HOUGH_GRADIENT        = 0x101,
-# Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
-# This enum will be enabled if OpenCV version >= 4.8.1
-#ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-    # use cv::HOUGH_GRADIENT_ALT with basic optimization
-    HOUGH_GRADIENT_ALT    = 0x102,
-    
-    # use cv::HOUGH_GRADIENT and cv::HOUGH_GRADIENT_ALT together for the best result
-    HOUGH_GRADIENT_MIX    = 0x103,
-#endif
-    EMPTY_ALGORITHM       = 0x001,
-    INVALID_ALGORITHM     = 0x000
+if MR_HAVE_HOUGH_GRADIENT_ALT:
+    class HoughCirclesAlgorithm(IntEnum):
+        HOUGH_GRADIENT        = 0x101,
+    # Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
+    # This enum will be enabled if OpenCV version >= 4.8.1
+    #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+        # use cv::HOUGH_GRADIENT_ALT with basic optimization
+        HOUGH_GRADIENT_ALT    = 0x102,
+        
+        # use cv::HOUGH_GRADIENT and cv::HOUGH_GRADIENT_ALT together for the best result
+        HOUGH_GRADIENT_MIX    = 0x103,
+    #endif
+        EMPTY_ALGORITHM       = 0x001,
+        INVALID_ALGORITHM     = 0x000
+else:
+    class HoughCirclesAlgorithm(IntEnum):
+        HOUGH_GRADIENT        = 0x101,
+        
+        EMPTY_ALGORITHM       = 0x001,
+        INVALID_ALGORITHM     = 0x000
 
 def find_circles_in_img(
     image_in:numpy.ndarray,

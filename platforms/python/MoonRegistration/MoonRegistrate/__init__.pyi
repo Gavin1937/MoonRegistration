@@ -4,24 +4,36 @@ from typing import Iterable, Callable, overload
 import numpy
 import cv2
 
+from .. import MR_HAVE_OPENCV_NONFREE
+
 __all__: list[str] = [
     'RegistrationAlgorithms',
     'default_is_good_match',
     'MoonRegistrar',
 ]
 
-class RegistrationAlgorithms(IntEnum):
-    SIFT                               = 0x100,
-    ORB                                = 0x101,
-    AKAZE                              = 0x102,
-    BRISK                              = 0x103,
-    
-#ifdef MR_HAVE_OPENCV_NONFREE
-    # opencv non-free algorithms
-    SURF_NONFREE                       = 0x200,
-#endif
-    EMPTY_ALGORITHM                    = 0x001,
-    INVALID_ALGORITHM                  = 0x000
+if MR_HAVE_OPENCV_NONFREE:
+    class RegistrationAlgorithms(IntEnum):
+        SIFT                               = 0x100,
+        ORB                                = 0x101,
+        AKAZE                              = 0x102,
+        BRISK                              = 0x103,
+        
+    #ifdef MR_HAVE_OPENCV_NONFREE
+        # opencv non-free algorithms
+        SURF_NONFREE                       = 0x200,
+    #endif
+        EMPTY_ALGORITHM                    = 0x001,
+        INVALID_ALGORITHM                  = 0x000
+else:
+    class RegistrationAlgorithms(IntEnum):
+        SIFT                               = 0x100,
+        ORB                                = 0x101,
+        AKAZE                              = 0x102,
+        BRISK                              = 0x103,
+        
+        EMPTY_ALGORITHM                    = 0x001,
+        INVALID_ALGORITHM                  = 0x000
 
 def default_is_good_match(
     m:cv2.DMatch,
