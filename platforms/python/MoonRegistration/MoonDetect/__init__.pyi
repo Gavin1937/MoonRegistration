@@ -14,7 +14,7 @@ __all__: list[str] = [
     'select_circle_by_largest_radius',
     'select_n_circles_by_largest_radius',
     'select_circle_by_shape',
-    'HoughCirclesAlgorithm',
+    'HoughCirclesAlgorithms',
     'find_circles_in_img',
     'default_preprocess_steps',
     'default_param_init',
@@ -48,7 +48,7 @@ def select_circle_by_shape(
 ) -> Circle: ...
 
 if MR_HAVE_HOUGH_GRADIENT_ALT:
-    class HoughCirclesAlgorithm(IntEnum):
+    class HoughCirclesAlgorithms(IntEnum):
         HOUGH_GRADIENT        = 0x101,
     # Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
     # This enum will be enabled if OpenCV version >= 4.8.1
@@ -62,7 +62,7 @@ if MR_HAVE_HOUGH_GRADIENT_ALT:
         EMPTY_ALGORITHM       = 0x001,
         INVALID_ALGORITHM     = 0x000
 else:
-    class HoughCirclesAlgorithm(IntEnum):
+    class HoughCirclesAlgorithms(IntEnum):
         HOUGH_GRADIENT        = 0x101,
         
         EMPTY_ALGORITHM       = 0x001,
@@ -253,7 +253,7 @@ class MoonDetector():
     def init_by_path(self, image_filepath:str) -> None: ...
     def init_by_byte(self, image_binary:bytes) -> None: ...
     def init_by_mat(self, image_in:numpy.ndarray) -> None: ...
-    def update_hough_circles_algorithm(algorithm:HoughCirclesAlgorithm) -> None: ...
+    def update_hough_circles_algorithm(algorithm:HoughCirclesAlgorithms) -> None: ...
     def detect_moon(self) -> Circle: ...
     def set_preprocess_steps(self, func:Callable) -> None: ...
     def set_param_init(self, func:Callable) -> None: ...

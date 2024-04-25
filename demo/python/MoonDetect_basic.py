@@ -32,10 +32,13 @@ for dirEntry in folder.rglob('*'):
         # detector = mr.MoonDetect.MoonDetector(cv_image)
         
         
+        # # Update hough circles algorithms and default step functions used
         # # You can change the underlying algorithm used in cv::HoughCircles()
-        # detector.hough_circles_algorithm = mr.MoonDetect.HoughCirclesAlgorithm.HOUGH_GRADIENT
-        # # HOUGH_GRADIENT_ALT algorithm only available with OpenCV >= 4.8.1
-        # detector.hough_circles_algorithm = mr.MoonDetect.HoughCirclesAlgorithm.HOUGH_GRADIENT_ALT
+        # # This function will overwrite all the step functions
+        # # HOUGH_GRADIENT_ALT and HOUGH_GRADIENT_MIX algorithm only available with OpenCV >= 4.8.1
+        # # If the library is compiled with OpenCV < 4.8.1, default algorithm is HOUGH_GRADIENT
+        # # If the library is compiled with OpenCV >= 4.8.1, default algorithm is HOUGH_GRADIENT_MIX
+        # detector.update_hough_circles_algorithm(mr.MoonDetect.HoughCirclesAlgorithms.HOUGH_GRADIENT)
         
         # calculate moon position
         final_circle = detector.detect_moon()

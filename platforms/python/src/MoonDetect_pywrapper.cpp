@@ -983,14 +983,14 @@ void init_MoonDetect(py::module &module)
     
     // MoonDetect/detector.hpp
     
-    py::enum_<mr::HoughCirclesAlgorithm>(module, "HoughCirclesAlgorithm", py::arithmetic())
-        .value("HOUGH_GRADIENT", mr::HoughCirclesAlgorithm::HOUGH_GRADIENT)
+    py::enum_<mr::HoughCirclesAlgorithms>(module, "HoughCirclesAlgorithms", py::arithmetic())
+        .value("HOUGH_GRADIENT", mr::HoughCirclesAlgorithms::HOUGH_GRADIENT)
 #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-        .value("HOUGH_GRADIENT_ALT", mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_ALT)
-        .value("HOUGH_GRADIENT_MIX", mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX)
+        .value("HOUGH_GRADIENT_ALT", mr::HoughCirclesAlgorithms::HOUGH_GRADIENT_ALT)
+        .value("HOUGH_GRADIENT_MIX", mr::HoughCirclesAlgorithms::HOUGH_GRADIENT_MIX)
 #endif
-        .value("EMPTY_ALGORITHM", mr::HoughCirclesAlgorithm::EMPTY_ALGORITHM)
-        .value("INVALID_ALGORITHM", mr::HoughCirclesAlgorithm::INVALID_ALGORITHM)
+        .value("EMPTY_ALGORITHM", mr::HoughCirclesAlgorithms::EMPTY_ALGORITHM)
+        .value("INVALID_ALGORITHM", mr::HoughCirclesAlgorithms::INVALID_ALGORITHM)
     ;
     
     module.def("find_circles_in_img", wrap_find_circles_in_img,

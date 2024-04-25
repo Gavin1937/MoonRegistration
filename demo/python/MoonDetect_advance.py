@@ -111,7 +111,7 @@ for dirEntry in folder.rglob('*'):
         # HOUGH_GRADIENT_ALT and HOUGH_GRADIENT_MIX algorithm only available with OpenCV >= 4.8.1
         # If the library is compiled with OpenCV < 4.8.1, default algorithm is HOUGH_GRADIENT
         # If the library is compiled with OpenCV >= 4.8.1, default algorithm is HOUGH_GRADIENT_MIX
-        detector.update_hough_circles_algorithm(mr.MoonDetect.HoughCirclesAlgorithm.HOUGH_GRADIENT)
+        detector.update_hough_circles_algorithm(mr.MoonDetect.HoughCirclesAlgorithms.HOUGH_GRADIENT)
         
         # Following functions of mr.MoonDetect.MoonDetector will set function pointers in the class.
         # Those pointers are functions to handle different steps in mr.MoonDetect.MoonDetector.detect_moon()

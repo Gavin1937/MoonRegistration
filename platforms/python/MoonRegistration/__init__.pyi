@@ -13,7 +13,7 @@ from .imgprocess import (
     ImageChannels,
 )
 from .MoonDetect import (
-    HoughCirclesAlgorithm,
+    HoughCirclesAlgorithms,
     MoonDetector,
 )
 from .MoonRegistrate import (
@@ -39,7 +39,7 @@ __all__: list[str] = [
     'ImageChannels',
     
     'MoonDetect',
-    'HoughCirclesAlgorithm',
+    'HoughCirclesAlgorithms',
     'MoonDetector',
     
     'MoonRegistrate',

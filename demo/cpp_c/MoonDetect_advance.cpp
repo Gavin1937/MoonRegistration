@@ -163,7 +163,7 @@ int main(int argc, char** argv)
             // HOUGH_GRADIENT_ALT and HOUGH_GRADIENT_MIX algorithm only available with OpenCV >= 4.8.1
             // If the library is compiled with OpenCV < 4.8.1, default algorithm is HOUGH_GRADIENT
             // If the library is compiled with OpenCV >= 4.8.1, default algorithm is HOUGH_GRADIENT_MIX
-            detector.update_hough_circles_algorithm(mr::HoughCirclesAlgorithm::HOUGH_GRADIENT);
+            detector.update_hough_circles_algorithm(mr::HoughCirclesAlgorithms::HOUGH_GRADIENT);
             
             // Following public members of mr::MoonDetector are function pointers
             // They are functions to handle different steps in mr::MoonDetector::detect_moon()

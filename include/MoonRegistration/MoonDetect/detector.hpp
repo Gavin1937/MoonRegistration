@@ -18,7 +18,7 @@
 namespace mr
 {
 
-EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithm
+EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithms
 {
     // use cv::HOUGH_GRADIENT with basic optimization
     HOUGH_GRADIENT        = 0x101,
@@ -34,7 +34,7 @@ EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithm
 #endif
     EMPTY_ALGORITHM       = 0x001,
     INVALID_ALGORITHM     = 0x000
-} HoughCirclesAlgorithm;
+} HoughCirclesAlgorithms;
 
 // A wrapper function around cv::HoughCircles
 // 
@@ -102,7 +102,7 @@ public:
     // this function will overwrite the step function pointer base on the input algorithm
     // If the library is compiled with OpenCV < 4.8.1, default we will use HOUGH_GRADIENT algorithm by default
     // If the library is compiled with OpenCV >= 4.8.1, default we will use HOUGH_GRADIENT_ALT algorithm by default
-    EXPORT_SYMBOL void update_hough_circles_algorithm(const mr::HoughCirclesAlgorithm& algorithm);
+    EXPORT_SYMBOL void update_hough_circles_algorithm(const mr::HoughCirclesAlgorithms& algorithm);
     
     
     // trying to find a circle from input image
@@ -130,9 +130,9 @@ private:
     cv::Mat original_image;
     cv::Mat process_image;
 #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-    mr::HoughCirclesAlgorithm hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX;
+    mr::HoughCirclesAlgorithms hough_circles_algorithm = mr::HoughCirclesAlgorithms::HOUGH_GRADIENT_MIX;
 #else
-    mr::HoughCirclesAlgorithm hough_circles_algorithm = mr::HoughCirclesAlgorithm::HOUGH_GRADIENT;
+    mr::HoughCirclesAlgorithms hough_circles_algorithm = mr::HoughCirclesAlgorithms::HOUGH_GRADIENT;
 #endif
     
 } MoonDetector;

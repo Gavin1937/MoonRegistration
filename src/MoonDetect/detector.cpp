@@ -98,11 +98,11 @@ EXPORT_SYMBOL void MoonDetector::init_by_mat(const cv::Mat& image_in)
         throw std::runtime_error("Empty Input Image");
 }
 
-EXPORT_SYMBOL void MoonDetector::update_hough_circles_algorithm(const mr::HoughCirclesAlgorithm& algorithm)
+EXPORT_SYMBOL void MoonDetector::update_hough_circles_algorithm(const mr::HoughCirclesAlgorithms& algorithm)
 {
     switch (algorithm)
     {
-    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT:
+    case mr::HoughCirclesAlgorithms::HOUGH_GRADIENT:
         this->preprocess_steps = mr::HG_default_preprocess_steps;
         this->param_init = mr::HG_default_param_init;
         this->iteration_param_update = mr::HG_default_iteration_param_update;
@@ -113,14 +113,14 @@ EXPORT_SYMBOL void MoonDetector::update_hough_circles_algorithm(const mr::HoughC
 // Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
 // This enum will be enabled if OpenCV version >= 4.8.1
 #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_ALT:
+    case mr::HoughCirclesAlgorithms::HOUGH_GRADIENT_ALT:
         this->preprocess_steps = mr::HGA_default_preprocess_steps;
         this->param_init = mr::HGA_default_param_init;
         this->iteration_param_update = mr::HGA_default_iteration_param_update;
         this->iteration_circle_select = mr::HGA_default_iteration_circle_select;
         this->coordinate_remap = mr::HGA_default_coordinate_remap;
         break;
-    case mr::HoughCirclesAlgorithm::HOUGH_GRADIENT_MIX:
+    case mr::HoughCirclesAlgorithms::HOUGH_GRADIENT_MIX:
         this->preprocess_steps = mr::HGM_default_preprocess_steps;
         this->param_init = mr::HGM_default_param_init;
         this->iteration_param_update = mr::HGM_default_iteration_param_update;
@@ -129,7 +129,7 @@ EXPORT_SYMBOL void MoonDetector::update_hough_circles_algorithm(const mr::HoughC
         break;
 #endif
     default:
-        throw std::runtime_error("Invalid or empty HoughCirclesAlgorithm.");
+        throw std::runtime_error("Invalid or empty HoughCirclesAlgorithms.");
         break;
     }
 }
