@@ -129,19 +129,20 @@ EXPORT_SYMBOL void sample_vector(
     std::random_device device;
     std::mt19937 rng(device());
     
+    int m = static_cast<int>(n * 1.5);
     int lbound = 0;
     int ubound = static_cast<int>(vec_in.size());
     int start = lbound + (rng() % ubound);
-    int end = start + n ;
+    int end = start + m;
     
     if (!vec_out.empty())
         vec_out.clear();
     vec_out.reserve(n);
     
     std::vector<int> indexes;
-    indexes.reserve(n);
+    indexes.reserve(m);
     
-    // generate n indexes from start to end
+    // generate m indexes from start to end
     // where start is a random index selected from lbound (lower bound) to ubound (upper bound)
     // then shuffle those indexes
     int val = -1;
@@ -152,9 +153,9 @@ EXPORT_SYMBOL void sample_vector(
     }
     std::shuffle(indexes.begin(), indexes.end(), rng);
     
-    // finally using those indexes to copy a portion of vec_in to vec_out
-    for (auto idx : indexes)
-        vec_out.push_back(vec_in[idx]);
+    // finally using those indexes to copy n elements from vec_in to vec_out
+    for (int i = 0; i < n; ++i)
+        vec_out.push_back(vec_in[indexes[i]]);
 }
 
 }
