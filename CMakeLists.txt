@@ -18,6 +18,11 @@ endif()
 set(CMAKE_DEBUG_POSTFIX "d")
 
 
+# get library version string
+set(MR_VERSION_STR CACHE STRING "MR_VERSION_STR" FORCE)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" MR_VERSION_STR)
+
+
 # src files
 file(GLOB SRC
     "src/*.c"
@@ -77,6 +82,7 @@ option(MR_ENABLE_OPENCV_NONFREE:BOOL "Build MoonRegistration Library with OpenCV
 
 # report
 message(STATUS "================= MR Build Config ================")
+message(STATUS "MR_VERSION_STR: ${MR_VERSION_STR}")
 message(STATUS "MR_BUILD_SHARED_LIBS: ${MR_BUILD_SHARED_LIBS}")
 message(STATUS "MR_ENABLE_OPENCV_NONFREE: ${MR_ENABLE_OPENCV_NONFREE}")
 message(STATUS "OpenCV_DIR: ${OpenCV_DIR}")
@@ -96,7 +102,7 @@ configure_file(
 include_directories("${MR_CONFIG_FILE_INCLUDE_DIR}")
 set(MR_MAIN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH "Main include directory")
 set(tmp_include_dirs "${MR_MAIN_INCLUDE_DIR}" "${MR_CONFIG_FILE_INCLUDE_DIR}")
-set(MR_INCLUDE_DIR ${tmp_include_dirs}  CACHE PATH "MR_INCLUDE_DIR")
+set(MR_INCLUDE_DIR ${tmp_include_dirs} CACHE PATH "MR_INCLUDE_DIR" FORCE)
 
 
 # build & link

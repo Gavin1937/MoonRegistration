@@ -108,6 +108,7 @@ endif()
 
 # report
 message(STATUS "============== MR WASM Build Config ==============")
+message(STATUS "MR_VERSION_STR: ${MR_VERSION_STR}")
 message(STATUS "OPENCV_SRC: ${OPENCV_SRC}")
 message(STATUS "OpenCV_DIR: ${OpenCV_DIR}")
 message(STATUS "OPENCV INCLUDE_DIRECTORIES: ${OPENCV_SRC}/include;${OPENCV_SRC}/build_wasm;${opencv_include_modules}")

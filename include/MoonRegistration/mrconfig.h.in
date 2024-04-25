@@ -6,8 +6,12 @@
 #define MRCONFIG_H
 
 #include <opencv2/core/version.hpp>
+#include <opencv2/opencv_modules.hpp>
 
-// Is OpenCV version >= 4.8.1
+
+#define MR_VERSION_STR "@MR_VERSION_STR@"
+
+/* Is OpenCV version >= 4.8.1 */
 #if (CV_VERSION_MAJOR*100 + CV_VERSION_MINOR*10 + CV_VERSION_REVISION) >= 481
     #define MR_HAVE_HOUGH_GRADIENT_ALT
 #endif
@@ -15,7 +19,10 @@
 /* Whether to enable OpenCV non-free algorithms in MoonRegistration */
 #cmakedefine MR_ENABLE_OPENCV_NONFREE
 
-/* Do we have an OpenCV library with non-free enabled and having XFeatures2D module? And Can we use non-free algorithms? */
+/*
+ * Do we have an OpenCV library with non-free enabled and having XFeatures2D module?
+ * And Can we use non-free algorithms?
+ */
 #if defined(MR_ENABLE_OPENCV_NONFREE)
     #if defined(OPENCV_ENABLE_NONFREE) && defined(HAVE_OPENCV_XFEATURES2D)
         #define MR_HAVE_OPENCV_NONFREE
