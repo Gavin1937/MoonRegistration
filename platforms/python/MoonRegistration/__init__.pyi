@@ -23,6 +23,12 @@ from .MoonRegistrate import (
 
 __version__: str
 __all__: list[str] = [
+    'version',
+    'MR_VERSION_STR',
+    'MR_HAVE_HOUGH_GRADIENT_ALT',
+    'MR_ENABLE_OPENCV_NONFREE',
+    'MR_HAVE_OPENCV_NONFREE',
+    
     'shapes',
     'Circle',
     'Square',
@@ -39,8 +45,10 @@ __all__: list[str] = [
     'MoonRegistrate',
     'RegistrationAlgorithms',
     'MoonRegistrar',
-    
-    'version',
 ]
 
 def version() -> str: ...
+MR_VERSION_STR = ...
+MR_HAVE_HOUGH_GRADIENT_ALT = ...
+MR_ENABLE_OPENCV_NONFREE = ...
+MR_HAVE_OPENCV_NONFREE = ...

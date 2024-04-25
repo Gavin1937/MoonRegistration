@@ -4,5 +4,5 @@
 namespace py = pybind11;
 
 
-// initialize submodule
-void init_shapes(py::module &module);
+// initialize function
+void init_constants(py::module &module);

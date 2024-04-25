@@ -5,6 +5,7 @@ namespace py = pybind11;
 
 #include "typecvt.hpp"
 
+#include "constants_pywrapper.hpp"
 #include "shapes_pywrapper.hpp"
 #include "imgprocess_pywrapper.hpp"
 #include "MoonDetect_pywrapper.hpp"
@@ -18,6 +19,9 @@ PYBIND11_MODULE(MoonRegistration_pywrapper, module)
     
     // version.hpp
     module.def("version", mr::version, R"pbdoc(MoonRegistration Library Version)pbdoc");
+    
+    
+    init_constants(module);
     
     
     py::module shapes_module = module.def_submodule("shapes", "Basic shape structs in the library.");
