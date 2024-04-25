@@ -11,6 +11,7 @@
 #include "MoonRegistration/macros.h"
 #include "MoonRegistration/mrconfig.h"
 #include "MoonRegistration/version.hpp"
+#include "MoonRegistration/MoonRegistrate/default_steps.hpp"
 
 
 namespace mr
@@ -33,16 +34,6 @@ EXPORT_SYMBOL typedef enum class RegistrationAlgorithms
 } RegistrationAlgorithms;
 
 EXPORT_SYMBOL void create_f2d_detector(const mr::RegistrationAlgorithms algorithm, cv::Ptr<cv::Feature2D>& f2d_detector);
-
-EXPORT_SYMBOL bool default_is_good_match(
-    const cv::DMatch& m,
-    const cv::DMatch& n,
-    const float good_match_ratio,
-    const cv::KeyPoint& user_kpt,
-    const cv::KeyPoint& model_kpt,
-    const cv::Mat& user_image,
-    const cv::Mat& model_image
-);
 
 EXPORT_SYMBOL typedef class MoonRegistrar
 {
