@@ -6,6 +6,8 @@
 #include <vector>
 #include <utility>
 #include <queue>
+#include <random>
+#include <algorithm>
 #include <functional>
 
 #include "MoonRegistration/macros.h"
@@ -63,7 +65,8 @@ public:
 //   - output: output buffer
 //   - calc_value_func: a function pointer to calculate the value for circle comparison
 //   - filter_value_func: a function pointer to filter circle base on the value from calc_value_func. (default return true)
-template<typename COMP_TYPE> EXPORT_SYMBOL void find_n_circles(
+template<typename COMP_TYPE>
+EXPORT_SYMBOL void find_n_circles(
     const int n,
     const std::vector<cv::Vec3f>& detected_circles,
     std::vector<cv::Vec3f>& output,
@@ -109,5 +112,49 @@ template<typename COMP_TYPE> EXPORT_SYMBOL void find_n_circles(
 }
 
 EXPORT_SYMBOL bool file_exists(const std::string& filepath);
+
+// Randomly sample n elements from input vector, and write them to output vector
+// 
+// Parameters:
+//   - n: int, number of elements to sample
+//   - vec_in: input vector
+//   - vec_out: output vector
+template <typename TYPE>
+EXPORT_SYMBOL void sample_vector(
+    const int n,
+    const std::vector<TYPE>& vec_in,
+    std::vector<TYPE>& vec_out
+)
+{
+    std::random_device device;
+    std::mt19937 rng(device());
+    
+    int lbound = 0;
+    int ubound = static_cast<int>(vec_in.size());
+    int start = lbound + (rng() % ubound);
+    int end = start + n ;
+    
+    if (!vec_out.empty())
+        vec_out.clear();
+    vec_out.reserve(n);
+    
+    std::vector<int> indexes;
+    indexes.reserve(n);
+    
+    // generate n indexes from start to end
+    // where start is a random index selected from lbound (lower bound) to ubound (upper bound)
+    // then shuffle those indexes
+    int val = -1;
+    for (int idx = start; idx < end; ++idx)
+    {
+        val = (idx > ubound) ? (idx % ubound) : idx;
+        indexes.push_back(val);
+    }
+    std::shuffle(indexes.begin(), indexes.end(), rng);
+    
+    // finally using those indexes to copy a portion of vec_in to vec_out
+    for (auto idx : indexes)
+        vec_out.push_back(vec_in[idx]);
+}
 
 }

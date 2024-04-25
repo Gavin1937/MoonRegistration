@@ -261,7 +261,7 @@ EXPORT_SYMBOL void HGA_default_param_init(
 )
 {
     max_iteration = 1;
-    circle_threshold = 200;
+    circle_threshold = 100;
     hough_circles_algorithm = cv::HOUGH_GRADIENT_ALT;
     cut_circle_padding = 30;
     
@@ -394,7 +394,7 @@ EXPORT_SYMBOL void HGM_default_param_init(
 )
 {
     max_iteration = 2;
-    circle_threshold = 1000;
+    circle_threshold = 700;
     hough_circles_algorithm = cv::HOUGH_GRADIENT;
     cut_circle_padding = 30;
     

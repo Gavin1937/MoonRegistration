@@ -42,7 +42,8 @@ EXPORT_SYMBOL typedef enum class HoughCirclesAlgorithm
 //   - image_in: gray scaled input image
 //   - detected_circles: output detected circles vector
 //   - circle_threshold: threshold on number of circles to search, set to negative number to disable threshold
-//     if detected_circles > circle_threshold, function will throw runtime_error
+//     if detected_circles > circle_threshold, function will randomly sample N circles from detected_circles vector,
+//     where N is circle_threshold
 //   - dp: OpenCV parameter, inverse ratio of the accumulator resolution to the image resolution
 //   - minDist: OpenCV parameter, minimum distance between the centers of the detected circles
 //   - minRadius: OpenCV parameter, minimum circle radius

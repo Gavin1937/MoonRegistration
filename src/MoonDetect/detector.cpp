@@ -34,8 +34,16 @@ EXPORT_SYMBOL void find_circles_in_img(
         dp, minDist, param1, param2, minRadius, maxRadius
     );
     
-    if (circle_threshold >= 0 && detected_circles.size() >= circle_threshold)
-        throw std::runtime_error("Found Too Many Circles.");
+    
+    // randomly sample N elements from detected_circles if it excess circle_threshold
+    // where N is circle_threshold
+    if (circle_threshold >= 0 && detected_circles.size() > circle_threshold)
+    {
+        std::vector<cv::Vec3f> tmp;
+        mr::sample_vector(circle_threshold, detected_circles, tmp);
+        detected_circles.clear();
+        detected_circles = tmp;
+    }
 }
 
 
