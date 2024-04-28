@@ -36,12 +36,12 @@ EXPORT_SYMBOL bool filter_by_ignore_edge_kp(
     cv::Size user_size = user_image.size();
     double user_radius_guess = (user_size.width / 2.0f) * radius_guess_ratio;
     cv::Point2f user_center_pt((user_size.width / 2.0f), (user_size.height / 2.0f));
-    double user_distance = cv::norm(cv::Mat(user_kpt.pt), cv::Mat(user_center_pt), cv::NORM_L2);
+    double user_distance = mr::norm_ptf(user_kpt.pt, user_center_pt, cv::NORM_L2);
     
     cv::Size model_size = model_image.size();
     double model_radius_guess = (model_size.width / 2.0f) * radius_guess_ratio;
     cv::Point2f model_center_pt((model_size.width / 2.0f), (model_size.height / 2.0f));
-    double model_distance = cv::norm(cv::Mat(model_kpt.pt), cv::Mat(model_center_pt), cv::NORM_L2);
+    double model_distance = mr::norm_ptf(model_kpt.pt, model_center_pt, cv::NORM_L2);
     
     // Finally, ignore all the keypoints outside of image circle that we guess
     return (

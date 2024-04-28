@@ -159,6 +159,18 @@ EXPORT_SYMBOL void sample_vector(
         vec_out.push_back(vec_in[indexes[i]]);
 }
 
+// A wrapper function to run cv::norm with cv::Point2f
+// 
+// Parameters:
+//   - ptf1: cv::Point2f, input left Point2f
+//   - ptf2: cv::Point2f, input right Point2f
+//   - method: int algorithm for cv::norm, default cv::NORM_L2
+EXPORT_SYMBOL double norm_ptf(
+    const cv::Point2f& ptf1,
+    const cv::Point2f& ptf2,
+    const int method
+);
+
 // A wrapper function to run cv::norm with cv::KeyPoint
 // 
 // Parameters:

@@ -24,17 +24,22 @@ EXPORT_SYMBOL bool file_exists(const std::string& filepath)
     return input.good();
 }
 
+EXPORT_SYMBOL double norm_ptf(
+    const cv::Point2f& ptf1,
+    const cv::Point2f& ptf2,
+    const int method
+)
+{
+    return cv::norm(cv::Mat(ptf1), cv::Mat(ptf2), method);
+}
+
 EXPORT_SYMBOL double norm_kp(
     const cv::KeyPoint& kp1,
     const cv::KeyPoint& kp2,
     const int method
 )
 {
-    return cv::norm(
-        cv::Mat(kp1.pt),
-        cv::Mat(kp2.pt),
-        method
-    );
+    return mr::norm_ptf(kp1.pt, kp2.pt, method);
 }
 
 }
