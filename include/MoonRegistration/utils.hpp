@@ -1,6 +1,7 @@
 #pragma once
 
 #include <opencv2/core/mat.hpp>
+#include <opencv2/core/types.hpp>
 
 #include <string>
 #include <vector>
@@ -157,5 +158,17 @@ EXPORT_SYMBOL void sample_vector(
     for (int i = 0; i < n; ++i)
         vec_out.push_back(vec_in[indexes[i]]);
 }
+
+// A wrapper function to run cv::norm with cv::KeyPoint
+// 
+// Parameters:
+//   - kp1: cv::KeyPoint, input left KeyPoint
+//   - kp2: cv::KeyPoint, input right KeyPoint
+//   - method: int algorithm for cv::norm, default cv::NORM_L2
+EXPORT_SYMBOL double norm_kp(
+    const cv::KeyPoint& kp1,
+    const cv::KeyPoint& kp2,
+    const int method = cv::NORM_L2
+);
 
 }

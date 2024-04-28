@@ -24,4 +24,17 @@ EXPORT_SYMBOL bool file_exists(const std::string& filepath)
     return input.good();
 }
 
+EXPORT_SYMBOL double norm_kp(
+    const cv::KeyPoint& kp1,
+    const cv::KeyPoint& kp2,
+    const int method
+)
+{
+    return cv::norm(
+        cv::Mat(kp1.pt),
+        cv::Mat(kp2.pt),
+        method
+    );
+}
+
 }
