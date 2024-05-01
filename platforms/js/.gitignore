@@ -9,6 +9,3 @@
 /build/
 /data/
 /dist/
-
-# configuration files
-moon-registration/constants.js

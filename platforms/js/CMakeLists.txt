@@ -123,15 +123,6 @@ else()
 endif()
 
 
-# configure
-set(MR_WASM_CONFIG_DIR "${CMAKE_CURRENT_BINARY_DIR}/moon-registration" CACHE PATH "Where to create the platform-dependant configuration files.")
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/moon-registration/constants.js.in"
-    "${MR_WASM_CONFIG_DIR}/constants.js"
-    @ONLY
-)
-
-
 # report
 message(STATUS "============== MR WASM Build Config ==============")
 message(STATUS "MR_VERSION_STR: ${MR_VERSION_STR}")
@@ -207,11 +198,6 @@ install(
     PATTERN "*.js"
     PATTERN "*.json"
     PATTERN "moon-registration/lib/*" EXCLUDE
-)
-# install config file
-install(
-    FILES "${MR_WASM_CONFIG_DIR}/constants.js"
-    DESTINATION "moon-registration/"
 )
 # install wasm binary
 install(
