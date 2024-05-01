@@ -34,6 +34,14 @@ set(OpenCV_DIR "${OPENCV_SRC}/build_wasm")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_BINARY_DIR}/MoonRegistration)
 include_directories(${MR_INCLUDE_DIR})
 
+# force update MR_VERSION_STR if its not set
+if (NOT MR_VERSION_STR)
+    get_directory_property(
+        MR_VERSION_STR
+        DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../"
+        DEFINITION MR_VERSION_STR
+    )
+endif()
 
 # functions to export to wasm
 set(MOONREGISTRATION_FUNCTION
@@ -104,6 +112,15 @@ elseif("${MRWASM_BUILD_MODULE}" STREQUAL "All")
 else()
     message(SEND_ERROR "Cannot reconize build module type: ${MRWASM_BUILD_MODULE}")
 endif()
+
+
+# configure
+set(MR_WASM_CONFIG_DIR "${CMAKE_CURRENT_BINARY_DIR}/moon-registration" CACHE PATH "Where to create the platform-dependant configuration files.")
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/moon-registration/constants.js.in"
+    "${MR_WASM_CONFIG_DIR}/constants.js"
+    @ONLY
+)
 
 
 # report
@@ -181,6 +198,11 @@ install(
     PATTERN "*.js"
     PATTERN "*.json"
     PATTERN "moon-registration/lib/*" EXCLUDE
+)
+# install config file
+install(
+    FILES "${MR_WASM_CONFIG_DIR}/constants.js"
+    DESTINATION "moon-registration/"
 )
 # install wasm binary
 install(

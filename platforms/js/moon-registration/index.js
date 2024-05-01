@@ -1,7 +1,13 @@
 import { instance } from './wasm_loader.js';
 import { get_c_str, get_cpp_exception } from './internal.js';
+import { MR_VERSION_STR } from './constants.js';
 
 export { MAX_C_STRING_LENGTH } from './internal.js';
+export { 
+  MR_VERSION_STR,
+  MR_ENABLE_OPENCV_NONFREE,
+  MR_HAVE_OPENCV_NONFREE,
+} from './constants.js';
 export { ImageHandler } from './image_handler.js';
 export {
   Circle, Square, Rectangle,
@@ -27,21 +33,10 @@ export {
 /**
  * Get MoonRegistration library version
  * 
- * @returns {Promise<String>} version string
+ * @returns {String} version string
  */
-async function version() {
-  return new Promise((resolve, reject) => {
-    instance.ready.then(async function(){
-      try {
-        let ptr = await instance._mrwasm_version();
-        let output = await get_c_str(ptr, 20);
-        
-        resolve(output);
-      } catch (error) {
-        reject(await get_cpp_exception(error));
-      }
-    });
-  });
+function version() {
+  return MR_VERSION_STR;
 }
 
 export { instance, get_c_str, get_cpp_exception, version };

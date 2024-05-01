@@ -75,6 +75,15 @@ set(MR_BUILD_SHARED_LIBS OFF)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_BINARY_DIR}/MoonRegistration)
 include_directories(${MR_INCLUDE_DIR})
 
+# force update MR_VERSION_STR if its not set
+if (NOT MR_VERSION_STR)
+    get_directory_property(
+        MR_VERSION_STR
+        DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../"
+        DEFINITION MR_VERSION_STR
+    )
+endif()
+
 
 message(STATUS "============= MR Python Build Config =============")
 message(STATUS "MR_VERSION_STR: ${MR_VERSION_STR}")
