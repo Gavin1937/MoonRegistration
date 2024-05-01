@@ -115,6 +115,7 @@ EXPORT_SYMBOL void find_n_circles(
 EXPORT_SYMBOL bool file_exists(const std::string& filepath);
 
 // Randomly sample n elements from input vector, and write them to output vector
+// If input vector length <= n, copy input vector to output vector
 // 
 // Parameters:
 //   - n: int, number of elements to sample
@@ -127,6 +128,16 @@ EXPORT_SYMBOL void sample_vector(
     std::vector<TYPE>& vec_out
 )
 {
+    if (vec_in.size() <= n)
+    {
+        vec_out = vec_in;
+        return;
+    }
+    
+    if (!vec_out.empty())
+        vec_out.clear();
+    vec_out.reserve(n);
+    
     std::random_device device;
     std::mt19937 rng(device());
     
@@ -135,10 +146,6 @@ EXPORT_SYMBOL void sample_vector(
     int ubound = static_cast<int>(vec_in.size());
     int start = lbound + (rng() % ubound);
     int end = start + m;
-    
-    if (!vec_out.empty())
-        vec_out.clear();
-    vec_out.reserve(n);
     
     std::vector<int> indexes;
     indexes.reserve(m);
