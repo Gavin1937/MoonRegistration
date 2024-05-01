@@ -47,6 +47,12 @@ endif()
 set(MOONREGISTRATION_FUNCTION
     "_mrwasm_version"
 )
+set(CONSTANTS_FUNCTION
+    "___MR_VERSION_STR__"
+    "___MR_HAVE_HOUGH_GRADIENT_ALT__"
+    "___MR_ENABLE_OPENCV_NONFREE__"
+    "___MR_HAVE_OPENCV_NONFREE__"
+)
 set(UTILS_FUNCTION
     "_mrwasm_get_last_exception_msg"
     "_mrwasm_destroy_ImageHandlerData"
@@ -86,6 +92,7 @@ endif()
 if("${MRWASM_BUILD_MODULE}" STREQUAL "MoonDetect")
     string(JOIN "," EXPORTED_FUNCTIONS
         ${MOONREGISTRATION_FUNCTION}
+        ${CONSTANTS_FUNCTION}
         ${UTILS_FUNCTION}
         ${SHAPES_FUNCTION}
         ${IMGPROCESS_FUNCTION}
@@ -94,6 +101,7 @@ if("${MRWASM_BUILD_MODULE}" STREQUAL "MoonDetect")
 elseif("${MRWASM_BUILD_MODULE}" STREQUAL "MoonRegistrate")
     string(JOIN "," EXPORTED_FUNCTIONS
         ${MOONREGISTRATION_FUNCTION}
+        ${CONSTANTS_FUNCTION}
         ${UTILS_FUNCTION}
         ${SHAPES_FUNCTION}
         ${IMGPROCESS_FUNCTION}
@@ -103,6 +111,7 @@ elseif("${MRWASM_BUILD_MODULE}" STREQUAL "MoonRegistrate")
 elseif("${MRWASM_BUILD_MODULE}" STREQUAL "All")
     string(JOIN "," EXPORTED_FUNCTIONS
         ${MOONREGISTRATION_FUNCTION}
+        ${CONSTANTS_FUNCTION}
         ${UTILS_FUNCTION}
         ${SHAPES_FUNCTION}
         ${IMGPROCESS_FUNCTION}

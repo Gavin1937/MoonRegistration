@@ -50,7 +50,7 @@
     try {
       // dynamically import ES6 module
       const mr = await import("./moon-registration/index.js");
-      console.log('version:', await mr.version());
+      console.log('version:', mr.version());
       
       // load user image from File object
       let user_input = document.querySelector('#file-selector-user');

@@ -3,8 +3,9 @@ import { get_c_str, get_cpp_exception } from './internal.js';
 import { MR_VERSION_STR } from './constants.js';
 
 export { MAX_C_STRING_LENGTH } from './internal.js';
-export { 
+export {
   MR_VERSION_STR,
+  MR_HAVE_HOUGH_GRADIENT_ALT,
   MR_ENABLE_OPENCV_NONFREE,
   MR_HAVE_OPENCV_NONFREE,
 } from './constants.js';

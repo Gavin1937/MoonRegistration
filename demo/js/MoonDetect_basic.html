@@ -19,7 +19,7 @@
     try {
       // dynamically import ES6 module
       const mr = await import("./moon-registration/index.js")
-      console.log('version:', await mr.version());
+      console.log('version:', mr.version());
       
       // load image to WASM from File object
       console.log('file:', file_object.name);

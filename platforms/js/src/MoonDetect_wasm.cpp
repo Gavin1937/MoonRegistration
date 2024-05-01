@@ -24,7 +24,7 @@ extern "C"
 // 6. free the memory when we are done from js side (mrwasm_destroy_image)
 
 
-int* mrwasm_detect_moon(void* img_ptr)
+int* mrwasm_detect_moon(void* img_ptr, const int algorithm)
 {
     try
     {
@@ -33,6 +33,9 @@ int* mrwasm_detect_moon(void* img_ptr)
         // clone data from shared heap to c++ local heap
         // preventing potential modification from js side
         mr::MoonDetector detector(cvtImage->clone());
+        detector.update_hough_circles_algorithm(
+            static_cast<mr::HoughCirclesAlgorithms>(algorithm)
+        );
         mr::Circle circle = detector.detect_moon();
         
         // we must re-interpret mr::Circle into an int array
