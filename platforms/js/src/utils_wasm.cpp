@@ -156,7 +156,7 @@ void* mrwasm_create_image_ptr(
             num_of_channels != 3 &&
             num_of_channels != 4)
         {
-            num_of_channels = 4;
+            num_of_channels = 3;
         }
         
         // cv::Mat constructor used
@@ -168,14 +168,17 @@ void* mrwasm_create_image_ptr(
             img_height, img_width,
             CV_MAKETYPE(CV_8U, num_of_channels)
         );
-        // assign img_binary by for-loop to avoid messing up with cv::Mat data structure
-        // and source pointer ownership problem
         for (int i = 0; i < img_binary_length; ++i)
-            image.at<uint8_t>(i) = img_binary[i];
+            image.data[i] = img_binary[i];
         
         // convert color format from RGBA to BGRA
         // so its ready for opencv
-        cv::cvtColor(image, *output, cv::COLOR_RGBA2BGRA);
+        if (num_of_channels == 1)
+            cv::cvtColor(image, *output, cv::COLOR_GRAY2BGR);
+        else if (num_of_channels == 3)
+            cv::cvtColor(image, *output, cv::COLOR_RGB2BGR);
+        else if (num_of_channels == 4)
+            cv::cvtColor(image, *output, cv::COLOR_RGBA2BGRA);
         
         if (img_binary)
             delete[] img_binary;
@@ -208,11 +211,16 @@ void mrwasm_destroy_image(void* img_ptr)
 void* mrwasm_get_rgba_image_ptr(void* image_ptr)
 {
     cv::Mat* mat_image_ptr = reinterpret_cast<cv::Mat*>(image_ptr);
+    int num_of_channels = mat_image_ptr->channels();
     cv::Mat buffer;
     
     // convert color from BGRA to RGBA
     // so its ready for JS
-    cv::cvtColor(*mat_image_ptr, buffer, cv::COLOR_BGRA2RGBA);
+    // num_of_channels == 1, grayscale, do nothing
+    if (num_of_channels == 3)
+        cv::cvtColor(*mat_image_ptr, buffer, cv::COLOR_BGR2RGB);
+    else if (num_of_channels == 4)
+        cv::cvtColor(*mat_image_ptr, buffer, cv::COLOR_BGRA2RGBA);
     
     size_t size = buffer.total() * buffer.elemSize();
     uchar* output = new uchar[size];

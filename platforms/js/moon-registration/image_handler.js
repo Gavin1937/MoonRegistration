@@ -180,11 +180,13 @@ class ImageHandler {
       instance.ready.then(async function() {
         try {
           let ptr = await instance._mrwasm_get_rgba_image_ptr(self.image_ptr);
-          let ret = new Uint8Array(
+          let buff = new Uint8Array(
             instance.HEAP8.buffer,
             ptr,
             self.img_data_length
           );
+          // return a deep copy of data
+          let ret = new Uint8Array(buff);
           await instance._mrwasm_destroy_image_buffer(ptr);
           resolve(ret);
         } catch (error) {
@@ -205,11 +207,13 @@ class ImageHandler {
       instance.ready.then(async function() {
         try {
           let ptr = await instance._mrwasm_get_rgba_image_ptr(self.image_ptr);
-          let ret = new Uint8ClampedArray(
+          let buff = new Uint8ClampedArray(
             instance.HEAP8.buffer,
             ptr,
             self.img_data_length
           );
+          // return a deep copy of data
+          let ret = new Uint8ClampedArray(buff);
           await instance._mrwasm_destroy_image_buffer(ptr);
           resolve(ret);
         } catch (error) {

@@ -14,11 +14,11 @@ import { ImageHandler } from './image_handler.js';
 // This enum will be enabled if OpenCV version >= 4.8.1
 class HoughCirclesAlgorithms {
   // Private Fields
-  static #_HOUGH_GRADIENT        = 0x100;
+  static #_HOUGH_GRADIENT        = 0x101;
   // use cv::HOUGH_GRADIENT_ALT with basic optimization
-  static #_HOUGH_GRADIENT_ALT    = 0x101;
+  static #_HOUGH_GRADIENT_ALT    = 0x102;
   // use cv::HOUGH_GRADIENT and cv::HOUGH_GRADIENT_ALT together for the best result
-  static #_HOUGH_GRADIENT_MIX    = 0x102;
+  static #_HOUGH_GRADIENT_MIX    = 0x103;
   static #_EMPTY_ALGORITHM       = 0x001;
   static #_INVALID_ALGORITHM     = 0x000;
 
