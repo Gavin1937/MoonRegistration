@@ -7,10 +7,66 @@ import cv2
 from .. import MR_HAVE_OPENCV_NONFREE
 
 __all__: list[str] = [
-    'RegistrationAlgorithms',
+    'filter_by_lowes_ratio_test',
+    'filter_by_ignore_edge_kp',
+    'filter_by_ignore_close_kp',
     'default_is_good_match',
+    'default_is_good_match_lowes_ratio_only',
+    'default_is_good_match_all',
+    'RegistrationAlgorithms',
     'MoonRegistrar',
 ]
+
+def filter_by_lowes_ratio_test(
+    m:cv2.DMatch,
+    n:cv2.DMatch,
+    ratio:float = 0.7
+) -> bool: ...
+def filter_by_ignore_edge_kp(
+    user_kpt:cv2.KeyPoint,
+    model_kpt:cv2.KeyPoint,
+    user_image:numpy.ndarray,
+    model_image:numpy.ndarray,
+    radius_guess_ratio:float = 0.9
+) -> bool: ...
+def filter_by_ignore_close_kp(
+    user_kpt:cv2.KeyPoint,
+    model_kpt:cv2.KeyPoint,
+    user_image:numpy.ndarray,
+    model_image:numpy.ndarray,
+    hash_coordinate_ratio:float = 0.3,
+    is_first_time:bool = True
+) -> bool: ...
+
+
+def default_is_good_match(
+    m:cv2.DMatch,
+    n:cv2.DMatch,
+    good_match_ratio:float,
+    user_kpt:cv2.KeyPoint,
+    model_kpt:cv2.KeyPoint,
+    user_image:numpy.ndarray,
+    model_image:numpy.ndarray
+) -> bool: ...
+def default_is_good_match_lowes_ratio_only(
+    m:cv2.DMatch,
+    n:cv2.DMatch,
+    good_match_ratio:float,
+    user_kpt:cv2.KeyPoint,
+    model_kpt:cv2.KeyPoint,
+    user_image:numpy.ndarray,
+    model_image:numpy.ndarray
+) -> bool: ...
+def default_is_good_match_all(
+    m:cv2.DMatch,
+    n:cv2.DMatch,
+    good_match_ratio:float,
+    user_kpt:cv2.KeyPoint,
+    model_kpt:cv2.KeyPoint,
+    user_image:numpy.ndarray,
+    model_image:numpy.ndarray
+) -> bool: ...
+
 
 if MR_HAVE_OPENCV_NONFREE:
     class RegistrationAlgorithms(IntEnum):
@@ -34,16 +90,6 @@ else:
         
         EMPTY_ALGORITHM                    = 0x001,
         INVALID_ALGORITHM                  = 0x000
-
-def default_is_good_match(
-    m:cv2.DMatch,
-    n:cv2.DMatch,
-    good_match_ratio:float,
-    user_kpt:cv2.KeyPoint,
-    model_kpt:cv2.KeyPoint,
-    user_image:numpy.ndarray,
-    model_image:numpy.ndarray
-) -> bool: ...
 
 class MoonRegistrar():
     @overload

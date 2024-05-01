@@ -243,6 +243,118 @@ void set_MoonRegistrar_is_good_match(
 // initialize submodule
 void init_MoonRegistrate(py::module &module)
 {
+    // MoonRegistrate/filter.hpp
+    
+    module.def("filter_by_lowes_ratio_test", &mr::filter_by_lowes_ratio_test,
+        py::arg("m"),
+        py::arg("n"),
+        py::arg("ratio") = 0.7f,
+        R"pbdoc(
+    Filter keypoints descriptor by Lowe's Ratio Test
+    
+    Lower the ratio => larger the differences between keypoints descriptor => more keypoints get filter out
+    
+    Algorithm Detail:
+    https://stackoverflow.com/a/60343973
+    https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf
+    
+    Parameters:
+      - m: DMatch, from matches[0]
+      - n: DMatch, from matches[1]
+      - ratio: float ratio between 0~1
+    
+    Returns:
+      - true or false to tell whether we need to filter current keypoints
+        )pbdoc"
+    );
+    module.def("filter_by_ignore_edge_kp", &mr::filter_by_ignore_edge_kp,
+        py::arg("user_kpt"),
+        py::arg("model_kpt"),
+        py::arg("user_image"),
+        py::arg("model_image"),
+        py::arg("radius_guess_ratio") = 0.9f,
+        R"pbdoc(
+    Filter keypoints descriptor by ignoring edge keypoints
+    
+    Parameter:
+      - user_kpt: user cv::KeyPoint
+      - model_kpt: model cv::KeyPoint
+      - user_image: user image
+      - model_image: model image
+      - radius_guess_ratio: float ratio (0~1) to determine how much of edge to ignore
+    
+    Returns:
+      - true or false to tell whether we need to filter current keypoints
+        )pbdoc"
+    );
+    module.def("filter_by_ignore_close_kp", &mr::filter_by_ignore_close_kp,
+        py::arg("user_kpt"),
+        py::arg("model_kpt"),
+        py::arg("user_image"),
+        py::arg("model_image"),
+        py::arg("hash_coordinate_ratio") = 0.3f,
+        py::arg("is_first_time") = true,
+        R"pbdoc(
+    Filter keypoints descriptor by ignoring keypoints that are too close to each other
+    
+    Parameter:
+      - user_kpt: user cv::KeyPoint
+      - model_kpt: model cv::KeyPoint
+      - user_image: user image
+      - model_image: model image
+      - hash_coordinate_ratio: float ratio (0~1) to determine how much we want to "blur" keypoints coordinates
+      - is_first_time: bool flag to determine whether we need to cleanup buffer hash map
+    
+    Returns:
+      - true or false to tell whether we need to filter current keypoints
+        )pbdoc"
+    );
+    
+    
+    // MoonRegistrate/default_steps.hpp
+    
+    module.def("default_is_good_match", mr::default_is_good_match,
+        py::arg("m"),
+        py::arg("n"),
+        py::arg("good_match_ratio"),
+        py::arg("user_kpt"),
+        py::arg("model_kpt"),
+        py::arg("user_image"),
+        py::arg("model_image"),
+        R"pbdoc(
+    default one for mr::MoonRegistrar class
+    Filter by ignore_edge_kp first, and then
+    filter by lowes_ratio_test
+        )pbdoc"
+    );
+    module.def("default_is_good_match_lowes_ratio_only", mr::default_is_good_match_lowes_ratio_only,
+        py::arg("m"),
+        py::arg("n"),
+        py::arg("good_match_ratio"),
+        py::arg("user_kpt"),
+        py::arg("model_kpt"),
+        py::arg("user_image"),
+        py::arg("model_image"),
+        R"pbdoc(
+    Filter by lowes_ratio_test only
+        )pbdoc"
+    );
+    module.def("default_is_good_match_all", mr::default_is_good_match_all,
+        py::arg("m"),
+        py::arg("n"),
+        py::arg("good_match_ratio"),
+        py::arg("user_kpt"),
+        py::arg("model_kpt"),
+        py::arg("user_image"),
+        py::arg("model_image"),
+        R"pbdoc(
+    Filter by ignore_edge_kp first, and then
+    filter by lowes_ratio_test, finally use
+    ignore_close_kp to filter a last time
+        )pbdoc"
+    );
+    
+    
     // MoonRegistrate/registrar.hpp
     
     py::enum_<mr::RegistrationAlgorithms>(module, "RegistrationAlgorithms", py::arithmetic())
@@ -262,16 +374,6 @@ void init_MoonRegistrate(py::module &module)
     // include:
     // mr::create_f2d_detector()
     // mr::MoonRegistrar::update_f2d_detector(const cv::Ptr<cv::Feature2D>&)
-    
-    module.def("default_is_good_match", mr::default_is_good_match,
-    py::arg("m"),
-    py::arg("n"),
-    py::arg("good_match_ratio"),
-    py::arg("user_kpt"),
-    py::arg("model_kpt"),
-    py::arg("user_image"),
-    py::arg("model_image")
-    );
     
     py::class_<mr::MoonRegistrar>(module, "MoonRegistrar")
         .def(py::init<>())

@@ -14,13 +14,26 @@ __all__: list[str] = [
     'select_circle_by_largest_radius',
     'select_n_circles_by_largest_radius',
     'select_circle_by_shape',
+    # HOUGH_GRADIENT (HG)
+    'HG_default_preprocess_steps',
+    'HG_default_param_init',
+    'HG_default_iteration_param_update',
+    'HG_default_iteration_circle_select',
+    'HG_default_coordinate_remap',
+    # HOUGH_GRADIENT (HGA)
+    'HGA_default_preprocess_steps',
+    'HGA_default_param_init',
+    'HGA_default_iteration_param_update',
+    'HGA_default_iteration_circle_select',
+    'HGA_default_coordinate_remap',
+    # HOUGH_GRADIENT (HGM)
+    'HGM_default_preprocess_steps',
+    'HGM_default_param_init',
+    'HGM_default_iteration_param_update',
+    'HGM_default_iteration_circle_select',
+    'HGM_default_coordinate_remap',
     'HoughCirclesAlgorithms',
     'find_circles_in_img',
-    'default_preprocess_steps',
-    'default_param_init',
-    'default_iteration_param_update',
-    'default_iteration_circle_select',
-    'default_coordinate_remap',
     'MoonDetector',
 ]
 
@@ -46,39 +59,6 @@ def select_circle_by_shape(
     image_in:numpy.ndarray,
     detected_circles:numpy.ndarray
 ) -> Circle: ...
-
-if MR_HAVE_HOUGH_GRADIENT_ALT:
-    class HoughCirclesAlgorithms(IntEnum):
-        HOUGH_GRADIENT        = 0x101,
-    # Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
-    # This enum will be enabled if OpenCV version >= 4.8.1
-    #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
-        # use cv::HOUGH_GRADIENT_ALT with basic optimization
-        HOUGH_GRADIENT_ALT    = 0x102,
-        
-        # use cv::HOUGH_GRADIENT and cv::HOUGH_GRADIENT_ALT together for the best result
-        HOUGH_GRADIENT_MIX    = 0x103,
-    #endif
-        EMPTY_ALGORITHM       = 0x001,
-        INVALID_ALGORITHM     = 0x000
-else:
-    class HoughCirclesAlgorithms(IntEnum):
-        HOUGH_GRADIENT        = 0x101,
-        
-        EMPTY_ALGORITHM       = 0x001,
-        INVALID_ALGORITHM     = 0x000
-
-def find_circles_in_img(
-    image_in:numpy.ndarray,
-    circle_threshold:int,
-    dp:float,
-    minDist:float,
-    minRadius:int,
-    maxRadius:int,
-    param1:float,
-    param2:float,
-    algorithm:int = cv2.HOUGH_GRADIENT
-) -> numpy.ndarray: ...
 
 
 # default stage functions
@@ -189,6 +169,7 @@ def HGA_default_coordinate_remap(
     resize_ratio:float
 ) -> Circle: ...
 
+
 # HOUGH_GRADIENT (HGM)
 def HGM_default_preprocess_steps(
     image_in:numpy.ndarray
@@ -238,6 +219,40 @@ def HGM_default_coordinate_remap(
     result_list:list[tuple[int, Circle, Rectangle]],
     resize_ratio:float
 ) -> Circle: ...
+
+
+if MR_HAVE_HOUGH_GRADIENT_ALT:
+    class HoughCirclesAlgorithms(IntEnum):
+        HOUGH_GRADIENT        = 0x101,
+    # Starting from OpenCV 4.8.1, algorithm HOUGH_GRADIENT_ALT is available for cv::HoughCircles().
+    # This enum will be enabled if OpenCV version >= 4.8.1
+    #ifdef MR_HAVE_HOUGH_GRADIENT_ALT
+        # use cv::HOUGH_GRADIENT_ALT with basic optimization
+        HOUGH_GRADIENT_ALT    = 0x102,
+        
+        # use cv::HOUGH_GRADIENT and cv::HOUGH_GRADIENT_ALT together for the best result
+        HOUGH_GRADIENT_MIX    = 0x103,
+    #endif
+        EMPTY_ALGORITHM       = 0x001,
+        INVALID_ALGORITHM     = 0x000
+else:
+    class HoughCirclesAlgorithms(IntEnum):
+        HOUGH_GRADIENT        = 0x101,
+        
+        EMPTY_ALGORITHM       = 0x001,
+        INVALID_ALGORITHM     = 0x000
+
+def find_circles_in_img(
+    image_in:numpy.ndarray,
+    circle_threshold:int,
+    dp:float,
+    minDist:float,
+    minRadius:int,
+    maxRadius:int,
+    param1:float,
+    param2:float,
+    algorithm:int = cv2.HOUGH_GRADIENT
+) -> numpy.ndarray: ...
 
 
 class MoonDetector():

@@ -10,4 +10,6 @@
 #include "MoonRegistration/mrconfig.h"
 #include "MoonRegistration/version.hpp"
 
+#include "MoonRegistration/MoonRegistrate/filter.hpp"
+#include "MoonRegistration/MoonRegistrate/default_steps.hpp"
 #include "MoonRegistration/MoonRegistrate/registrar.hpp"

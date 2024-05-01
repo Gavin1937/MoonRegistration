@@ -1072,8 +1072,8 @@ void init_MoonDetect(py::module &module)
         R"pbdoc(
     update hough circle detection algorithm and default functions
     this function will overwrite the step function pointer base on the input algorithm
-    If the library is compiled with OpenCV < 4.8.1, default we will use HOUGH_GRADIENT algorithm by default
-    If the library is compiled with OpenCV >= 4.8.1, default we will use HOUGH_GRADIENT_ALT algorithm by default
+    If the library is compiled with OpenCV < 4.8.1, we will use HOUGH_GRADIENT algorithm by default
+    If the library is compiled with OpenCV >= 4.8.1, we will use HOUGH_GRADIENT_ALT algorithm by default
         )pbdoc"
         )
         .def("detect_moon", &mr::MoonDetector::detect_moon, R"pbdoc(
