@@ -72,12 +72,26 @@ jobs:
         mkdir archives
         mv MoonRegistration*.zip ./archives
     
+    # This step reads a file from repo and use it for body of the release
+    # This works on any self-hosted runner OS
+    - name: Read RELEASE_BODY.md and use it as a body of new release
+      id: read_release
+      shell: bash
+      run: |
+        r=$(cat RELEASE_BODY.md)
+        r="${r//'%'/'%25'}"
+        r="${r//$'\n'/'%0A'}"
+        r="${r//$'\r'/'%0D'}"
+        echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT
+    
     - name: Release archives
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: './archives/MoonRegistration*.zip'
         file_glob: true
-        overwrite: true
         tag: '${{ github.ref_name }}'
+        body: |
+          ${{ steps.read_release.outputs.RELEASE_BODY }}
+
 
