@@ -3,6 +3,7 @@
 
 ## Before we start
 
+* [Make sure you have all the dependencies required for using MoonRegistration library natively](../BUILDING.md#build--use-moonregistration-library-natively)
 * **You can use dataset in [./data](./data) folder**
   * datasets are divided into folders for testing different modules
 * **You can play with demo applications inside [Docker Container](../BUILDING.md#build-using-docker-recommend)**

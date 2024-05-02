@@ -9,6 +9,13 @@
 This project uses CMake (version >= 3.11) as its build system. You need to [install CMake](https://cgold.readthedocs.io/en/latest/first-step/installation.html) in your system first
 
 
+## Build & Use MoonRegistration library natively
+
+To build and use MoonRegistration library natively, you need to have OpenCV C++ library installed in your system. [Checkout OpenCV version & modules that we use](#about-opencv-versions--modules). And learn more about [how to get OpenCV](#build-manually-from-source)
+
+> **MoonRegistration-js** library is an exception: it is a WASM + JavaScript library runs on browser, so it doesn't require you to install OpenCV natively. You just need to download the release archive and extract it and use it as Node.js module.
+
+
 ## **About OpenCV versions & modules**
 
 This library is heavily rely on OpenCV, linking with different version of OpenCV or with different OpenCV modules will enable/disable some feature of the library.
