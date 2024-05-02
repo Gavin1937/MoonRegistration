@@ -30,14 +30,14 @@ Currently, we have 3 libraries:
 only have one attribute differentiate free version and nonfree version
 
 * It is `nonfree` when its compiled with OpenCV non-free modules & algorithms.
-* It is empty when its not compiled with those algorithms. [Checkout this doc for detail](https://github.com/Gavin1937/MoonRegistration/blob/main/BUILDING.md#about-opencv-non-free-modules)
+* It is empty when its not compiled with those algorithms. [Checkout this doc for detail](https://github.com/Gavin1937/MoonRegistration/blob/main/BUILDING.md#about-opencv-versions--modules)
 
 ### MoonRegistration-python
 
 only have one attribute differentiate free version and nonfree version
 
 * It is `nonfree` when its compiled with OpenCV non-free modules & algorithms.
-* It is empty when its not compiled with those algorithms. [Checkout this doc for detail](https://github.com/Gavin1937/MoonRegistration/blob/main/BUILDING.md#about-opencv-non-free-modules)
+* It is empty when its not compiled with those algorithms. [Checkout this doc for detail](https://github.com/Gavin1937/MoonRegistration/blob/main/BUILDING.md#about-opencv-versions--modules)
 
 ### MoonRegistration-js
 
