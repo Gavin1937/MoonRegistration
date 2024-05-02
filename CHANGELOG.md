@@ -2,6 +2,47 @@
 # CHANGELOG
 
 <details open>
+<summary><strong style="font-size:140%">v1.0.0</strong></summary>
+
+* Interface change
+  * add overload method for `sync_img_size()`
+  * update `stack_imgs()` interface in JS
+  * add abstraction interface for ImageHandler to blob obj
+  * add `draw_layer_image_no_compute()` for JS, draw layer img with input homography matrix
+  * add `compute_registration()` for JS, only compute homography matrix and return it
+  * change some functions in `shapes` module to overload function
+  * add shape to string functions
+  * add `default_steps` for both `MoonDetect` & `MoonRegistrate`, all the default step functions are store there
+  * add `binarize_image()` to `imgprocess` module
+  * update `cut_image_from_circle()` interface
+  * update `calc_circle_brightness_perc()` interface
+  * make C++ macros available in JS & Python. JS & Python interface will change base on macro settings
+  * rename `HoughCirclesAlgorithm` enum
+* Behavior change
+  * update `filter_px` parameter behavior, its now filtering pixels <= input `filter_px`
+  * update `sync_img_size()` behavior
+* Optimization
+  * optimize C++ exception handling for JS
+  * optimize `MoonDetect` module: improve preprocessing, and also add optimized step functions for `HOUGH_GRADIENT`, `HOUGH_GRADIENT_ALT`, and `HOUGH_GRADIENT_MIX` algorithm
+  * use random sampling for find_circles when it excess circle_threshold
+  * optimize `MoonRegistrate` module: add more filtering algorithms & improve the filter process
+* Bug fixes
+  * fix `stack_imgs()` shift foreground img in a weird way when foreground and background have different size
+  * fix `stack_imgs()` background_roi update logic
+  * fix bug on `cv::merge() size not match`
+  * fix image color goes wrong when transferring between C++ & JS
+  * fix `sync_img_size()` roi not found issue
+  * fix some memory management bugs in wasm wrappers
+  * fix `stack_imgs()` shifting foreground in some case
+* Others
+  * update doc
+  * general bug fix
+  * general code base cleanup
+
+</details>
+
+
+<details>
 <summary><strong style="font-size:140%">v0.1.10</strong></summary>
 
 * add new features to js api
