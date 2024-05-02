@@ -60,7 +60,7 @@ int main(int argc, char** argv)
     {
         mr::RegistrationAlgorithms algorithm = mr::RegistrationAlgorithms::ORB;
         // Currently, SURF algorithm works the best, but its disabled by default.
-        // Learn more in BUILDING.md at "About OpenCV non-free modules" section.
+        // Learn more in BUILDING.md at "About OpenCV versions & modules" section.
         // mr::RegistrationAlgorithms algorithm = mr::RegistrationAlgorithms::SURF_NONFREE;
         
         

@@ -29,7 +29,7 @@ registrar = mr.MoonRegistrate.MoonRegistrar()
 registrar.update_f2d_detector(mr.MoonRegistrate.RegistrationAlgorithms.SIFT)
 
 # Currently, SURF algorithm works the best, but its disabled by default.
-# Learn more in BUILDING.md at "About OpenCV non-free modules" section.
+# Learn more in BUILDING.md at "About OpenCV versions & modules" section.
 # registrar.update_f2d_detector(mr.MoonRegistrate.RegistrationAlgorithms.SURF_NONFREE)
 
 # ==================== MoonRegistration ====================

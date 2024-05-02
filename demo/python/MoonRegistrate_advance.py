@@ -45,7 +45,7 @@ print("Layer Image Path:", layer_image)
 try:
     algorithm = mr.MoonRegistrate.RegistrationAlgorithms.ORB
     # Currently, SURF algorithm works the best, but its disabled by default.
-    # Learn more in BUILDING.md at "About OpenCV non-free modules" section.
+    # Learn more in BUILDING.md at "About OpenCV versions & modules" section.
     # algorithm = mr.MoonRegistrate.RegistrationAlgorithms.SURF_NONFREE
     
     

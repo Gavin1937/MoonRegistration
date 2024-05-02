@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     registrar.update_f2d_detector(mr::RegistrationAlgorithms::SIFT);
     
     // Currently, SURF algorithm works the best, but its disabled by default.
-    // Learn more in BUILDING.md at "About OpenCV non-free modules" section.
+    // Learn more in BUILDING.md at "About OpenCV versions & modules" section.
     // registrar.update_f2d_detector(mr::RegistrationAlgorithms::SURF_NONFREE);
     
     // ==================== MoonRegistration ====================

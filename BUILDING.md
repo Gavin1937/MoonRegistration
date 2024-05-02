@@ -9,7 +9,7 @@
 This project uses CMake (version >= 3.11) as its build system. You need to [install CMake](https://cgold.readthedocs.io/en/latest/first-step/installation.html) in your system first
 
 
-## **About OpenCV versions & modules:**
+## **About OpenCV versions & modules**
 
 This library is heavily rely on OpenCV, linking with different version of OpenCV or with different OpenCV modules will enable/disable some feature of the library.
 
