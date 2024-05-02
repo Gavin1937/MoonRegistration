@@ -65,7 +65,7 @@ def binarize_image(
 def cut_image_from_circle(
     image_in:numpy.ndarray,
     circle:Circle,
-    padding:int           = 0
+    padding:int           = 15
 ) -> tuple[Rectangle, numpy.ndarray]: ...
 @overload
 def sync_img_size(
