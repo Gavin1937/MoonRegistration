@@ -519,12 +519,12 @@ EXPORT_SYMBOL void stack_imgs(
     if (new_width == background_roi.width)
     {
         new_x = background_roi.x;
-        new_y = (background_roi.height - new_height) / 2;
+        new_y = ((background_roi.height - new_height) / 2) + background_roi.y;
     }
     // background_roi and foreground have same height, center by width
     else if (new_height == background_roi.height)
     {
-        new_x = (background_roi.width - new_width) / 2;
+        new_x = ((background_roi.width - new_width) / 2) + background_roi.x;
         new_y = background_roi.y;
     }
     
@@ -673,12 +673,12 @@ EXPORT_SYMBOL void stack_imgs_in_place(
     if (new_width == background_roi.width)
     {
         new_x = background_roi.x;
-        new_y = (background_roi.height - new_height) / 2;
+        new_y = ((background_roi.height - new_height) / 2) + background_roi.y;
     }
     // background_roi and foreground have same height, center by width
     else if (new_height == background_roi.height)
     {
-        new_x = (background_roi.width - new_width) / 2;
+        new_x = ((background_roi.width - new_width) / 2) + background_roi.x;
         new_y = background_roi.y;
     }
     
