@@ -179,6 +179,7 @@ async function draw_layer_image(
   return new Promise((resolve, reject) => {
     instance.ready.then(async function() {
       try {
+        filter_px = Number(filter_px);
         let ptr = await instance._mrwasm_draw_layer_image(
           user_image_handler.image_ptr,
           model_image_handler.image_ptr,

@@ -89,6 +89,7 @@ async function stack_imgs(
   return new Promise((resolve, reject) => {
     instance.ready.then(async function () {
       try {
+        filter_px = Number(filter_px);
         let ptr = await instance._mrwasm_stack_imgs(
           background_image_handler.image_ptr,
           background_roi[0], background_roi[1],
