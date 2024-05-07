@@ -37,6 +37,8 @@ int* mrwasm_detect_moon(void* img_ptr, const int algorithm)
             static_cast<mr::HoughCirclesAlgorithms>(algorithm)
         );
         mr::Circle circle = detector.detect_moon();
+        if (!mr::is_valid_circle(circle))
+            throw std::runtime_error("Cannot find moon circle.");
         
         // we must re-interpret mr::Circle into an int array
         // in order for js to understand it

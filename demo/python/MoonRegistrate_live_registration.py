@@ -55,17 +55,19 @@ while True:
     
     # ==================== MoonRegistration ====================
     
-    # detect moon location from current frame
-    detector = mr.MoonDetect.MoonDetector(frame)
-    circle:mr.shapes.Circle = detector.detect_moon()
-    
-    # cut an image from the circle as our user image
-    rect_out, user_img = mr.imgprocess.cut_image_from_circle(
-        frame, circle
-    )
-    registrar.update_images(user_img, model_img)
-    
     try:
+        # detect moon location from current frame
+        detector = mr.MoonDetect.MoonDetector(frame)
+        circle:mr.shapes.Circle = detector.detect_moon()
+        if not mr.shapes.is_valid_circle(circle):
+            raise RuntimeError('Cannot find moon circle.')
+        
+        # cut an image from the circle as our user image
+        rect_out, user_img = mr.imgprocess.cut_image_from_circle(
+            frame, circle
+        )
+        registrar.update_images(user_img, model_img)
+        
         # compute moon image registration with updated images
         registrar.compute_registration()
         

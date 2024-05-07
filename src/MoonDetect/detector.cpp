@@ -224,7 +224,7 @@ EXPORT_SYMBOL mr::Circle MoonDetector::detect_moon()
         // maybe we didn't find any circle
         // in iteration 0, which means input image doesn't contain any circle, return {-1, -1, -1}
         if (iteration == 0 && !mr::is_valid_circle(circle_found))
-            return circle_found;
+            return {-1, -1, -1};
         // use the center of image as the new circle
         else if (!mr::is_valid_circle(circle_found))
             circle_found = {image_shape.width/2, image_shape.height/2, (image_shape.width/2)+3};

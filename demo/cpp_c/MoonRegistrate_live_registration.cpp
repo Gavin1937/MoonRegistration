@@ -80,18 +80,20 @@ int main(int argc, char** argv)
         
         // ==================== MoonRegistration ====================
         
-        // detect moon location from current frame
-        mr::MoonDetector detector(frame);
-        mr::Circle circle = detector.detect_moon();
-        
-        // cut an image from the circle as our user image
-        cv::Mat user_img;
-        mr::Rectangle rect_out;
-        mr::cut_image_from_circle(frame, user_img, rect_out, circle);
-        registrar.update_images(user_img, model_img);
-        
         try
         {
+            // detect moon location from current frame
+            mr::MoonDetector detector(frame);
+            mr::Circle circle = detector.detect_moon();
+            if (!mr::is_valid_circle(circle))
+                throw std::runtime_error("Cannot find moon circle.");
+            
+            // cut an image from the circle as our user image
+            cv::Mat user_img;
+            mr::Rectangle rect_out;
+            mr::cut_image_from_circle(frame, user_img, rect_out, circle);
+            registrar.update_images(user_img, model_img);
+            
             // compute moon image registration with updated images
             registrar.compute_registration();
             

@@ -125,6 +125,8 @@ for dirEntry in folder.rglob('*'):
         
         # calculate moon position
         final_circle = detector.detect_moon()
+        if not mr.shapes.is_valid_circle(final_circle):
+            raise RuntimeError('Cannot find moon circle.')
         
         
         # printing out result

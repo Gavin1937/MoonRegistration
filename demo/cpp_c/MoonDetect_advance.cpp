@@ -177,6 +177,8 @@ int main(int argc, char** argv)
             
             // calculate moon position
             mr::Circle final_circle = detector.detect_moon();
+            if (!mr::is_valid_circle(final_circle))
+                throw std::runtime_error("Cannot find moon circle.");
             
             
             // printing out result
