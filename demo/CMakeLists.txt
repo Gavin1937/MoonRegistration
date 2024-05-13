@@ -31,10 +31,24 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../ ${CMAKE_CURRENT_BINARY_DIR}/Moo
 # # ###############################################################################################
 # # this is useful when linking with a MoonRegistration install directory or release package
 # # you need to manually include & link OpenCV in this case
-# find_package(OpenCV REQUIRED)
+# # handle manually provided OpenCV path via -DOPENCV_DIR cmake flag
+# if(DEFINED OPENCV_DIR OR DEFINED ${OPENCV_DIR})
+#     message(STATUS "Setting OPENCV_DIR: ${OPENCV_DIR}")
+#     find_package(OpenCV PATHS ${OPENCV_DIR} NO_DEFAULT_PATH)
+# elseif(DEFINED $ENV{OPENCV_DIR})
+#     message(STATUS "Setting OPENCV_DIR: $ENV{OPENCV_DIR}")
+#     find_package(OpenCV PATHS $ENV{OPENCV_DIR} NO_DEFAULT_PATH)
+# elseif(DEFINED $ENV{OpenCV_DIR})
+#     message(STATUS "Setting OPENCV_DIR: $ENV{OpenCV_DIR}")
+#     find_package(OpenCV PATHS $ENV{OpenCV_DIR} NO_DEFAULT_PATH)
+# # no OpenCV path provided
+# else()
+#     find_package(OpenCV REQUIRED)
+# endif()
 # include_directories( ${OpenCV_INCLUDE_DIRS} )
 # # you need to supply path to MoonRegistration install directory
-# set(MR_INSTALL_DIR "/path/to/MoonRegistration/install/dir")
+# # set(MR_INSTALL_DIR "/path/to/MoonRegistration/install/dir")
+# set(MR_INSTALL_DIR "C:\\Users\\gyh18\\School Works\\CalStateLA\\2023 Fall\\CS 4961\\Project\\MoonRegistration\\build\\install")
 # # Under Windows, you also need to manually copy .dll file to the exe path
 # if(WIN32)
 #     file(GLOB_RECURSE _MR_LIB_FILES "${MR_INSTALL_DIR}/*.dll")
