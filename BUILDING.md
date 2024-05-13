@@ -107,7 +107,7 @@ You can use Docker container to develope this library.
 
 > vcpkg will download and build opencv4 for your machine, so it will take a while.
 
-> Note: Util March 24, 2024, vcpkg only have opencv version 4.8.0. Which means you cannot use HOUGH_CIRCLE_ALT algorithm for MoonDetect module ([learn more here](#about-opencv-versions--modules)). Checkout [this manifest file](https://github.com/microsoft/vcpkg/blob/master/ports/opencv4/vcpkg.json) for the latest version.
+> Note: Until March 24, 2024, vcpkg only have opencv version 4.8.0. Which means you cannot use HOUGH_CIRCLE_ALT algorithm for MoonDetect module ([learn more here](#about-opencv-versions--modules)). Checkout [this manifest file](https://github.com/microsoft/vcpkg/blob/master/ports/opencv4/vcpkg.json) for the latest version.
 
 1. Setup vcpkg
 
@@ -192,3 +192,6 @@ If you don't supply `--prefix` flag, cmake will try to install all the library &
   * `"${CMAKE_BINARY_DIR}/install"`
 * Otherwise install to:
   * `"/usr/local"`
+
+> Checkout [./demo/CMakeLists.txt](./demo/CMakeLists.txt) for an example of linking with MoonRegistration install directory or release package
+

@@ -18,9 +18,14 @@ endif()
 set(CMAKE_DEBUG_POSTFIX "d")
 
 
-# get library version string
+# read library version
 set(MR_VERSION_STR CACHE STRING "MR_VERSION_STR" FORCE)
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" MR_VERSION_STR)
+string(REGEX MATCH "v([0-9]+)\\.([0-9]+)\\.([0-9]+)" _ ${MR_VERSION_STR})
+set(PROJECT_VERSION_MAJOR ${CMAKE_MATCH_1})
+set(PROJECT_VERSION_MINOR ${CMAKE_MATCH_2})
+set(PROJECT_VERSION_PATCH ${CMAKE_MATCH_3})
+message(STATUS "CMAKE_PROJECT_VERSION: ${CMAKE_PROJECT_VERSION}")
 
 
 # src files
@@ -103,6 +108,26 @@ include_directories("${MR_CONFIG_FILE_INCLUDE_DIR}")
 set(MR_MAIN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH "Main include directory")
 set(tmp_include_dirs "${MR_MAIN_INCLUDE_DIR}" "${MR_CONFIG_FILE_INCLUDE_DIR}")
 set(MR_INCLUDE_DIR ${tmp_include_dirs} CACHE PATH "MR_INCLUDE_DIR" FORCE)
+set(MR_LIBRARIES "${PROJECT_NAME}" CACHE STRING "MR_LIBRARIES" FORCE)
+
+
+# setup .cmake config files
+# Include module with fuction 'write_basic_package_version_file'
+include(CMakePackageConfigHelpers)
+# cmake distribution config file dir
+set(CMAKE_DIST_CONFIG_DIR "${CMAKE_BINARY_DIR}/cmake_dist_config")
+# Configure "${PROJECT_NAME}ConfigVersion.cmake"
+write_basic_package_version_file(
+    "${CMAKE_DIST_CONFIG_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    COMPATIBILITY SameMajorVersion
+    VERSION ${MR_VERSION_STR}
+)
+# Configure "${PROJECT_NAME}Config.cmake"
+configure_package_config_file(
+    "cmake/Config.cmake.in"
+    "${CMAKE_DIST_CONFIG_DIR}/${PROJECT_NAME}Config.cmake"
+    INSTALL_DESTINATION "${CMAKE_DIST_CONFIG_DIR}/${PROJECT_NAME}"
+)
 
 
 # build & link
@@ -112,10 +137,12 @@ add_library(${PROJECT_NAME} ${MR_BUILD_TYPE}
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 # add -fPIC compile flag for MoonRegistration for unix system
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
-# expose mrconfig.h to external projects
+# expose target include directories for build-tree & install-tree
 target_include_directories(
     ${PROJECT_NAME}
-    PUBLIC "${MR_CONFIG_FILE_INCLUDE_DIR}"
+    PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
 # linking
@@ -139,14 +166,26 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     endif()
 endif()
 
-# install binary
-install(
-    TARGETS ${PROJECT_NAME}
-    CONFIGURATIONS Debug Release
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
-)
+# install binary & export targets
+if(WIN32)
+    install(
+        TARGETS ${PROJECT_NAME}
+        EXPORT "${PROJECT_NAME}Targets"
+        CONFIGURATIONS Debug Release
+        LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+        ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+        RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
+    )
+else()
+    install(
+        TARGETS ${PROJECT_NAME}
+        EXPORT "${PROJECT_NAME}Targets"
+        CONFIGURATIONS Debug Release
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+    )
+endif()
 # install main include files
 install(
     DIRECTORY "${CMAKE_SOURCE_DIR}/include/"
@@ -158,6 +197,17 @@ install(
     DIRECTORY "${MR_CONFIG_FILE_INCLUDE_DIR}/"
     DESTINATION "include"
     FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
+# install cmake configurations
+install(
+    DIRECTORY "${CMAKE_DIST_CONFIG_DIR}/"
+    DESTINATION "."
+    PATTERN "${CMAKE_DIST_CONFIG_DIR}/*.cmake"
+)
+install(
+    EXPORT "${PROJECT_NAME}Targets"
+    FILE "${PROJECT_NAME}Targets.cmake"
+    DESTINATION "."
 )
 # install VERSION
 install(
