@@ -47,8 +47,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../ ${CMAKE_CURRENT_BINARY_DIR}/Moo
 # endif()
 # include_directories( ${OpenCV_INCLUDE_DIRS} )
 # # you need to supply path to MoonRegistration install directory
-# # set(MR_INSTALL_DIR "/path/to/MoonRegistration/install/dir")
-# set(MR_INSTALL_DIR "C:\\Users\\gyh18\\School Works\\CalStateLA\\2023 Fall\\CS 4961\\Project\\MoonRegistration\\build\\install")
+# set(MR_INSTALL_DIR "/path/to/MoonRegistration/install/dir")
 # # Under Windows, you also need to manually copy .dll file to the exe path
 # if(WIN32)
 #     file(GLOB_RECURSE _MR_LIB_FILES "${MR_INSTALL_DIR}/*.dll")
