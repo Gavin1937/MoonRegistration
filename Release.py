@@ -18,15 +18,25 @@ def execute(cmd:list, env:dict, cwd:str):
         cmd, env=env, shell=True, cwd=cwd,
         stdout=PIPE, stderr=PIPE
     )
-    for char in iter(lambda: (popen.stdout.read(1), popen.stderr.read(1)), b''):
-        len0 = len(char[0])
-        len1 = len(char[1])
-        if len0 > 0:
-            sys.stdout.buffer.write(char[0])
-        if len1 > 0:
+    # block process, wait until popen finished
+    popen.wait()
+    for char in iter(lambda: (popen.stdout.read(16), popen.stderr.read(16)), b''):
+        has_out = len(char[0]) > 0
+        has_err = len(char[1]) > 0
+        if has_err and not has_out:
             sys.stderr.buffer.write(char[1])
-        if len0 <= 0 and len1 <= 0:
+            sys.stderr.flush()
+        elif has_err and has_out:
+            sys.stderr.buffer.write(char[1])
+            sys.stderr.flush()
+            sys.stdout.buffer.write(char[0])
+        elif not has_err and has_out:
+            sys.stdout.buffer.write(char[0])
+            sys.stdout.flush()
+        else: # not has_err and not has_out
             break
+    sys.stdout.flush()
+    sys.stderr.flush()
     popen.stdout.close()
     popen.stderr.close()
     return_code = popen.wait()
@@ -77,6 +87,7 @@ def build(metadata:dict, cmds:list, cmd_matrix:dict, env:dict):
             else:
                 exe = shutil.which(cmd[0])
             exe = exe if exe is not None else cmd[0]
+            cmd = [c for c in cmd if len(c.strip()) > 0]
             newcmd = [exe, *cmd[1:]] if metadata['platform'] == 'win' else ' '.join([exe, *cmd[1:]])
             print(newcmd)
             execute(newcmd, env, env['WorkingDir'])

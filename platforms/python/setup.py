@@ -215,11 +215,12 @@ class My_bdist_wheel(bdist_wheel):
         
         # copy additional libraries to wheel build dir
         loc_bdist_dir = ROOT / self.bdist_dir
-        loc_bdist_dir = (loc_bdist_dir/'MoonRegistration/libs')
+        loc_bdist_dir = (loc_bdist_dir/'MoonRegistration'/'libs')
         loc_bdist_dir.mkdir(parents=True, exist_ok=True)
         for lib in LIB_FILES:
             try:
                 shcopy(lib, ROOT/'MoonRegistration/libs')
+                shcopy(lib, loc_bdist_dir)
             except SameFileError:
                 pass
         
