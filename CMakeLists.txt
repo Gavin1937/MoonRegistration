@@ -83,6 +83,9 @@ else()
 endif()
 
 option(MR_ENABLE_OPENCV_NONFREE:BOOL "Build MoonRegistration Library with OpenCV nonfree modules enabled" OFF)
+if(NOT MR_ENABLE_OPENCV_NONFREE)
+    set(MR_ENABLE_OPENCV_NONFREE OFF)
+endif()
 
 
 # report
@@ -137,11 +140,13 @@ add_library(${PROJECT_NAME} ${MR_BUILD_TYPE}
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 # add -fPIC compile flag for MoonRegistration for unix system
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
-# expose target include directories for build-tree & install-tree
+# expose library interface to external projects for build & install
+# https://stackoverflow.com/a/62465051
+# https://cmake.org/cmake/help/latest/command/target_include_directories.html
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC
-    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+    "$<BUILD_INTERFACE:${MR_INCLUDE_DIR}>"
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
