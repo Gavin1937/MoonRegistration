@@ -46,6 +46,8 @@ only have one attribute differentiate the library modules it contains
 * It is `detect` when its compiled with MoonDetect module only.
 * It is `registrate` when its not compiled with both MoonDetect and MoonRegistrate modules.
 
+**[Checkout demo documentation for some usage examples](https://github.com/Gavin1937/MoonRegistration/blob/main/demo/README.md)**
+
 **All the release packages are compiled with OpenCV 4.9.0**
 
 **For more information about this release, checkout the [CHANGELOG](https://github.com/Gavin1937/MoonRegistration/blob/main/CHANGELOG.md)**
