@@ -2,6 +2,15 @@
 # CHANGELOG
 
 <details open>
+<summary><strong style="font-size:140%">v1.0.2</strong></summary>
+
+* Bug fixes
+  * fix cmake imported target not found under linux
+
+</details>
+
+
+<details>
 <summary><strong style="font-size:140%">v1.0.1</strong></summary>
 
 * Bug fixes
