@@ -2,6 +2,22 @@
 # CHANGELOG
 
 <details open>
+<summary><strong style="font-size:140%">v1.0.1</strong></summary>
+
+* Bug fixes
+  * in js interface, force `filter_px` to be Number
+  * fix CMake exposing wrong include dir
+  * try fix python release scripts
+* Others
+  * add invalid circle (x == -1 && y == -1 && radius == -1) handling code
+  * add vscode cpp extension to dev container
+  * make install package compatible with cmake `find_package()`
+  * allow CMakeLists.txt in demo folder to handle `-DOpenCV_DIR` flag
+
+</details>
+
+
+<details>
 <summary><strong style="font-size:140%">v1.0.0</strong></summary>
 
 * Interface change
