@@ -13,7 +13,7 @@ check_required_components("@PROJECT_NAME@")
 # set global variables
 set(MR_VERSION_STR "@MR_VERSION_STR@")
 
-set(MR_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
+set(MR_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/../include")
 include_directories("${MR_INCLUDE_DIR}")
 set(MR_LIBRARIES @PROJECT_NAME@)
 

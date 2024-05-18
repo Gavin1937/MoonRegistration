@@ -117,19 +117,17 @@ set(MR_LIBRARIES "${PROJECT_NAME}" CACHE STRING "MR_LIBRARIES" FORCE)
 # setup .cmake config files
 # Include module with fuction 'write_basic_package_version_file'
 include(CMakePackageConfigHelpers)
-# cmake distribution config file dir
-set(CMAKE_DIST_CONFIG_DIR "${CMAKE_BINARY_DIR}/cmake_dist_config")
 # Configure "${PROJECT_NAME}ConfigVersion.cmake"
 write_basic_package_version_file(
-    "${CMAKE_DIST_CONFIG_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     COMPATIBILITY SameMajorVersion
     VERSION ${MR_VERSION_STR}
 )
 # Configure "${PROJECT_NAME}Config.cmake"
 configure_package_config_file(
     "cmake/Config.cmake.in"
-    "${CMAKE_DIST_CONFIG_DIR}/${PROJECT_NAME}Config.cmake"
-    INSTALL_DESTINATION "${CMAKE_DIST_CONFIG_DIR}/${PROJECT_NAME}"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    INSTALL_DESTINATION "${PROJECT_NAME}"
 )
 
 
@@ -172,25 +170,14 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 # install binary & export targets
-if(WIN32)
-    install(
-        TARGETS ${PROJECT_NAME}
-        EXPORT "${PROJECT_NAME}Targets"
-        CONFIGURATIONS Debug Release
-        LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
-        ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
-        RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
-    )
-else()
-    install(
-        TARGETS ${PROJECT_NAME}
-        EXPORT "${PROJECT_NAME}Targets"
-        CONFIGURATIONS Debug Release
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
-    )
-endif()
+install(
+    TARGETS ${PROJECT_NAME}
+    EXPORT "${PROJECT_NAME}Targets"
+    CONFIGURATIONS Debug Release
+    LIBRARY DESTINATION "lib"
+    ARCHIVE DESTINATION "lib"
+    RUNTIME DESTINATION "bin"
+)
 # install main include files
 install(
     DIRECTORY "${CMAKE_SOURCE_DIR}/include/"
@@ -205,14 +192,15 @@ install(
 )
 # install cmake configurations
 install(
-    DIRECTORY "${CMAKE_DIST_CONFIG_DIR}/"
-    DESTINATION "."
-    PATTERN "${CMAKE_DIST_CONFIG_DIR}/*.cmake"
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION "cmake"
 )
 install(
     EXPORT "${PROJECT_NAME}Targets"
     FILE "${PROJECT_NAME}Targets.cmake"
-    DESTINATION "."
+    DESTINATION "cmake"
 )
 # install VERSION
 install(
