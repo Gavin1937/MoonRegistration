@@ -40,9 +40,14 @@ To build this library from source and install it to your python environment, you
 python setup.py install
 ```
 
+> Note: you may need to install `setuptools` & `wheel` packages to run above command.
+> ```sh
+> pip3 install setuptools wheel
+> ```
+> 
 > Note: you can append argument `--mr-enable-opencv-nonfree` after this command to enable `MR_ENABLE_OPENCV_NONFREE` CMake flag, checkout [CMake Build Arguments](../../BUILDING.md#cmake-build-arguments) for detail.
 
-3. [Optional] You can build this library into a python .whl package, but it will be tie to your python version and cannot install/run in an environment with different python version.
+1. [Optional] You can build this library into a python .whl package, but it will be tie to your python version and cannot install/run in an environment with different python version.
    * The argument `--py-limited-api cp38` will set the minimum supported cpython version to cpython 3.8
 
 ```sh
