@@ -13,7 +13,8 @@ This project uses CMake (version >= 3.11) as its build system. You need to [inst
 
 To build and use MoonRegistration library natively, you need to have OpenCV C++ library installed in your system. [Checkout OpenCV version & modules that we use](#about-opencv-versions--modules). And learn more about [how to get OpenCV](#build-manually-from-source)
 
-> **MoonRegistration-js** library is an exception: it is a WASM + JavaScript library runs on browser, so it doesn't require you to install OpenCV natively. You just need to download the release archive and extract it and use it as Node.js module.
+> [!NOTE]
+> **MoonRegistration-js** library is an exception: it is a WASM + JavaScript library runs on the browser, so it doesn't require you to install OpenCV natively. You just need to download the release archive and extract it and use it as Node.js module.
 
 
 ## **About OpenCV versions & modules**
@@ -30,6 +31,7 @@ Starting from **version 4.8.1**, OpenCV [provide a new algorithm (HOUGH_GRADIENT
 |--------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|------------------------------------|
 | [XFeatures2D](https://docs.opencv.org/4.9.0/d2/dca/group__xfeatures2d__nonfree.html) | [SURF](https://docs.opencv.org/3.4/d5/df7/classcv_1_1xfeatures2d_1_1SURF.html) | SURF_NONFREE                       |
 
+> [!NOTE]
 > When OpenCV Contrib is not present, above mr::RegistrationAlgorithms are not available.
 
 ### How to get OpenCV Contrib
@@ -105,9 +107,11 @@ You can use Docker container to develope this library.
 
 [vcpkg](https://github.com/microsoft/vcpkg) is a cross-platform C++ Library Manager (Dependency Package Manager). You can use it for easy dependency setup. In following examples, we will use powershell as our shell, [checkout this doc](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started) for other shells and more detail.
 
+> [!NOTE]
 > vcpkg will download and build opencv4 for your machine, so it will take a while.
 
-> Note: Until March 24, 2024, vcpkg only have opencv version 4.8.0. Which means you cannot use HOUGH_CIRCLE_ALT algorithm for MoonDetect module ([learn more here](#about-opencv-versions--modules)). Checkout [this manifest file](https://github.com/microsoft/vcpkg/blob/master/ports/opencv4/vcpkg.json) for the latest version.
+> [!NOTE]
+> Until March 24, 2024, vcpkg only have opencv version 4.8.0. Which means you cannot use HOUGH_CIRCLE_ALT algorithm for MoonDetect module ([learn more here](#about-opencv-versions--modules)). Checkout [this manifest file](https://github.com/microsoft/vcpkg/blob/master/ports/opencv4/vcpkg.json) for the latest version.
 
 1. Setup vcpkg
 
@@ -193,5 +197,6 @@ If you don't supply `--prefix` flag, cmake will try to install all the library &
 * Otherwise install to:
   * `"/usr/local"`
 
+> [!TIP]
 > Checkout [./demo/CMakeLists.txt](./demo/CMakeLists.txt) for an example of linking with MoonRegistration install directory or release package
 

@@ -119,7 +119,8 @@ When running CMake initialization, you can supply arguments to CMake.
   * `All` - All modules of the library
 * You also use [build arguments from the core library](../../BUILDING.md#cmake-build-arguments). However, flags `MR_BUILD_SHARED_LIBS` and `OPENCV_DIR` are automatically set by the CMakeLists file in this folder. And flag `MR_ENABLE_OPENCV_NONFREE` isn't available due to OpenCV.js doesn't support non-free module & algorithm yet. [Checkout this list of available features](https://github.com/opencv/opencv/blob/4.x/platforms/js/opencv_js.config.py)
 
-> Regarding to the registration algorithms available in WebAssembly, we have following algorithms:
+> [!NOTE]
+> We have following registration algorithms available in MoonRegistration JavaScript library:
 > * SIFT
 > * ORB
 > * AKAZE
@@ -158,6 +159,7 @@ You can checkout [demo folder](../../demo/README.md) for some simple usages.
 2. In WebAssembly, we have no way to control in a guaranteed fashion when new memory commit vs address space reserve occurs.
    * Which means, we have no way to know if a newly allocated memory block is ready to use or not, every time a heap allocation happens, it has a chance to trigger "memory access out of bounds" error in JavaScript. This is because we might accessing the memory when it isn't ready.
    * [Detailed article](https://github.com/WebAssembly/design/issues/1397)
+> [!IMPORTANT] 
 > Workarounds for above limitation (use all of them):
 > 1. de-allocate memory right after we are done with it
 >    * call `destroy_***` function right after we are done with the variable
