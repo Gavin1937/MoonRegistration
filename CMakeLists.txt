@@ -73,7 +73,6 @@ set(OpenCV_LIBS_TO_USE
     opencv_imgcodecs
     opencv_imgproc
     opencv_features2d
-    opencv_xfeatures2d
 )
 
 include_directories( ${OpenCV_INCLUDE_DIRS} )
@@ -95,6 +94,9 @@ endif()
 option(MR_ENABLE_OPENCV_NONFREE:BOOL "Build MoonRegistration Library with OpenCV nonfree modules enabled" OFF)
 if(NOT MR_ENABLE_OPENCV_NONFREE)
     set(MR_ENABLE_OPENCV_NONFREE OFF)
+else()
+    # link opencv_xfeatures2d when MR_ENABLE_OPENCV_NONFREE is enabled
+    list(APPEND OpenCV_LIBS_TO_USE opencv_xfeatures2d)
 endif()
 
 
