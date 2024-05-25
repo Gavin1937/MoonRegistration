@@ -69,6 +69,7 @@ endif()
 set(OpenCV_LIBS_TO_USE
     opencv_core
     opencv_flann
+    opencv_calib3d
     opencv_imgcodecs
     opencv_imgproc
     opencv_features2d
