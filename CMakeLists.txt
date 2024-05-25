@@ -66,6 +66,15 @@ else()
     find_package(OpenCV REQUIRED)
 endif()
 
+set(OpenCV_LIBS_TO_USE
+    opencv_core
+    opencv_flann
+    opencv_imgcodecs
+    opencv_imgproc
+    opencv_features2d
+    opencv_xfeatures2d
+)
+
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 
@@ -96,6 +105,7 @@ message(STATUS "MR_ENABLE_OPENCV_NONFREE: ${MR_ENABLE_OPENCV_NONFREE}")
 message(STATUS "OpenCV_DIR: ${OpenCV_DIR}")
 message(STATUS "OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "OpenCV_LIBS: ${OpenCV_LIBS}")
+message(STATUS "OpenCV_LIBS_TO_USE: ${OpenCV_LIBS_TO_USE}")
 message(STATUS "==================================================")
 
 
@@ -149,7 +159,9 @@ target_include_directories(
 )
 
 # linking
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME}
+    ${OpenCV_LIBS_TO_USE}
+)
 
 
 # install path setup from OpenCV
