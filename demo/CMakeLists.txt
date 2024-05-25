@@ -109,7 +109,12 @@ set_target_properties(MoonRegistrate_live_registration PROPERTIES
     CXX_STANDARD     ${CXX_VERSION}
     LINKER_LANGUAGE  CXX
 )
-target_link_libraries(MoonRegistrate_live_registration MoonRegistration opencv_video)
+target_link_libraries(MoonRegistrate_live_registration
+    MoonRegistration
+    opencv_video
+    opencv_videoio
+    opencv_highgui
+)
 
 
 
