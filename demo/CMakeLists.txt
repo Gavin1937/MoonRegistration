@@ -10,6 +10,24 @@ set(CXX_VERSION 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 
+# you need to manually include & link OpenCV
+# handle manually provided OpenCV path via -DOPENCV_DIR cmake flag
+if(DEFINED OPENCV_DIR OR DEFINED ${OPENCV_DIR})
+    message(STATUS "Setting OPENCV_DIR: ${OPENCV_DIR}")
+    find_package(OpenCV PATHS ${OPENCV_DIR} NO_DEFAULT_PATH)
+elseif(DEFINED $ENV{OPENCV_DIR})
+    message(STATUS "Setting OPENCV_DIR: $ENV{OPENCV_DIR}")
+    find_package(OpenCV PATHS $ENV{OPENCV_DIR} NO_DEFAULT_PATH)
+elseif(DEFINED $ENV{OpenCV_DIR})
+    message(STATUS "Setting OPENCV_DIR: $ENV{OpenCV_DIR}")
+    find_package(OpenCV PATHS $ENV{OpenCV_DIR} NO_DEFAULT_PATH)
+# no OpenCV path provided
+else()
+    find_package(OpenCV REQUIRED)
+endif()
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+
 # build MoonRegistration library as shared or static library (default is shared)
 set(MR_BUILD_SHARED_LIBS ON)
 # set(MR_BUILD_SHARED_LIBS OFF)
@@ -30,22 +48,6 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../ ${CMAKE_CURRENT_BINARY_DIR}/Moo
 # # add MoonRegistration using find_package()
 # # ###############################################################################################
 # # this is useful when linking with a MoonRegistration install directory or release package
-# # you need to manually include & link OpenCV in this case
-# # handle manually provided OpenCV path via -DOPENCV_DIR cmake flag
-# if(DEFINED OPENCV_DIR OR DEFINED ${OPENCV_DIR})
-#     message(STATUS "Setting OPENCV_DIR: ${OPENCV_DIR}")
-#     find_package(OpenCV PATHS ${OPENCV_DIR} NO_DEFAULT_PATH)
-# elseif(DEFINED $ENV{OPENCV_DIR})
-#     message(STATUS "Setting OPENCV_DIR: $ENV{OPENCV_DIR}")
-#     find_package(OpenCV PATHS $ENV{OPENCV_DIR} NO_DEFAULT_PATH)
-# elseif(DEFINED $ENV{OpenCV_DIR})
-#     message(STATUS "Setting OPENCV_DIR: $ENV{OpenCV_DIR}")
-#     find_package(OpenCV PATHS $ENV{OpenCV_DIR} NO_DEFAULT_PATH)
-# # no OpenCV path provided
-# else()
-#     find_package(OpenCV REQUIRED)
-# endif()
-# include_directories( ${OpenCV_INCLUDE_DIRS} )
 # # you need to supply path to MoonRegistration install directory
 # set(MR_INSTALL_DIR "/path/to/MoonRegistration/install/dir")
 # # Under Windows, you also need to manually copy .dll file to the exe path
