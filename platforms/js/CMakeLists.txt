@@ -31,6 +31,15 @@ set(MR_ENABLE_OPENCV_NONFREE OFF)
 # and also compile it as static library
 set(MR_BUILD_SHARED_LIBS OFF)
 set(OpenCV_DIR "${OPENCV_SRC}/build_wasm")
+# specify OpenCV modules to link
+# we cannot link with opencv_imgcodecs
+set(OpenCV_LIBS_TO_USE
+    opencv_core
+    opencv_flann
+    opencv_calib3d
+    opencv_imgproc
+    opencv_features2d
+)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_BINARY_DIR}/MoonRegistration)
 include_directories(${MR_INCLUDE_DIR})
 

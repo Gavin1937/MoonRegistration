@@ -66,14 +66,18 @@ else()
     find_package(OpenCV REQUIRED)
 endif()
 
-set(OpenCV_LIBS_TO_USE
-    opencv_core
-    opencv_flann
-    opencv_calib3d
-    opencv_imgcodecs
-    opencv_imgproc
-    opencv_features2d
-)
+# specify OpenCV modules to link
+# if not provide by user, use default
+if(NOT DEFINED OpenCV_LIBS_TO_USE)
+    set(OpenCV_LIBS_TO_USE
+        opencv_core
+        opencv_flann
+        opencv_calib3d
+        opencv_imgcodecs
+        opencv_imgproc
+        opencv_features2d
+    )
+endif()
 
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
@@ -162,9 +166,7 @@ target_include_directories(
 )
 
 # linking
-target_link_libraries(${PROJECT_NAME}
-    ${OpenCV_LIBS_TO_USE}
-)
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS_TO_USE})
 
 
 # install path setup from OpenCV

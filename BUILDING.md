@@ -180,6 +180,16 @@ cmake --build .
   * Or, you can turn it off to build the library into a static library `-DMR_BUILD_SHARED_LIBS=OFF`
 * Use Custom build of opencv
   * You can tell cmake to use your opencv build with flag `-DOPENCV_DIR`. This flag should point to a folder that contains cmake files like **"OpenCVConfig.cmake"** or **"opencv-config.cmake"**
+* Specify OpenCV modules to link
+  * By default, MoonRegistration will link with following OpenCV modules:
+    * opencv_core
+    * opencv_flann
+    * opencv_calib3d
+    * opencv_imgcodecs
+    * opencv_imgproc
+    * opencv_features2d
+    * opencv_xfeatures2d (when MR_ENABLE_OPENCV_NONFREE is enable)
+  * You can change these modules by setting cmake flag `-DOpenCV_LIBS_TO_USE=module1;module2;module3`
 * To enable MoonRegistration library to [use OpenCV non-free modules and algorithms](#about-opencv-non-free-modules), you can set cmake flag `-DMR_ENABLE_OPENCV_NONFREE=ON`. By default, this option is `OFF` by default.
 
 ## Install with CMake
