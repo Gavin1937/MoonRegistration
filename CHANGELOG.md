@@ -2,6 +2,15 @@
 # CHANGELOG
 
 <details open>
+<summary><strong style="font-size:140%">v1.0.3</strong></summary>
+
+* Build tool update
+  * link only the necessary opencv modules
+
+</details>
+
+
+<details>
 <summary><strong style="font-size:140%">v1.0.2</strong></summary>
 
 * Bug fixes
