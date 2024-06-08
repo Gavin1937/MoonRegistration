@@ -52,17 +52,24 @@ set(OpenCV_SHARED OFF)
 # please manaully setting -DOPENCV_DIR cmake flag,
 # point to a path contains files like:
 # "OpenCVConfig.cmake" or "opencv-config.cmake"
-if(DEFINED OPENCV_DIR OR DEFINED ${OPENCV_DIR})
+
+# provided by CMake arguments
+if(DEFINED OPENCV_DIR AND NOT "${OPENCV_DIR}" STREQUAL "")
     message(STATUS "Setting OPENCV_DIR: ${OPENCV_DIR}")
     find_package(OpenCV PATHS ${OPENCV_DIR} NO_DEFAULT_PATH)
-elseif(DEFINED $ENV{OPENCV_DIR})
+elseif(DEFINED OpenCV_DIR AND NOT "${OpenCV_DIR}" STREQUAL "")
+    message(STATUS "Setting OPENCV_DIR: ${OpenCV_DIR}")
+    find_package(OpenCV PATHS ${OpenCV_DIR} NO_DEFAULT_PATH)
+# provided by environment variable
+elseif(NOT "$ENV{OPENCV_DIR}" STREQUAL "")
     message(STATUS "Setting OPENCV_DIR: $ENV{OPENCV_DIR}")
     find_package(OpenCV PATHS $ENV{OPENCV_DIR} NO_DEFAULT_PATH)
-elseif(DEFINED $ENV{OpenCV_DIR})
+elseif(NOT "$ENV{OpenCV_DIR}" STREQUAL "")
     message(STATUS "Setting OPENCV_DIR: $ENV{OpenCV_DIR}")
     find_package(OpenCV PATHS $ENV{OpenCV_DIR} NO_DEFAULT_PATH)
-# no OpenCV path provided
+# not provided, let CMake to find it
 else()
+    message("last opencv")
     find_package(OpenCV REQUIRED)
 endif()
 
