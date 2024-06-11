@@ -177,6 +177,7 @@ target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS_TO_USE})
 
 
 # install path setup from OpenCV
+# https://github.com/opencv/opencv/blob/a03b81316782ae30038b288fd3568993fa1e3538/CMakeLists.txt#L141-L152
 # https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT.html
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     # native build
